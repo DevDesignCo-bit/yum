@@ -29,6 +29,12 @@ const localStyles = `
       pointer-events: none;
     }
     .store-slide.is-selected .store-pet-img { filter: drop-shadow(0 8px 8px rgba(26, 35, 55, .2)); }
+    .store-swatch { transition: transform .18s ease, box-shadow .18s ease; }
+    .store-swatch.is-selected {
+      transform: translateY(-4px);
+      outline: 3px solid #1b2538;
+      outline-offset: 3px;
+    }
     }
   </style>`;
 const port = Number(process.env.PORT) || 4174;

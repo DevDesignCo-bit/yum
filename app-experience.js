@@ -25,10 +25,12 @@
     '/assets/recipes/vegetable-curry.png'
   ];
   const petColors = { pot: '#ff4c2c', carrot: '#ffb15f', banana: '#97d7ff' };
+  const homeColors = { blue: '#97D5FF', red: '#FF8B8E', green: '#CEE8BB', orange: '#FFC891', purple: '#B176FF' };
 
-  const savePet = (pet, petName) => {
+  const savePet = (pet, petName, homeColor) => {
     const next = { ...read(ONBOARDING_KEY), pet };
     if (petName != null) next.pet_name = petName;
+    if (homeColor && homeColors[homeColor]) next.home_color = homeColor;
     next.plan = { ...(next.plan || {}), pet, petName: petName || next.plan?.petName || next.pet_name || 'Pepi' };
     save(ONBOARDING_KEY, next);
     Object.assign(onboarding, next);
@@ -40,6 +42,8 @@
     if (!['pot', 'carrot', 'banana'].includes(pet)) return;
     const nameInput = document.querySelector('#profile-pet-name');
     if (nameInput && onboarding.pet_name) nameInput.value = onboarding.pet_name;
+    const homeColor = homeColors[onboarding.home_color] || petColors[pet];
+    document.querySelectorAll('.home-hero').forEach((hero) => hero.style.setProperty('--home-hill-color', homeColor));
     const profileImage = document.querySelector('.app-page-illustration');
     if (profileImage) profileImage.alt = `${onboarding.pet_name || titleCase(pet)} the ${titleCase(pet)}`;
     const petImages = '.app-navbar-mascot, .home-hero-pet img, .home-fasting-off-pet, .app-page-illustration, .recipes-list-mascot img, .ai-meal-analyzing-mascot img, .pet-notification-pet';
@@ -64,6 +68,13 @@
           if (selected) slide.style.setProperty('--selected-pet-color', petColors[option.value] || petColors.pot);
         });
       };
+      const colorOptions = [...storeForm.querySelectorAll('input[name="color"]')];
+      const updateColorSelection = (preview = false) => {
+        colorOptions.forEach((option) => {
+          option.closest('[data-store-swatch]')?.classList.toggle('is-selected', option.checked);
+          if (preview && option.checked) document.querySelectorAll('.home-hero').forEach((hero) => hero.style.setProperty('--home-hill-color', homeColors[option.value] || homeColors.blue));
+        });
+      };
       const currentPet = onboarding.pet || onboarding.plan?.pet;
       if (currentPet) {
         const option = [...storeForm.querySelectorAll('input[name="pet"]')].find((input) => input.value === currentPet);
@@ -72,14 +83,21 @@
           queueMicrotask(() => option.closest('label')?.click());
         }
       }
+      const savedColor = onboarding.home_color;
+      const savedColorOption = colorOptions.find((option) => option.value === savedColor);
+      if (savedColorOption) savedColorOption.checked = true;
       updateStoreSelection();
+      updateColorSelection();
       storeForm.addEventListener('change', updateStoreSelection);
+      storeForm.addEventListener('change', () => updateColorSelection(true));
       storeForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const pet = storeForm.querySelector('input[name="pet"]:checked')?.value;
+        const color = storeForm.querySelector('input[name="color"]:checked')?.value;
         if (!pet) return;
-        savePet(pet);
+        savePet(pet, undefined, color);
         updateStoreSelection();
+        updateColorSelection();
         applySelectedPet();
         const modal = storeForm.closest('.modal');
         if (window.bootstrap?.Modal && modal) window.bootstrap.Modal.getOrCreateInstance(modal).hide();
