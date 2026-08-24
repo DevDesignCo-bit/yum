@@ -3,6 +3,16 @@ const fs = require('fs');
 const path = require('path');
 
 const root = __dirname;
+const localStyles = `
+  <style>
+    .store-slide { transition: transform .2s ease, filter .2s ease; }
+    .store-slide.is-selected { transform: translateY(-8px); }
+    .store-slide.is-selected .store-card {
+      outline: 4px solid var(--selected-pet-color, #ff4c2c);
+      outline-offset: 4px;
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--selected-pet-color, #ff4c2c) 38%, transparent);
+    }
+  </style>`;
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;
 const routes = {
@@ -130,6 +140,6 @@ http.createServer(async (req, res) => {
     if (error) { res.writeHead(500); return res.end('Unable to load page'); }
     res.writeHead(200, { 'Content-Type': contentType });
     if (req.method === 'HEAD') return res.end();
-    res.end(file.endsWith('.html') ? data.toString().replace('</body>', '    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n</body>') : data);
+    res.end(file.endsWith('.html') ? data.toString().replace('</head>', `${localStyles}\n</head>`).replace('</body>', '    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n</body>') : data);
   });
 }).listen(port, () => console.log(`Yumetics is ready at http://localhost:${port}`));

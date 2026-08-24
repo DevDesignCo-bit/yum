@@ -14,6 +14,7 @@
   const onboarding = read(ONBOARDING_KEY);
   const titleCase = (value) => String(value || '').replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
   const recipeImages = ['/assets/recipes/chickpea-skillet.png', '/assets/recipes/vegetable-curry.png', '/assets/recipes/quinoa-bowl.png'];
+  const petColors = { pot: '#ff4c2c', carrot: '#ffb15f', banana: '#97d7ff' };
 
   const savePet = (pet, petName) => {
     const next = { ...read(ONBOARDING_KEY), pet };
@@ -43,6 +44,14 @@
   const initPetSaving = () => {
     const storeForm = document.querySelector('[data-store-form]');
     if (storeForm) {
+      const updateStoreSelection = () => {
+        storeForm.querySelectorAll('[data-store-slide]').forEach((slide) => {
+          const option = slide.querySelector('input[name="pet"]');
+          const selected = Boolean(option?.checked);
+          slide.classList.toggle('is-selected', selected);
+          if (selected) slide.style.setProperty('--selected-pet-color', petColors[option.value] || petColors.pot);
+        });
+      };
       const currentPet = onboarding.pet || onboarding.plan?.pet;
       if (currentPet) {
         const option = [...storeForm.querySelectorAll('input[name="pet"]')].find((input) => input.value === currentPet);
@@ -51,11 +60,14 @@
           queueMicrotask(() => option.closest('label')?.click());
         }
       }
+      updateStoreSelection();
+      storeForm.addEventListener('change', updateStoreSelection);
       storeForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const pet = storeForm.querySelector('input[name="pet"]:checked')?.value;
         if (!pet) return;
         savePet(pet);
+        updateStoreSelection();
         applySelectedPet();
         const modal = storeForm.closest('.modal');
         if (window.bootstrap?.Modal && modal) window.bootstrap.Modal.getOrCreateInstance(modal).hide();
