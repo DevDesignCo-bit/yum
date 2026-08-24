@@ -4,8 +4,17 @@
   const ONBOARDING_KEY = 'yumetics-onboarding-v1';
   const PLANNER_KEY = 'yumetics-local-planner-v1';
   const read = (key) => { try { return JSON.parse(sessionStorage.getItem(key) || localStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
+  const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) { /* The UI remains usable when storage is unavailable. */ } };
   const onboarding = read(ONBOARDING_KEY);
   const titleCase = (value) => String(value || '').replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+  const savePet = (pet, petName) => {
+    const next = { ...read(ONBOARDING_KEY), pet };
+    if (petName != null) next.pet_name = petName;
+    next.plan = { ...(next.plan || {}), pet, petName: petName || next.plan?.petName || next.pet_name || 'Pepi' };
+    save(ONBOARDING_KEY, next);
+    Object.assign(onboarding, next);
+  };
 
   const applySelectedPet = () => {
     if (!document.body.classList.contains('app-page') && !document.title.includes('Your plan')) return;
@@ -15,6 +24,42 @@
     if (nameInput && onboarding.pet_name) nameInput.value = onboarding.pet_name;
     const profileImage = document.querySelector('.app-page-illustration');
     if (profileImage) profileImage.alt = `${onboarding.pet_name || titleCase(pet)} the ${titleCase(pet)}`;
+    document.querySelectorAll('img:not(.store-pet-img)[src*="/images/pets/"]').forEach((image) => {
+      image.src = image.src.replace(/\/images\/pets\/(pot|carrot|banana)\//, `/images/pets/${pet}/`);
+    });
+  };
+
+  const initPetSaving = () => {
+    const storeForm = document.querySelector('[data-store-form]');
+    if (storeForm) {
+      const currentPet = onboarding.pet || onboarding.plan?.pet;
+      if (currentPet) {
+        const option = [...storeForm.querySelectorAll('input[name="pet"]')].find((input) => input.value === currentPet);
+        if (option) option.checked = true;
+      }
+      storeForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const pet = storeForm.querySelector('input[name="pet"]:checked')?.value;
+        if (!pet) return;
+        savePet(pet);
+        applySelectedPet();
+        const modal = storeForm.closest('.modal');
+        if (window.bootstrap?.Modal && modal) window.bootstrap.Modal.getOrCreateInstance(modal).hide();
+        else if (modal) { modal.classList.remove('show'); modal.style.display = 'none'; }
+      });
+    }
+
+    const nameInput = document.querySelector('#profile-pet-name');
+    const nameForm = nameInput?.closest('form');
+    if (nameInput && nameForm) {
+      nameForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const petName = nameInput.value.trim();
+        if (!petName) return nameInput.focus();
+        savePet(onboarding.pet || onboarding.plan?.pet || 'pot', petName);
+        applySelectedPet();
+      });
+    }
   };
 
   const updateProfileFromPlan = () => {
@@ -192,6 +237,7 @@
   };
 
   applySelectedPet();
+  initPetSaving();
   document.querySelectorAll('#ai-meal-analyzing-modal .text-blue-800').forEach((element) => { element.textContent = 'Analyzing your photo'; });
   updateProfileFromPlan();
   initSnapAndCook();
