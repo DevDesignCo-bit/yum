@@ -24,9 +24,6 @@
     if (nameInput && onboarding.pet_name) nameInput.value = onboarding.pet_name;
     const profileImage = document.querySelector('.app-page-illustration');
     if (profileImage) profileImage.alt = `${onboarding.pet_name || titleCase(pet)} the ${titleCase(pet)}`;
-    document.querySelectorAll('img:not(.store-pet-img)[src*="/images/pets/"]').forEach((image) => {
-      image.src = image.src.replace(/\/images\/pets\/(pot|carrot|banana)\//, `/images/pets/${pet}/`);
-    });
   };
 
   const initPetSaving = () => {
