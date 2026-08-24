@@ -60,15 +60,16 @@
   const initPetSaving = () => {
     const storeForm = document.querySelector('[data-store-form]');
     if (storeForm) {
+      const colorOptions = [...storeForm.querySelectorAll('input[name="color"]')];
       const updateStoreSelection = () => {
+        const selectedColor = colorOptions.find((option) => option.checked)?.value;
         storeForm.querySelectorAll('[data-store-slide]').forEach((slide) => {
           const option = slide.querySelector('input[name="pet"]');
           const selected = Boolean(option?.checked);
           slide.classList.toggle('is-selected', selected);
-          if (selected) slide.style.setProperty('--selected-pet-color', petColors[option.value] || petColors.pot);
+          if (selected) slide.style.setProperty('--selected-pet-color', homeColors[selectedColor] || homeColors[onboarding.home_color] || petColors[option.value] || petColors.pot);
         });
       };
-      const colorOptions = [...storeForm.querySelectorAll('input[name="color"]')];
       const updateColorSelection = (preview = false) => {
         colorOptions.forEach((option) => {
           option.closest('[data-store-swatch]')?.classList.toggle('is-selected', option.checked);
