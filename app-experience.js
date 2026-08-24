@@ -489,6 +489,50 @@
     if (fasting.status === 'active') window.setInterval(render, 1000);
   };
 
+  const initDemoEntry = () => {
+    const entryRoutes = {
+      '/lp': '3G demo', '/login': 'Login demo', '/otp': 'OTP demo', '/wifi': 'WiFi demo',
+      '/wifi-operator-country-selector': 'WiFi demo', '/wifi-no-number': 'WiFi demo'
+    };
+    const route = window.location.pathname;
+    const method = entryRoutes[route];
+    if (method) {
+      // These screens are intentionally a safe, presentational demo: do not keep
+      // or transmit the phone number, operator, country, CAPTCHA, or any payment data.
+      document.querySelectorAll('.hero-description p').forEach((copy) => {
+        copy.textContent = 'Demo flow: continue with a simulated code, then start your nutrition onboarding. No SMS, payment or personal data is sent.';
+      });
+      document.querySelectorAll('.form-pill .text-center.fs-8').forEach((copy) => { copy.textContent = 'Demo mode — no charge'; });
+      const captcha = document.querySelector('.g-recaptcha')?.closest('.mt-4');
+      if (captcha) captcha.replaceChildren(document.createTextNode('Demo mode — no CAPTCHA needed.'));
+      document.querySelectorAll('form').forEach((form) => {
+        // The source prototype intercepts controls inside forms. Put the demo
+        // continuation just after the form so it always works as an ordinary link.
+        const continuation = form.querySelector('a[href^="/demo-code"]');
+        if (continuation) { form.insertAdjacentElement('afterend', continuation); }
+        form.addEventListener('submit', (event) => {
+          if (!form.checkValidity()) return form.reportValidity();
+          save('yumetics-demo-entry-v1', { method });
+        });
+      });
+      return;
+    }
+    if (route !== '/demo-code' && route !== '/lp-confirm' && route !== '/otp-pin' && route !== '/wifi-pin') return;
+    const entry = read('yumetics-demo-entry-v1');
+    const methodFromUrl = new URLSearchParams(window.location.search).get('method');
+    const label = document.querySelector('[data-demo-method]');
+    if (label) {
+      const methodName = methodFromUrl ? `${methodFromUrl} demo` : entry.method;
+      label.textContent = methodName ? `${methodName} complete. Continue to your Yumetics onboarding.` : 'Continue to your Yumetics onboarding.';
+    }
+    const form = document.querySelector('[data-demo-pin-form]');
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) return form.reportValidity();
+      window.location.assign('/onboarding');
+    });
+  };
+
   const initWeeklyStats = () => {
     if (!document.title.includes('Stats')) return;
     let tracker = { meals: [] };
@@ -672,6 +716,7 @@
   initPartyPlanner();
   renderPlannerResults();
   renderPartyResults();
+  initDemoEntry();
   initFasting();
   renderWeeklyStats();
 })();

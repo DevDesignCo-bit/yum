@@ -17,24 +17,25 @@
                 <div class="col-12 col-md-6 col-lg-4 text-center mt-5 pt-1">
                     <h1 class="fw-black fs-35px fs-xl-1 lh-1 mb-5 pb-4">Login in to Yumetics</h1>
 
-                    <form method="get" action="/onboarding" class="needs-validation form-pill" novalidate>
+                    <form method="get" action="/demo-code" class="needs-validation form-pill" novalidate>
                         <div class="form-field form-gap">
                             <label class="form-label text-center w-100" for="phone">Enter your phone number:</label>
-                            <input type="tel" class="form-control text-center" placeholder="+48 xxx xxx xxxx" name="phone" id="phone" required>
+                            <input type="tel" class="form-control text-center" placeholder="+48 xxx xxx xxxx" id="phone" required>
                             <div class="invalid-feedback">Please enter a valid phone number *</div>
                         </div>
 
-                        <button type="submit" class="btn btn-dark mt-4">Continue</button>
+                        <a href="/demo-code?method=Login" class="demo-entry-continue mt-4">Continue</a>
                     </form>
 
-                    <div class="mt-4 d-flex justify-content-center">
+                        <div class="mt-4 d-flex justify-content-center">
                         <div class="g-recaptcha"
      data-callback="capcha_filled"
      data-expired-callback="capcha_expired"
      data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
 
+                        </div>
+                        <a href="/onboarding" class="d-inline-block mt-4 text-primary fw-semibold text-decoration-none">Start onboarding directly</a>
                     </div>
-                </div>
             </div>
         </div>
 
