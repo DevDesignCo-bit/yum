@@ -3,8 +3,14 @@
 
   const ONBOARDING_KEY = 'yumetics-onboarding-v1';
   const PLANNER_KEY = 'yumetics-local-planner-v1';
-  const read = (key) => { try { return JSON.parse(sessionStorage.getItem(key) || localStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
-  const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) { /* The UI remains usable when storage is unavailable. */ } };
+  const read = (key) => { try { return JSON.parse(localStorage.getItem(key) || sessionStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
+  const save = (key, value) => {
+    try {
+      const serialized = JSON.stringify(value);
+      localStorage.setItem(key, serialized);
+      sessionStorage.setItem(key, serialized);
+    } catch (_) { /* The UI remains usable when storage is unavailable. */ }
+  };
   const onboarding = read(ONBOARDING_KEY);
   const titleCase = (value) => String(value || '').replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
   const recipeImages = ['/assets/recipes/chickpea-skillet.png', '/assets/recipes/vegetable-curry.png', '/assets/recipes/quinoa-bowl.png'];
@@ -25,6 +31,13 @@
     if (nameInput && onboarding.pet_name) nameInput.value = onboarding.pet_name;
     const profileImage = document.querySelector('.app-page-illustration');
     if (profileImage) profileImage.alt = `${onboarding.pet_name || titleCase(pet)} the ${titleCase(pet)}`;
+    document.querySelectorAll('img[src*="/images/pets/pot/"]').forEach((image) => {
+      const originalSrc = image.currentSrc || image.src;
+      const selectedSrc = originalSrc.replace('/images/pets/pot/', `/images/pets/${pet}/`);
+      if (selectedSrc === originalSrc) return;
+      image.addEventListener('error', () => { image.src = originalSrc; }, { once: true });
+      image.src = selectedSrc;
+    });
   };
 
   const initPetSaving = () => {
@@ -33,7 +46,10 @@
       const currentPet = onboarding.pet || onboarding.plan?.pet;
       if (currentPet) {
         const option = [...storeForm.querySelectorAll('input[name="pet"]')].find((input) => input.value === currentPet);
-        if (option) option.checked = true;
+        if (option) {
+          option.checked = true;
+          queueMicrotask(() => option.closest('label')?.click());
+        }
       }
       storeForm.addEventListener('submit', (event) => {
         event.preventDefault();

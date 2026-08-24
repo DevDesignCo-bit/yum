@@ -13,7 +13,9 @@
     try {
       const next = { ...read(), ...updates };
       next.plan = { ...(next.plan || {}), pet: next.pet || 'pot', petName: next.pet_name || next.plan?.petName || 'Pepi' };
-      localStorage.setItem(KEY, JSON.stringify(next));
+      const serialized = JSON.stringify(next);
+      localStorage.setItem(KEY, serialized);
+      sessionStorage.setItem(KEY, serialized);
     } catch (_) { /* The onboarding can still continue if browser storage is unavailable. */ }
   };
 
