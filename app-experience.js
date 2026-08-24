@@ -14,7 +14,16 @@
   };
   const onboarding = read(ONBOARDING_KEY);
   const titleCase = (value) => String(value || '').replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
-  const recipeImages = ['/assets/recipes/chickpea-skillet.png', '/assets/recipes/vegetable-curry.png', '/assets/recipes/quinoa-bowl.png'];
+  const recipeImages = [
+    '/assets/recipes/tomato-bruschetta.png',
+    '/assets/recipes/chickpea-curry-rice.png',
+    '/assets/recipes/berry-yogurt-parfait.png',
+    '/assets/recipes/lemon-chicken-traybake.png',
+    '/assets/recipes/avocado-cucumber-bites.png',
+    '/assets/recipes/quinoa-bowl.png',
+    '/assets/recipes/chickpea-skillet.png',
+    '/assets/recipes/vegetable-curry.png'
+  ];
   const petColors = { pot: '#ff4c2c', carrot: '#ffb15f', banana: '#97d7ff' };
 
   const savePet = (pet, petName) => {
@@ -122,7 +131,18 @@
     return result;
   };
 
-  const recipe = (name, tag, calories, prep, cook, ingredients, description, imageIndex = 0) => ({
+  const recipeImageIndex = (name) => {
+    const value = String(name || '').toLowerCase();
+    if (/bruschetta|crostini|tomato/.test(value)) return 0;
+    if (/curry|chickpea/.test(value)) return 1;
+    if (/parfait|berry|yogurt|mousse|crumble/.test(value)) return 2;
+    if (/chicken|tray bake|roasted protein/.test(value)) return 3;
+    if (/avocado|cucumber/.test(value)) return 4;
+    if (/quinoa|grain|harvest bowl/.test(value)) return 5;
+    if (/skillet|broccoli/.test(value)) return 6;
+    return 7;
+  };
+  const recipe = (name, tag, calories, prep, cook, ingredients, description, imageIndex = null) => ({
     name, tag, calories, prep_min: prep, cook_min: cook, ingredients,
     description: `${description} Approx. ${Math.round(calories * .11)}g protein · ${Math.round(calories * .12)}g carbs · ${Math.round(calories * .045)}g fat per serving.`,
     instructions: [
@@ -130,7 +150,7 @@
       { title: 'Cook', description: 'Cook in a pan or oven until tender and hot throughout.' },
       { title: 'Serve', description: 'Plate, season to taste, and enjoy while warm.' }
     ],
-    image_url: recipeImages[imageIndex % recipeImages.length]
+    image_url: recipeImages[(imageIndex == null ? recipeImageIndex(name) : imageIndex) % recipeImages.length]
   });
 
   const buildRecipes = (profile, preferences) => {
