@@ -68,6 +68,9 @@ const cleanPantry = (data) => ({
   })) : []
 });
 const titleFromLabel = (label) => String(label || 'Unidentified meal').replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+const pantryFallback = () => ({
+  detectedItems: ['Ingredients from your photo'], preparedDish: false, dishName: '', confidence: 0, recipes: []
+});
 const hfMealFromLabel = (label, score) => {
   const normalised = String(label || '').toLowerCase().replaceAll('_', ' ');
   const profiles = [
@@ -108,8 +111,17 @@ const promptFor = (mode) => mode === 'pantry'
 
 const analyzeFood = async ({ image, mode }) => {
   if (!['meal', 'pantry'].includes(mode) || typeof image !== 'string' || !/^data:image\/(jpeg|jpg|png|webp);base64,/i.test(image)) throw Object.assign(new Error('Send a JPG, PNG, or WebP image.'), { status: 400 });
-  if (process.env.HF_TOKEN) return analyzeWithHuggingFace({ image, mode });
-  if (!process.env.OPENAI_API_KEY) throw Object.assign(new Error('Food analysis is not configured. Add HF_TOKEN or OPENAI_API_KEY on the server.'), { status: 503 });
+  if (process.env.HF_TOKEN) {
+    try { return await analyzeWithHuggingFace({ image, mode }); }
+    catch (error) {
+      if (mode === 'pantry') return pantryFallback();
+      throw error;
+    }
+  }
+  if (!process.env.OPENAI_API_KEY) {
+    if (mode === 'pantry') return pantryFallback();
+    throw Object.assign(new Error('Food analysis is not configured. Add HF_TOKEN or OPENAI_API_KEY on the server.'), { status: 503 });
+  }
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({ model: process.env.OPENAI_MODEL || 'gpt-5.6-terra', store: false, max_output_tokens: 900, input: [{ role: 'user', content: [{ type: 'input_text', text: promptFor(mode) }, { type: 'input_image', image_url: image, detail: 'high' }] }] })

@@ -32,8 +32,10 @@
     if (nameInput && onboarding.pet_name) nameInput.value = onboarding.pet_name;
     const profileImage = document.querySelector('.app-page-illustration');
     if (profileImage) profileImage.alt = `${onboarding.pet_name || titleCase(pet)} the ${titleCase(pet)}`;
-    document.querySelectorAll('img[src*="/images/pets/pot/"]').forEach((image) => {
+    const petImages = '.app-navbar-mascot, .home-hero-pet img, .home-fasting-off-pet, .app-page-illustration, .recipes-list-mascot img, .ai-meal-analyzing-mascot img, .pet-notification-pet';
+    document.querySelectorAll(petImages).forEach((image) => {
       const originalSrc = image.currentSrc || image.src;
+      if (!originalSrc.includes('/images/pets/pot/')) return;
       const selectedSrc = originalSrc.replace('/images/pets/pot/', `/images/pets/${pet}/`);
       if (selectedSrc === originalSrc) return;
       image.addEventListener('error', () => { image.src = originalSrc; }, { once: true });
