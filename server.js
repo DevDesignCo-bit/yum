@@ -16,13 +16,13 @@ const localStyles = `
       content: 'Selected';
       position: absolute;
       z-index: 2;
-      top: 10px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 999px;
       color: #1b2538;
-      background: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.96);
       font-size: 12px;
       font-weight: 700;
       line-height: 1;
