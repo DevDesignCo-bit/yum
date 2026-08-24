@@ -3,6 +3,7 @@
 
   const ONBOARDING_KEY = 'yumetics-onboarding-v1';
   const PLANNER_KEY = 'yumetics-local-planner-v1';
+  const PARTY_KEY = 'yumetics-party-planner-v1';
   const read = (key) => { try { return JSON.parse(localStorage.getItem(key) || sessionStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
   const save = (key, value) => {
     try {
@@ -175,6 +176,35 @@
     });
   };
 
+  const pantryProfile = (profile) => {
+    const detected = (profile.detectedItems || []).join(' ').toLowerCase();
+    if (/broccoli|spinach|kale|green|salad/.test(detected)) return { type: 'green' };
+    if (/tomato|pepper|red/.test(detected)) return { type: 'red' };
+    if (/carrot|corn|pumpkin|golden|yellow/.test(detected)) return { type: 'golden' };
+    if (/mushroom|bean|potato|brown/.test(detected)) return { type: 'brown' };
+    return { type: 'light' };
+  };
+
+  const buildPartyRecipes = ({ diet = 'none', guests = '5', event = 'family_gathering', difficulty = 'easy', allergies = [] }) => {
+    const vegan = diet === 'vegan' || allergies.includes('animal_products');
+    const vegetarian = vegan || diet === 'vegetarian' || allergies.includes('meat');
+    const lowCarb = diet === 'low_carb' || diet === 'ketogenic';
+    const highProtein = diet === 'high_protein' || diet === 'paleo';
+    const tag = vegan ? 'Vegan' : vegetarian ? 'Vegetarian' : lowCarb ? 'Low Carb' : highProtein ? 'High Protein' : 'Balanced';
+    const occasion = { christmas: 'festive', picnic: 'picnic', family_gathering: 'family-style' }[event] || 'shared';
+    const time = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 8 : 0;
+    const menu = vegan
+      ? [['Crispy vegetable crostini', 210, 12, 8, ['wholegrain bread', 'tomatoes', 'herbs']], ['Creamy chickpea curry', 460, 15, 28, ['chickpeas', 'vegetables', 'coconut milk']], ['Berry coconut pots', 260, 10, 0, ['berries', 'coconut yogurt', 'oats']]]
+      : vegetarian
+        ? [['Herb tomato bruschetta', 220, 12, 8, ['bread', 'tomatoes', 'fresh herbs']], ['Roasted vegetable gratin', 510, 18, 35, ['seasonal vegetables', 'cheese', 'potatoes']], ['Warm fruit crumble', 320, 15, 25, ['seasonal fruit', 'oats', 'cinnamon']]]
+        : lowCarb
+          ? [['Avocado cucumber bites', 190, 12, 0, ['avocado', 'cucumber', 'lemon']], ['Lemon chicken tray bake', 520, 15, 32, ['chicken', 'vegetables', 'lemon']], ['Greek yogurt berry cups', 240, 8, 0, ['greek yogurt', 'berries', 'seeds']]]
+          : highProtein
+            ? [['Protein hummus board', 260, 12, 0, ['hummus', 'vegetables', 'seeds']], ['Herb chicken & quinoa', 560, 18, 30, ['chicken', 'quinoa', 'vegetables']], ['Cocoa protein mousse', 280, 10, 0, ['yogurt', 'cocoa', 'berries']]]
+            : [['Seasonal sharing platter', 260, 15, 0, ['vegetables', 'bread', 'dip']], ['Roasted vegetable & chicken bake', 540, 18, 35, ['chicken', 'vegetables', 'herbs']], ['Fruit yogurt parfaits', 300, 10, 0, ['fruit', 'yogurt', 'granola']]];
+    return menu.map(([name, calories, prep, cook, ingredients], index) => recipe(name, tag, calories, prep + time, cook + time, ingredients, `A ${occasion} recipe scaled for ${guests} guests.`, index));
+  };
+
   const initSnapAndCook = () => {
     const input = document.querySelector('input[name="snap_photo"]');
     const button = document.querySelector('#snap-analyze');
@@ -208,7 +238,7 @@
         }
         const keepPreferences = Boolean(document.querySelector('#keep-diet-prefs')?.checked);
         const preferences = keepPreferences ? { diet: onboarding.diet?.[0] || '', allergies: onboarding.allergies || [] } : {};
-        const recipes = (profile.recipes?.length ? profile.recipes : buildRecipes({ type: 'light' }, preferences)).map((item, index) => ({ ...item, image_url: item.image_url || recipeImages[index % recipeImages.length] }));
+        const recipes = (profile.recipes?.length ? profile.recipes : buildRecipes(pantryProfile(profile), preferences)).map((item, index) => ({ ...item, image_url: item.image_url || recipeImages[index % recipeImages.length] }));
         sessionStorage.setItem(PLANNER_KEY, JSON.stringify({ profile, preferences, recipes, rotation: 0 }));
         window.location.assign('/snap-and-cook-result');
       } catch (error) {
@@ -232,7 +262,7 @@
   };
 
   const renderPlannerResults = () => {
-    if (!document.title.includes('Snap & Cook')) return;
+    if (!document.body.classList.contains('cooking-planner-peach')) return;
     const state = read(PLANNER_KEY);
     if (!state.recipes?.length) return;
     const recipes = [...state.recipes];
@@ -266,10 +296,61 @@
     });
   };
 
+  const initPartyPlanner = () => {
+    const form = document.querySelector('.party-planner-inner form');
+    if (!form) return;
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const values = new FormData(form);
+      const settings = {
+        difficulty: values.get('difficulty') || 'easy', guests: values.get('guests') || '5', event: values.get('event') || 'family_gathering',
+        diet: values.get('diet') || 'none', allergies: values.getAll('allergies[]')
+      };
+      sessionStorage.setItem(PARTY_KEY, JSON.stringify({ settings, recipes: buildPartyRecipes(settings) }));
+      window.location.assign('/party-planing-result');
+    });
+  };
+
+  const renderPartyResults = () => {
+    if (!document.body.classList.contains('cooking-planner-blue') || !document.querySelector('.party-planner-regenerate')) return;
+    const state = read(PARTY_KEY);
+    if (!state.recipes?.length) return;
+    const recipes = state.recipes;
+    const settings = state.settings || {};
+    const labels = { christmas: 'Christmas', picnic: 'Picnic', family_gathering: 'Family gathering', easy: 'Easy', medium: 'Medium', hard: 'Advanced' };
+    const summary = [...document.querySelectorAll('.cooking-planner-panel > p.d-flex .fw-light')];
+    if (summary[0]) summary[0].textContent = labels[settings.event] || 'Family gathering';
+    if (summary[1]) summary[1].textContent = `${settings.guests || 5} people`;
+    if (summary[2]) summary[2].textContent = labels[settings.difficulty] || 'Easy';
+    const basedOn = document.querySelector('.party-planner-result-based');
+    if (basedOn) basedOn.textContent = `Menu based on your ${titleCase(settings.diet || 'balanced')} preference`;
+    const cards = [...document.querySelectorAll('.recipes-list-card')];
+    cards.forEach((card, index) => {
+      const item = recipes[index]; const wrapper = card.closest('.col-12');
+      if (!item) { if (wrapper) wrapper.hidden = true; return; }
+      card.querySelector('.recipes-list-card-title').textContent = item.name;
+      card.querySelector('.recipe-tag').textContent = item.tag;
+      const image = card.querySelector('.recipes-list-card-image'); if (image) { image.src = item.image_url; image.alt = item.name; }
+      const meta = card.querySelector('.recipes-list-card-meta'); if (meta) meta.replaceChildren(...[`⏱ Prep: ${item.prep_min} min`, `🍳 Cook: ${item.cook_min} min`, `🔥 ${item.calories} kcal`].map((value) => { const li = document.createElement('li'); li.textContent = value; return li; }));
+      const trigger = card.querySelector('[data-recipe-index]'); if (trigger) trigger.dataset.recipeIndex = index;
+    });
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-recipe-index]');
+      if (!trigger) return;
+      event.preventDefault(); event.stopImmediatePropagation(); fillRecipeModal(recipes[Number(trigger.dataset.recipeIndex) || 0]);
+    }, true);
+    document.querySelector('.party-planner-regenerate')?.addEventListener('click', (event) => {
+      event.preventDefault(); state.recipes = [...recipes.slice(1), recipes[0]]; sessionStorage.setItem(PARTY_KEY, JSON.stringify(state)); window.location.reload();
+    });
+  };
+
   applySelectedPet();
   initPetSaving();
   document.querySelectorAll('#ai-meal-analyzing-modal .text-blue-800').forEach((element) => { element.textContent = 'Analyzing your photo'; });
   updateProfileFromPlan();
   initSnapAndCook();
+  initPartyPlanner();
   renderPlannerResults();
+  renderPartyResults();
 })();
