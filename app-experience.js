@@ -7,6 +7,7 @@
   const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) { /* The UI remains usable when storage is unavailable. */ } };
   const onboarding = read(ONBOARDING_KEY);
   const titleCase = (value) => String(value || '').replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+  const recipeImages = ['/assets/recipes/chickpea-skillet.png', '/assets/recipes/vegetable-curry.png', '/assets/recipes/quinoa-bowl.png'];
 
   const savePet = (pet, petName) => {
     const next = { ...read(ONBOARDING_KEY), pet };
@@ -90,7 +91,7 @@
     return result;
   };
 
-  const recipe = (name, tag, calories, prep, cook, ingredients, description) => ({
+  const recipe = (name, tag, calories, prep, cook, ingredients, description, imageIndex = 0) => ({
     name, tag, calories, prep_min: prep, cook_min: cook, ingredients,
     description: `${description} Approx. ${Math.round(calories * .11)}g protein · ${Math.round(calories * .12)}g carbs · ${Math.round(calories * .045)}g fat per serving.`,
     instructions: [
@@ -98,7 +99,7 @@
       { title: 'Cook', description: 'Cook in a pan or oven until tender and hot throughout.' },
       { title: 'Serve', description: 'Plate, season to taste, and enjoy while warm.' }
     ],
-    image_url: 'https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg'
+    image_url: recipeImages[imageIndex % recipeImages.length]
   });
 
   const buildRecipes = (profile, preferences) => {
@@ -110,9 +111,9 @@
     const tags = vegan ? 'Vegan' : vegetarian ? 'Vegetarian' : lowCarb ? 'Low Carb' : highProtein ? 'High Protein' : 'Balanced';
     const sets = {
       green: [
-        recipe('Broccoli & chickpea skillet', tags, 365, 12, 18, ['broccoli', 'chickpeas', 'lemon'], 'A quick green-pan meal from the fresh produce in your photo.'),
-        recipe('Green vegetable grain bowl', tags, 420, 15, 20, ['leafy vegetables', 'quinoa', 'herbs'], 'A filling bowl built around the greens detected.'),
-        recipe('Roasted green tray bake', tags, 390, 10, 30, ['zucchini', 'broccoli', 'olive oil'], 'Simple roasted vegetables with a satisfying crunch.')
+        recipe('Broccoli & chickpea skillet', tags, 365, 12, 18, ['broccoli', 'chickpeas', 'lemon'], 'A quick green-pan meal from the fresh produce in your photo.', 0),
+        recipe('Green vegetable grain bowl', tags, 420, 15, 20, ['leafy vegetables', 'quinoa', 'herbs'], 'A filling bowl built around the greens detected.', 2),
+        recipe('Roasted green tray bake', tags, 390, 10, 30, ['zucchini', 'broccoli', 'olive oil'], 'Simple roasted vegetables with a satisfying crunch.', 1)
       ],
       red: [
         recipe('Tomato & lentil pasta', tags, 470, 12, 20, ['tomatoes', 'lentils', 'pasta'], 'A pantry-friendly tomato dish inspired by the colours detected.'),
@@ -177,7 +178,7 @@
         }
         const keepPreferences = Boolean(document.querySelector('#keep-diet-prefs')?.checked);
         const preferences = keepPreferences ? { diet: onboarding.diet?.[0] || '', allergies: onboarding.allergies || [] } : {};
-        const recipes = profile.recipes?.length ? profile.recipes : buildRecipes({ type: 'light' }, preferences);
+        const recipes = (profile.recipes?.length ? profile.recipes : buildRecipes({ type: 'light' }, preferences)).map((item, index) => ({ ...item, image_url: item.image_url || recipeImages[index % recipeImages.length] }));
         sessionStorage.setItem(PLANNER_KEY, JSON.stringify({ profile, preferences, recipes, rotation: 0 }));
         window.location.assign('/snap-and-cook-result');
       } catch (error) {
@@ -217,6 +218,8 @@
       if (wrapper) wrapper.hidden = false;
       card.querySelector('.recipes-list-card-title').textContent = item.name;
       card.querySelector('.recipe-tag').textContent = item.tag;
+      const cardImage = card.querySelector('.recipes-list-card-image');
+      if (cardImage) { cardImage.src = item.image_url || recipeImages[index % recipeImages.length]; cardImage.alt = item.name; }
       const meta = card.querySelector('.recipes-list-card-meta');
       if (meta) meta.replaceChildren(...[`⏱ Prep: ${item.prep_min} min`, `🍳 Cook: ${item.cook_min} min`, `🔥 ${item.calories} kcal`].map((text) => { const li = document.createElement('li'); li.textContent = text; return li; }));
       const trigger = card.querySelector('[data-recipe-index]'); if (trigger) trigger.dataset.recipeIndex = index;

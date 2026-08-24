@@ -87,7 +87,10 @@ const analyzeWithHuggingFace = async ({ image, mode }) => {
   if (!best?.label) throw new Error('The food model did not return a dish.');
   const meal = hfMealFromLabel(best.label, best.score);
   if (mode === 'meal') return meal;
-  return { detectedItems: [meal.name], preparedDish: true, dishName: meal.name, confidence: meal.confidence, recipes: [] };
+  const isPreparedDessert = /tiramisu|cake|cheesecake|mousse|donut|ice cream|creme brulee/.test(String(best.label).toLowerCase());
+  return isPreparedDessert
+    ? { detectedItems: [meal.name], preparedDish: true, dishName: meal.name, confidence: meal.confidence, recipes: [] }
+    : { detectedItems: [meal.name], preparedDish: false, dishName: '', confidence: meal.confidence, recipes: [] };
 };
 const promptFor = (mode) => mode === 'pantry'
   ? `Analyze this food, pantry, or fridge photo. Return JSON only, with this exact shape: {"detectedItems":["..."],"preparedDish":false,"dishName":"","confidence":0.0,"recipes":[{"name":"","tag":"","calories":0,"prep_min":0,"cook_min":0,"ingredients":[""],"description":"","instructions":[{"title":"","description":""}]}]}. Identify food by visual evidence, not colours. If it is already a prepared dish (for example tiramisu), set preparedDish true and state its precise name; do not invent vegetables. Give three practical recipes only when visible ingredients support them. Use English names and conservative nutrition estimates.`
@@ -119,9 +122,10 @@ http.createServer(async (req, res) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js']);
-  const file = scripts.has(pathname.slice(1)) ? pathname.slice(1) : onboardingFile || routes[pathname];
+  const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
+  const file = recipeAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : onboardingFile || routes[pathname]);
   if (!file) { res.writeHead(404); return res.end('Not found'); }
-  const contentType = file.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/html; charset=utf-8';
+  const contentType = file.endsWith('.js') ? 'text/javascript; charset=utf-8' : file.endsWith('.png') ? 'image/png' : 'text/html; charset=utf-8';
   fs.readFile(path.join(root, file), (error, data) => {
     if (error) { res.writeHead(500); return res.end('Unable to load page'); }
     res.writeHead(200, { 'Content-Type': contentType });
