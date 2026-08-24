@@ -4,6 +4,7 @@
   const ONBOARDING_KEY = 'yumetics-onboarding-v1';
   const PLANNER_KEY = 'yumetics-local-planner-v1';
   const PARTY_KEY = 'yumetics-party-planner-v1';
+  const FASTING_KEY = 'yumetics-fasting-v1';
   const read = (key) => { try { return JSON.parse(localStorage.getItem(key) || sessionStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
   const save = (key, value) => {
     try {
@@ -395,6 +396,99 @@
     });
   };
 
+  const initFasting = () => {
+    const fastingPages = new Set([
+      '/home', '/home-activate-fasting', '/home-fasting-active', '/home-fasting-in-progress',
+      '/home-fasting-paused', '/home-fasting-goal-achieved', '/home-fasting-completed', '/edit-fasting'
+    ]);
+    if (!fastingPages.has(window.location.pathname)) return;
+
+    const hoursFrom = (value) => Math.max(1, Number.parseInt(String(value || ''), 10) || 16);
+    const defaultHours = hoursFrom(onboarding.fasting_goal || onboarding.plan?.fasting || 16);
+    let fasting = { goalHours: defaultHours, status: 'off', elapsedMs: 0, startedAt: null, ...read(FASTING_KEY) };
+    fasting.goalHours = hoursFrom(fasting.goalHours);
+    fasting.elapsedMs = Math.max(0, Number(fasting.elapsedMs) || 0);
+    const persistFasting = () => save(FASTING_KEY, fasting);
+    const saveGoalToProfile = () => {
+      const next = { ...read(ONBOARDING_KEY), fasting_goal: `${fasting.goalHours}h` };
+      next.plan = { ...(next.plan || {}), fasting: fasting.goalHours };
+      save(ONBOARDING_KEY, next); Object.assign(onboarding, next);
+    };
+    const totalMs = () => fasting.goalHours * 60 * 60 * 1000;
+    const elapsedMs = () => fasting.status === 'active' && fasting.startedAt
+      ? fasting.elapsedMs + Math.max(0, Date.now() - Number(fasting.startedAt)) : fasting.elapsedMs;
+    const clock = (milliseconds) => {
+      const seconds = Math.floor(milliseconds / 1000);
+      const hours = Math.floor(seconds / 3600); const minutes = Math.floor((seconds % 3600) / 60); const rest = seconds % 60;
+      return [hours, minutes, rest].map((part) => String(part).padStart(2, '0')).join(':');
+    };
+    const caption = () => `Goal: ${fasting.goalHours} h fast • eating window ${Math.max(0, 24 - fasting.goalHours)} h`;
+    const render = () => {
+      const elapsed = elapsedMs(); const complete = elapsed >= totalMs();
+      if (complete && fasting.status === 'active') {
+        fasting = { ...fasting, status: 'completed', elapsedMs: totalMs(), startedAt: null }; persistFasting();
+        if (window.location.pathname === '/home-fasting-in-progress') window.location.assign('/home-fasting-goal-achieved');
+        return;
+      }
+      const displayElapsed = fasting.status === 'completed' ? totalMs() : elapsed;
+      document.querySelectorAll('.home-fasting-timer').forEach((timer) => { timer.textContent = clock(displayElapsed); });
+      document.querySelectorAll('.home-fasting-caption').forEach((element) => {
+        element.textContent = fasting.status === 'completed' ? `Completed ${fasting.goalHours}h 00m` : caption();
+      });
+      const percent = Math.min(100, Math.round((displayElapsed / totalMs()) * 100));
+      document.querySelectorAll('.fasting-progress').forEach((progress) => { progress.style.setProperty('--fp-percent', String(percent)); });
+      document.querySelectorAll('input[name="fasting_goal"]').forEach((input) => { input.checked = hoursFrom(input.value) === fasting.goalHours; });
+      document.querySelectorAll('[data-fasting-helper]').forEach((helper) => { helper.classList.toggle('d-none', helper.dataset.fastingHelper !== `${fasting.goalHours}h`); });
+
+      const offCard = document.querySelector('.home-fasting-card-off');
+      if (offCard && ['ready', 'active', 'paused'].includes(fasting.status)) {
+        offCard.querySelector('.home-card-label')?.replaceChildren(document.createTextNode('Fasting'));
+        const heading = offCard.querySelector('.home-fasting-off-heading');
+        if (heading) heading.textContent = fasting.status === 'active' ? 'Your fasting is in progress' : 'Your fasting is ready';
+        const link = offCard.querySelector('a[href="/home-activate-fasting"]');
+        if (link) { link.href = fasting.status === 'active' ? '/home-fasting-in-progress' : '/home-fasting-active'; link.textContent = fasting.status === 'active' ? 'Continue' : 'Start Fasting'; }
+      }
+    };
+
+    document.querySelectorAll('[data-fasting-goal] input[name="fasting_goal"]').forEach((input) => {
+      input.addEventListener('change', () => { fasting.goalHours = hoursFrom(input.value); saveGoalToProfile(); persistFasting(); render(); });
+    });
+    const goalForm = document.querySelector('form[action="/home-fasting-active"], form[action="/profile"]');
+    if (goalForm) goalForm.addEventListener('submit', (event) => {
+      const choice = goalForm.querySelector('input[name="fasting_goal"]:checked');
+      if (!choice) return;
+      event.preventDefault();
+      fasting = { goalHours: hoursFrom(choice.value), status: window.location.pathname === '/edit-fasting' ? fasting.status : 'ready', elapsedMs: 0, startedAt: null };
+      saveGoalToProfile(); persistFasting();
+      window.location.assign(goalForm.action);
+    });
+
+    const start = () => {
+      fasting = { ...fasting, status: 'active', startedAt: Date.now() }; persistFasting();
+      window.location.assign('/home-fasting-in-progress');
+    };
+    if (window.location.pathname === '/home-fasting-active') {
+      document.querySelectorAll('a[href="/home-fasting-in-progress"]').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); start(); }, true));
+    }
+    if (window.location.pathname === '/home-fasting-paused') {
+      document.querySelectorAll('a[href="/home-fasting-in-progress"]').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); start(); }, true));
+    }
+    document.querySelectorAll('#fasting-ended-sheet a[href="/home-fasting-completed"]').forEach((button) => button.addEventListener('click', (event) => {
+      event.preventDefault(); fasting = { ...fasting, status: 'off', elapsedMs: 0, startedAt: null }; persistFasting(); window.location.assign('/home-fasting-completed');
+    }, true));
+    // The designed Start links all lead here. Entering this state begins the
+    // clock as well, so the demo remains reliable even if a page navigation is
+    // handled by the prototype's existing scripts.
+    if (window.location.pathname === '/home-fasting-in-progress' && fasting.status === 'ready') {
+      fasting = { ...fasting, status: 'active', startedAt: Date.now() }; persistFasting();
+    }
+    if (window.location.pathname === '/home-fasting-paused' && fasting.status === 'active') { fasting.status = 'paused'; fasting.elapsedMs = elapsedMs(); fasting.startedAt = null; persistFasting(); }
+    if (window.location.pathname === '/home-fasting-goal-achieved') { fasting = { ...fasting, status: 'completed', elapsedMs: totalMs(), startedAt: null }; persistFasting(); }
+    if (window.location.pathname === '/home-fasting-completed') { fasting = { ...fasting, status: 'off', elapsedMs: 0, startedAt: null }; persistFasting(); }
+    render();
+    if (fasting.status === 'active') window.setInterval(render, 1000);
+  };
+
   const initWeeklyStats = () => {
     if (!document.title.includes('Stats')) return;
     let tracker = { meals: [] };
@@ -578,5 +672,6 @@
   initPartyPlanner();
   renderPlannerResults();
   renderPartyResults();
+  initFasting();
   renderWeeklyStats();
 })();
