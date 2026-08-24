@@ -8,9 +8,27 @@ const localStyles = `
     .store-slide { transition: transform .2s ease, filter .2s ease; }
     .store-slide.is-selected { transform: translateY(-8px); }
     .store-slide.is-selected .store-card {
-      outline: 4px solid var(--selected-pet-color, #ff4c2c);
-      outline-offset: 4px;
-      box-shadow: 0 12px 28px color-mix(in srgb, var(--selected-pet-color, #ff4c2c) 38%, transparent);
+      border: 4px solid var(--selected-pet-color, #ff4c2c) !important;
+      background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, var(--selected-pet-color, #ff4c2c) 100%) !important;
+      box-shadow: 0 14px 30px rgba(26, 35, 55, .24);
+    }
+    .store-slide.is-selected .store-card::after {
+      content: 'Selected';
+      position: absolute;
+      z-index: 2;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: #1b2538;
+      background: rgba(255,255,255,.92);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .store-slide.is-selected .store-pet-img { filter: drop-shadow(0 8px 8px rgba(26, 35, 55, .2)); }
     }
   </style>`;
 const port = Number(process.env.PORT) || 4174;
