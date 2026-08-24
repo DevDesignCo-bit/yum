@@ -27,9 +27,10 @@
     text('.onboarding-step-title', `Reach ${targetWeight} kg by ${formattedDate}`);
     text('.trajectory-pill-start', `${weight} KG`); text('.trajectory-pill-target', `${targetWeight} KG`);
     const trajectoryPath = document.querySelector('.trajectory-path');
+    const trajectoryChart = document.querySelector('.trajectory-chart');
+    const direction = Math.sign(targetWeight - weight);
     if (trajectoryPath) {
       // Maintain is horizontal; a gain goal rises towards the target, while a loss goal falls.
-      const direction = Math.sign(targetWeight - weight);
       const path = direction === 0
         ? 'M2.9126 38.5 L244.156 38.5'
         : direction > 0
@@ -37,6 +38,21 @@
           : 'M2.9126 2.93521 C60 38 145 74.6097 244.156 74.7715';
       trajectoryPath.setAttribute('d', path);
     }
+    if (trajectoryChart) {
+      trajectoryChart.classList.toggle('trajectory-chart-maintain', direction === 0);
+      trajectoryChart.classList.toggle('trajectory-chart-gain', direction > 0);
+      trajectoryChart.setAttribute('aria-label', direction === 0
+        ? `Weight maintained at ${weight} kg`
+        : `Weight trajectory from ${weight} kg to ${targetWeight} kg`);
+    }
+    // A maintenance plan has one value, so retain the original clean chart style
+    // instead of showing a second, identical target marker.
+    ['.trajectory-vline-target', '.trajectory-pill-target', '.trajectory-dot-target'].forEach((selector) => {
+      const element = document.querySelector(selector);
+      if (element) element.hidden = direction === 0;
+    });
+    text('.trajectory-axis-mid', targetDate.toLocaleDateString('en-US', { month: 'long' }));
+    text('.trajectory-axis-end', direction === 0 ? 'Maintain' : `Goal: ${targetWeight} kg`);
     text('.summary-card-nutrition .summary-metric-value', goalCalories.toLocaleString('en-US'));
     text('.summary-card-hydration .summary-metric-value', water);
     const fastingValues = document.querySelectorAll('.fasting-summary-value');
