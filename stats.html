@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats — Yumetics</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="app-page">
+        <div class="sticky-top app-navbar-sticky">
+        <nav class="navbar bg-primary overflow-hidden position-relative d-flex d-lg-none px-4 app-navbar-mobile">
+            <a href="/" class="navbar-brand p-0 m-0 d-flex align-items-center">
+                <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+            </a>
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="117" height="121" class="app-navbar-mascot rtl-flip">
+        </nav>
+
+                    <div class="container d-none d-lg-block">
+                <nav class="navbar bg-primary rounded-pill overflow-hidden position-relative flex-nowrap d-flex app-navbar-pill" aria-label="Main">
+                    <a href="/" class="navbar-brand p-0 ms-5 ps-xl-3 d-flex align-items-center">
+                        <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+                    </a>
+                    <ul class="nav flex-nowrap align-items-center ms-7 ms-xl-auto me-auto">
+                        <li class="nav-item"><a href="/" class="nav-link text-uppercase fw-bold">Home</a></li>
+                        <li class="nav-item"><a href="/stats" class="nav-link text-uppercase fw-bold active">Stats</a></li>
+                        <li class="nav-item"><a href="/cooking-planner" class="nav-link text-uppercase fw-bold">Cooking Planner</a></li>
+                        <li class="nav-item"><a href="/profile" class="nav-link text-uppercase fw-bold">My Profile</a></li>
+                    </ul>
+                    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="192" height="199" class="app-navbar-mascot rtl-flip">
+                </nav>
+            </div>
+            </div>
+
+
+    <main class="app-main flex-grow-1">
+            
+    <section class="app-page-header app-page-header-with-illustration">
+    <div class="container">
+        <div class="app-page-header-content d-flex align-items-start gap-3">
+                <a href="/" class="app-icon-btn" aria-label="Back">
+        <span class="icon-arrow icon-arrow-left" aria-hidden="true"></span>
+    </a>
+
+            <h1 class="app-page-title mb-0">Weekly Stats</h1>
+        </div>
+                                <div class="app-page-progress-ring">
+                                                    <div class="progress-ring is-static is-sm" style="--ring-arc-percent: 85; --ring-digits: 5;">
+        <div class="progress-ring-track" aria-hidden="true"></div>
+        <div class="progress-ring-content">
+            <span class="progress-ring-value">12594</span>
+                            <span class="progress-ring-subtext">TOTAL</span>
+                    </div>
+    </div>
+
+            </div>
+            </div>
+</section>
+
+    <section class="stats-content container">
+        <div class="mt-2 mt-lg-8 pt-lg-5" aria-hidden="true">&nbsp;</div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-12 col-xl-10 col-xxl-8">
+                <button type="button" class="stats-calendar"
+                        data-bs-toggle="modal" data-bs-target="#weekly-stats-modal">
+                    <span class="stats-calendar-icon" aria-hidden="true">
+                        <span class="icon-calendar"></span>
+                    </span>
+                    <span class="stats-calendar-label">FEB 9-15</span>
+                </button>
+            </div>
+        </div>
+
+
+
+        <div class="row g-3 g-lg-4 justify-content-center mt-2 mt-lg-3">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                
+<figure class="chart-card calories-chart" aria-label="Weekly calories">
+    <header class="calories-chart-header">
+        <p class="calories-chart-label">Calories</p>
+        <p class="calories-chart-value">
+            <span class="icon-flame" aria-hidden="true"></span>
+            <span>1,800<span class="calories-chart-unit">kcal</span></span>
+        </p>
+    </header>
+
+    <div class="calories-chart-graph" data-min-cal="1000" data-max-cal="3000">
+        <div class="calories-chart-plot">
+            <span class="calories-chart-grid calories-chart-grid-max" aria-hidden="true"></span>
+            <span class="calories-chart-grid calories-chart-grid-mid" aria-hidden="true"></span>
+            <span class="calories-chart-grid calories-chart-grid-min" aria-hidden="true"></span>
+            <ol class="calories-chart-bars">
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 61.6%;" aria-label="S: 2232 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 21.65%;" aria-label="M: 1433 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 22.3%;" aria-label="T: 1446 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 20%;" aria-label="W: 1400 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 49.4%;" aria-label="T: 1988 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 56.9%;" aria-label="F: 2138 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 47.85%;" aria-label="S: 1957 kcal"></span>
+                    </li>
+                            </ol>
+        </div>
+        <ul class="calories-chart-y-axis" aria-hidden="true">
+            <li class="calories-chart-y-label calories-chart-y-label-max">3000</li>
+            <li class="calories-chart-y-label calories-chart-y-label-mid">2000</li>
+            <li class="calories-chart-y-label calories-chart-y-label-min">1000</li>
+        </ul>
+    </div>
+
+    <ol class="calories-chart-days" aria-hidden="true">
+        <li>S</li><li>M</li><li>T</li><li>W</li><li>T</li><li>F</li><li>S</li>    </ol>
+</figure>
+            </div>
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                
+<figure class="chart-card weekly-macros" aria-label="Weekly macro split">
+    <header class="weekly-macros-header">
+        <p class="weekly-macros-title">Macro Balance</p>
+        <ul class="weekly-macros-summary">
+            <li class="weekly-macros-summary-item">
+                <span class="weekly-macros-legend-label">
+                    <span class="macro-balance-dot macro-balance-dot-carbs" aria-hidden="true"></span>Carbs
+                </span>
+                <span class="weekly-macros-summary-value">52%</span>
+            </li>
+            <li class="weekly-macros-summary-item">
+                <span class="weekly-macros-legend-label">
+                    <span class="macro-balance-dot macro-balance-dot-fat" aria-hidden="true"></span>Fat
+                </span>
+                <span class="weekly-macros-summary-value">32%</span>
+            </li>
+            <li class="weekly-macros-summary-item">
+                <span class="weekly-macros-legend-label">
+                    <span class="macro-balance-dot macro-balance-dot-protein" aria-hidden="true"></span>Protein
+                </span>
+                <span class="weekly-macros-summary-value">16%</span>
+            </li>
+        </ul>
+    </header>
+
+    <div class="weekly-macros-graph">
+        <div class="weekly-macros-plot">
+            <span class="weekly-macros-grid weekly-macros-grid-max" aria-hidden="true"></span>
+            <span class="weekly-macros-grid weekly-macros-grid-mid" aria-hidden="true"></span>
+            <span class="weekly-macros-grid weekly-macros-grid-min" aria-hidden="true"></span>
+            <ol class="weekly-macros-bars">
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="S">
+                            <span class="macro-balance-bar-carbs"   style="flex: 44;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 40;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 16;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="M">
+                            <span class="macro-balance-bar-carbs"   style="flex: 55;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 32;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 13;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="T">
+                            <span class="macro-balance-bar-carbs"   style="flex: 48;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 38;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 14;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="W">
+                            <span class="macro-balance-bar-carbs"   style="flex: 58;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 27;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 15;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="T">
+                            <span class="macro-balance-bar-carbs"   style="flex: 54;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 27;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 19;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="F">
+                            <span class="macro-balance-bar-carbs"   style="flex: 50;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 35;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 15;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="S">
+                            <span class="macro-balance-bar-carbs"   style="flex: 55;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 26;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 19;"></span>
+                        </span>
+                    </li>
+                            </ol>
+        </div>
+        <ul class="weekly-macros-y-axis" aria-hidden="true">
+            <li class="weekly-macros-y-label weekly-macros-y-label-max">100%</li>
+            <li class="weekly-macros-y-label weekly-macros-y-label-mid">50%</li>
+            <li class="weekly-macros-y-label weekly-macros-y-label-min">0%</li>
+        </ul>
+    </div>
+
+    <ol class="weekly-macros-days" aria-hidden="true">
+        <li>S</li><li>M</li><li>T</li><li>W</li><li>T</li><li>F</li><li>S</li>    </ol>
+</figure>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade weekly-stats" id="weekly-stats-modal" tabindex="-1" aria-labelledby="weekly-stats-title" aria-hidden="true">
+    <div class="modal-dialog weekly-stats-dialog">
+        <div class="modal-content weekly-stats-content border-0 overflow-hidden position-relative">
+
+            <button type="button"
+                    class="btn-close view-recipe-chip view-recipe-close position-absolute top-0 end-0 m-3 m-md-6 mt-md-5"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+
+            <div class="px-3 px-md-7 pt-4 pt-md-7 pb-4 pb-md-7">
+                <div class="row justify-content-center" data-weekly-stats-selector>
+                    <div class="col-12 col-xl-10 col-xxl-8">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="stats-calendar-icon" aria-hidden="true">
+                                <span class="icon-calendar"></span>
+                            </span>
+                            <span class="weekly-stats-label text-uppercase text-nowrap"
+                                  data-weekly-stats-label>FEB 9-15</span>
+                        </div>
+
+                        <div class="swiper weekly-stats-carousel mt-3 mt-md-4"
+                             data-weekly-stats-carousel
+                             data-current-week-index="16">
+                            <div class="swiper-wrapper">
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="0"
+                                                >
+                                            <span class="weekly-stats-week-month">Oct</span>
+                                            <span class="weekly-stats-week-range">27-2</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="1"
+                                                >
+                                            <span class="weekly-stats-week-month">Nov</span>
+                                            <span class="weekly-stats-week-range">3-9</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="2"
+                                                >
+                                            <span class="weekly-stats-week-month">Nov</span>
+                                            <span class="weekly-stats-week-range">10-16</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="3"
+                                                >
+                                            <span class="weekly-stats-week-month">Nov</span>
+                                            <span class="weekly-stats-week-range">17-23</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="4"
+                                                >
+                                            <span class="weekly-stats-week-month">Nov</span>
+                                            <span class="weekly-stats-week-range">24-30</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="5"
+                                                >
+                                            <span class="weekly-stats-week-month">Dec</span>
+                                            <span class="weekly-stats-week-range">1-7</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="6"
+                                                >
+                                            <span class="weekly-stats-week-month">Dec</span>
+                                            <span class="weekly-stats-week-range">8-14</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="7"
+                                                >
+                                            <span class="weekly-stats-week-month">Dec</span>
+                                            <span class="weekly-stats-week-range">15-21</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="8"
+                                                >
+                                            <span class="weekly-stats-week-month">Dec</span>
+                                            <span class="weekly-stats-week-range">22-28</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="9"
+                                                >
+                                            <span class="weekly-stats-week-month">Dec</span>
+                                            <span class="weekly-stats-week-range">29-4</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="10"
+                                                >
+                                            <span class="weekly-stats-week-month">Jan</span>
+                                            <span class="weekly-stats-week-range">5-11</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="11"
+                                                >
+                                            <span class="weekly-stats-week-month">Jan</span>
+                                            <span class="weekly-stats-week-range">12-18</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="12"
+                                                >
+                                            <span class="weekly-stats-week-month">Jan</span>
+                                            <span class="weekly-stats-week-range">19-25</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="13"
+                                                >
+                                            <span class="weekly-stats-week-month">Jan</span>
+                                            <span class="weekly-stats-week-range">26-1</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="14"
+                                                >
+                                            <span class="weekly-stats-week-month">Feb</span>
+                                            <span class="weekly-stats-week-range">2-8</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="15"
+                                                data-active>
+                                            <span class="weekly-stats-week-month">Feb</span>
+                                            <span class="weekly-stats-week-range">9-15</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="16"
+                                                >
+                                            <span class="weekly-stats-week-month">Feb</span>
+                                            <span class="weekly-stats-week-range">16-22</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="17"
+                                                >
+                                            <span class="weekly-stats-week-month">Feb</span>
+                                            <span class="weekly-stats-week-range">23-1</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="18"
+                                                >
+                                            <span class="weekly-stats-week-month">Mar</span>
+                                            <span class="weekly-stats-week-range">2-8</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="19"
+                                                >
+                                            <span class="weekly-stats-week-month">Mar</span>
+                                            <span class="weekly-stats-week-range">9-15</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="20"
+                                                >
+                                            <span class="weekly-stats-week-month">Mar</span>
+                                            <span class="weekly-stats-week-range">16-22</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="21"
+                                                >
+                                            <span class="weekly-stats-week-month">Mar</span>
+                                            <span class="weekly-stats-week-range">23-29</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="22"
+                                                >
+                                            <span class="weekly-stats-week-month">Mar</span>
+                                            <span class="weekly-stats-week-range">30-5</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="23"
+                                                >
+                                            <span class="weekly-stats-week-month">Apr</span>
+                                            <span class="weekly-stats-week-range">6-12</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="24"
+                                                >
+                                            <span class="weekly-stats-week-month">Apr</span>
+                                            <span class="weekly-stats-week-range">13-19</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="25"
+                                                >
+                                            <span class="weekly-stats-week-month">Apr</span>
+                                            <span class="weekly-stats-week-range">20-26</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="26"
+                                                >
+                                            <span class="weekly-stats-week-month">Apr</span>
+                                            <span class="weekly-stats-week-range">27-3</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="27"
+                                                >
+                                            <span class="weekly-stats-week-month">May</span>
+                                            <span class="weekly-stats-week-range">4-10</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="28"
+                                                >
+                                            <span class="weekly-stats-week-month">May</span>
+                                            <span class="weekly-stats-week-range">11-17</span>
+                                        </button>
+                                    </div>
+                                                                                                                                            <div class="swiper-slide weekly-stats-week-slide">
+                                        <button type="button"
+                                                class="weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0"
+                                                data-week-index="29"
+                                                >
+                                            <span class="weekly-stats-week-month">May</span>
+                                            <span class="weekly-stats-week-range">18-24</span>
+                                        </button>
+                                    </div>
+                                                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4 mt-md-5" data-weekly-stats-hero>
+                    <div class="col-12 col-lg-6 col-xl-5 col-xxl-4 offset-lg-6 d-flex align-items-center gap-3 gap-md-4 px-4 px-md-3 justify-content-between justify-content-md-center justify-content-lg-start">
+                        <h2 class="weekly-stats-hero-title fw-extrabold mb-0">Weekly<br>Stats</h2>
+                        <div class="flex-shrink-0" data-weekly-stats-ring>
+                                                                <div class="progress-ring is-static is-sm" style="--ring-arc-percent: 85; --ring-digits: 5;">
+        <div class="progress-ring-track" aria-hidden="true"></div>
+        <div class="progress-ring-content">
+            <span class="progress-ring-value">12594</span>
+                            <span class="progress-ring-subtext">TOTAL</span>
+                    </div>
+    </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center g-3 g-md-0 mt-4 mt-md-6" data-weekly-stats-charts>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                        
+<figure class="chart-card calories-chart" aria-label="Weekly calories">
+    <header class="calories-chart-header">
+        <p class="calories-chart-label">Calories</p>
+        <p class="calories-chart-value">
+            <span class="icon-flame" aria-hidden="true"></span>
+            <span>1,800<span class="calories-chart-unit">kcal</span></span>
+        </p>
+    </header>
+
+    <div class="calories-chart-graph" data-min-cal="1000" data-max-cal="3000">
+        <div class="calories-chart-plot">
+            <span class="calories-chart-grid calories-chart-grid-max" aria-hidden="true"></span>
+            <span class="calories-chart-grid calories-chart-grid-mid" aria-hidden="true"></span>
+            <span class="calories-chart-grid calories-chart-grid-min" aria-hidden="true"></span>
+            <ol class="calories-chart-bars">
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 61.6%;" aria-label="S: 2232 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 21.65%;" aria-label="M: 1433 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 22.3%;" aria-label="T: 1446 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 20%;" aria-label="W: 1400 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 49.4%;" aria-label="T: 1988 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 56.9%;" aria-label="F: 2138 kcal"></span>
+                    </li>
+                                                        <li class="calories-chart-bar-slot">
+                        <span class="calories-chart-bar" style="height: 47.85%;" aria-label="S: 1957 kcal"></span>
+                    </li>
+                            </ol>
+        </div>
+        <ul class="calories-chart-y-axis" aria-hidden="true">
+            <li class="calories-chart-y-label calories-chart-y-label-max">3000</li>
+            <li class="calories-chart-y-label calories-chart-y-label-mid">2000</li>
+            <li class="calories-chart-y-label calories-chart-y-label-min">1000</li>
+        </ul>
+    </div>
+
+    <ol class="calories-chart-days" aria-hidden="true">
+        <li>S</li><li>M</li><li>T</li><li>W</li><li>T</li><li>F</li><li>S</li>    </ol>
+</figure>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                        
+<figure class="chart-card weekly-macros" aria-label="Weekly macro split">
+    <header class="weekly-macros-header">
+        <p class="weekly-macros-title">Macro Balance</p>
+        <ul class="weekly-macros-summary">
+            <li class="weekly-macros-summary-item">
+                <span class="weekly-macros-legend-label">
+                    <span class="macro-balance-dot macro-balance-dot-carbs" aria-hidden="true"></span>Carbs
+                </span>
+                <span class="weekly-macros-summary-value">52%</span>
+            </li>
+            <li class="weekly-macros-summary-item">
+                <span class="weekly-macros-legend-label">
+                    <span class="macro-balance-dot macro-balance-dot-fat" aria-hidden="true"></span>Fat
+                </span>
+                <span class="weekly-macros-summary-value">32%</span>
+            </li>
+            <li class="weekly-macros-summary-item">
+                <span class="weekly-macros-legend-label">
+                    <span class="macro-balance-dot macro-balance-dot-protein" aria-hidden="true"></span>Protein
+                </span>
+                <span class="weekly-macros-summary-value">16%</span>
+            </li>
+        </ul>
+    </header>
+
+    <div class="weekly-macros-graph">
+        <div class="weekly-macros-plot">
+            <span class="weekly-macros-grid weekly-macros-grid-max" aria-hidden="true"></span>
+            <span class="weekly-macros-grid weekly-macros-grid-mid" aria-hidden="true"></span>
+            <span class="weekly-macros-grid weekly-macros-grid-min" aria-hidden="true"></span>
+            <ol class="weekly-macros-bars">
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="S">
+                            <span class="macro-balance-bar-carbs"   style="flex: 44;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 40;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 16;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="M">
+                            <span class="macro-balance-bar-carbs"   style="flex: 55;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 32;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 13;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="T">
+                            <span class="macro-balance-bar-carbs"   style="flex: 48;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 38;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 14;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="W">
+                            <span class="macro-balance-bar-carbs"   style="flex: 58;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 27;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 15;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="T">
+                            <span class="macro-balance-bar-carbs"   style="flex: 54;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 27;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 19;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="F">
+                            <span class="macro-balance-bar-carbs"   style="flex: 50;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 35;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 15;"></span>
+                        </span>
+                    </li>
+                                    <li class="weekly-macros-bar-slot">
+                        <span class="weekly-macros-bar" aria-label="S">
+                            <span class="macro-balance-bar-carbs"   style="flex: 55;"></span>
+                            <span class="macro-balance-bar-fat"     style="flex: 26;"></span>
+                            <span class="macro-balance-bar-protein" style="flex: 19;"></span>
+                        </span>
+                    </li>
+                            </ol>
+        </div>
+        <ul class="weekly-macros-y-axis" aria-hidden="true">
+            <li class="weekly-macros-y-label weekly-macros-y-label-max">100%</li>
+            <li class="weekly-macros-y-label weekly-macros-y-label-mid">50%</li>
+            <li class="weekly-macros-y-label weekly-macros-y-label-min">0%</li>
+        </ul>
+    </div>
+
+    <ol class="weekly-macros-days" aria-hidden="true">
+        <li>S</li><li>M</li><li>T</li><li>W</li><li>T</li><li>F</li><li>S</li>    </ol>
+</figure>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="application/json" id="weekly-stats-data">[{"label_short":"Oct 27-2","label_long":"OCT 27-2","total_calories":6913,"percent":85,"target_calories":2300,"weekly_calories":{"days":[{"day":"S","value":2383},{"day":"M","value":2031},{"day":"T","value":2499},{"day":"W","value":0},{"day":"T","value":0},{"day":"F","value":0},{"day":"S","value":0}]},"weekly_macros":{"days":[{"day":"S","carbs":58,"fat":31,"protein":11},{"day":"M","carbs":54,"fat":26,"protein":20},{"day":"T","carbs":56,"fat":31,"protein":13},{"day":"W","carbs":0,"fat":0,"protein":0},{"day":"T","carbs":0,"fat":0,"protein":0},{"day":"F","carbs":0,"fat":0,"protein":0},{"day":"S","carbs":0,"fat":0,"protein":0}]}},{"label_short":"Nov 3-9","label_long":"NOV 3-9","total_calories":16360,"percent":85,"target_calories":2350,"weekly_calories":{"days":[{"day":"S","value":2446},{"day":"M","value":1832},{"day":"T","value":2568},{"day":"W","value":2327},{"day":"T","value":2398},{"day":"F","value":1893},{"day":"S","value":2896}]},"weekly_macros":{"days":[{"day":"S","carbs":44,"fat":36,"protein":20},{"day":"M","carbs":45,"fat":30,"protein":25},{"day":"T","carbs":52,"fat":34,"protein":14},{"day":"W","carbs":58,"fat":26,"protein":16},{"day":"T","carbs":56,"fat":30,"protein":14},{"day":"F","carbs":47,"fat":29,"protein":24},{"day":"S","carbs":45,"fat":39,"protein":16}]}},{"label_short":"Nov 10-16","label_long":"NOV 10-16","total_calories":17852,"percent":85,"target_calories":2550,"weekly_calories":{"days":[{"day":"S","value":3147},{"day":"M","value":2417},{"day":"T","value":2297},{"day":"W","value":2661},{"day":"T","value":2810},{"day":"F","value":2103},{"day":"S","value":2417}]},"weekly_macros":{"days":[{"day":"S","carbs":54,"fat":31,"protein":15},{"day":"M","carbs":54,"fat":35,"protein":11},{"day":"T","carbs":43,"fat":40,"protein":17},{"day":"W","carbs":45,"fat":38,"protein":17},{"day":"T","carbs":47,"fat":32,"protein":21},{"day":"F","carbs":42,"fat":36,"protein":22},{"day":"S","carbs":46,"fat":31,"protein":23}]}},{"label_short":"Nov 17-23","label_long":"NOV 17-23","total_calories":8515,"percent":86,"target_calories":1200,"weekly_calories":{"days":[{"day":"S","value":1570},{"day":"M","value":1336},{"day":"T","value":888},{"day":"W","value":1620},{"day":"T","value":862},{"day":"F","value":1178},{"day":"S","value":1061}]},"weekly_macros":{"days":[{"day":"S","carbs":47,"fat":37,"protein":16},{"day":"M","carbs":50,"fat":25,"protein":25},{"day":"T","carbs":42,"fat":35,"protein":23},{"day":"W","carbs":51,"fat":26,"protein":23},{"day":"T","carbs":46,"fat":33,"protein":21},{"day":"F","carbs":52,"fat":35,"protein":13},{"day":"S","carbs":59,"fat":30,"protein":11}]}},{"label_short":"Nov 24-30","label_long":"NOV 24-30","total_calories":9371,"percent":84,"target_calories":1350,"weekly_calories":{"days":[{"day":"S","value":1757},{"day":"M","value":1565},{"day":"T","value":820},{"day":"W","value":1061},{"day":"T","value":1396},{"day":"F","value":1170},{"day":"S","value":1602}]},"weekly_macros":{"days":[{"day":"S","carbs":58,"fat":28,"protein":14},{"day":"M","carbs":49,"fat":30,"protein":21},{"day":"T","carbs":51,"fat":30,"protein":19},{"day":"W","carbs":52,"fat":36,"protein":12},{"day":"T","carbs":45,"fat":38,"protein":17},{"day":"F","carbs":47,"fat":30,"protein":23},{"day":"S","carbs":56,"fat":33,"protein":11}]}},{"label_short":"Dec 1-7","label_long":"DEC 1-7","total_calories":13537,"percent":84,"target_calories":1950,"weekly_calories":{"days":[{"day":"S","value":1934},{"day":"M","value":1897},{"day":"T","value":2081},{"day":"W","value":1942},{"day":"T","value":1735},{"day":"F","value":1721},{"day":"S","value":2227}]},"weekly_macros":{"days":[{"day":"S","carbs":55,"fat":25,"protein":20},{"day":"M","carbs":47,"fat":39,"protein":14},{"day":"T","carbs":48,"fat":40,"protein":12},{"day":"W","carbs":60,"fat":29,"protein":11},{"day":"T","carbs":45,"fat":33,"protein":22},{"day":"F","carbs":51,"fat":27,"protein":22},{"day":"S","carbs":49,"fat":36,"protein":15}]}},{"label_short":"Dec 8-14","label_long":"DEC 8-14","total_calories":17962,"percent":86,"target_calories":2550,"weekly_calories":{"days":[{"day":"S","value":2796},{"day":"M","value":2067},{"day":"T","value":2943},{"day":"W","value":1968},{"day":"T","value":2873},{"day":"F","value":2502},{"day":"S","value":2813}]},"weekly_macros":{"days":[{"day":"S","carbs":47,"fat":38,"protein":15},{"day":"M","carbs":55,"fat":34,"protein":11},{"day":"T","carbs":44,"fat":38,"protein":18},{"day":"W","carbs":57,"fat":28,"protein":15},{"day":"T","carbs":48,"fat":34,"protein":18},{"day":"F","carbs":59,"fat":26,"protein":15},{"day":"S","carbs":48,"fat":35,"protein":17}]}},{"label_short":"Dec 15-21","label_long":"DEC 15-21","total_calories":18951,"percent":85,"target_calories":2700,"weekly_calories":{"days":[{"day":"S","value":2968},{"day":"M","value":2583},{"day":"T","value":2608},{"day":"W","value":2329},{"day":"T","value":3200},{"day":"F","value":2253},{"day":"S","value":3010}]},"weekly_macros":{"days":[{"day":"S","carbs":52,"fat":33,"protein":15},{"day":"M","carbs":52,"fat":31,"protein":17},{"day":"T","carbs":42,"fat":34,"protein":24},{"day":"W","carbs":46,"fat":30,"protein":24},{"day":"T","carbs":46,"fat":35,"protein":19},{"day":"F","carbs":43,"fat":35,"protein":22},{"day":"S","carbs":52,"fat":31,"protein":17}]}},{"label_short":"Dec 22-28","label_long":"DEC 22-28","total_calories":9177,"percent":86,"target_calories":1300,"weekly_calories":{"days":[{"day":"S","value":1087},{"day":"M","value":1224},{"day":"T","value":919},{"day":"W","value":1395},{"day":"T","value":1089},{"day":"F","value":1735},{"day":"S","value":1728}]},"weekly_macros":{"days":[{"day":"S","carbs":48,"fat":32,"protein":20},{"day":"M","carbs":57,"fat":26,"protein":17},{"day":"T","carbs":43,"fat":32,"protein":25},{"day":"W","carbs":49,"fat":27,"protein":24},{"day":"T","carbs":47,"fat":39,"protein":14},{"day":"F","carbs":56,"fat":33,"protein":11},{"day":"S","carbs":53,"fat":30,"protein":17}]}},{"label_short":"Dec 29-4","label_long":"DEC 29-4","total_calories":10200,"percent":85,"target_calories":1450,"weekly_calories":{"days":[{"day":"S","value":1202},{"day":"M","value":1178},{"day":"T","value":1415},{"day":"W","value":1799},{"day":"T","value":1795},{"day":"F","value":1350},{"day":"S","value":1461}]},"weekly_macros":{"days":[{"day":"S","carbs":52,"fat":32,"protein":16},{"day":"M","carbs":48,"fat":27,"protein":25},{"day":"T","carbs":56,"fat":27,"protein":17},{"day":"W","carbs":44,"fat":39,"protein":17},{"day":"T","carbs":60,"fat":25,"protein":15},{"day":"F","carbs":58,"fat":32,"protein":10},{"day":"S","carbs":48,"fat":34,"protein":18}]}},{"label_short":"Jan 5-11","label_long":"JAN 5-11","total_calories":14135,"percent":86,"target_calories":2000,"weekly_calories":{"days":[{"day":"S","value":1484},{"day":"M","value":2365},{"day":"T","value":2271},{"day":"W","value":2160},{"day":"T","value":2245},{"day":"F","value":2042},{"day":"S","value":1568}]},"weekly_macros":{"days":[{"day":"S","carbs":46,"fat":35,"protein":19},{"day":"M","carbs":55,"fat":31,"protein":14},{"day":"T","carbs":52,"fat":38,"protein":10},{"day":"W","carbs":59,"fat":30,"protein":11},{"day":"T","carbs":53,"fat":32,"protein":15},{"day":"F","carbs":45,"fat":39,"protein":16},{"day":"S","carbs":53,"fat":37,"protein":10}]}},{"label_short":"Jan 12-18","label_long":"JAN 12-18","total_calories":15701,"percent":85,"target_calories":2250,"weekly_calories":{"days":[{"day":"S","value":2609},{"day":"M","value":2263},{"day":"T","value":1987},{"day":"W","value":2178},{"day":"T","value":2021},{"day":"F","value":2306},{"day":"S","value":2337}]},"weekly_macros":{"days":[{"day":"S","carbs":55,"fat":34,"protein":11},{"day":"M","carbs":45,"fat":36,"protein":19},{"day":"T","carbs":47,"fat":39,"protein":14},{"day":"W","carbs":40,"fat":37,"protein":23},{"day":"T","carbs":48,"fat":36,"protein":16},{"day":"F","carbs":46,"fat":32,"protein":22},{"day":"S","carbs":59,"fat":30,"protein":11}]}},{"label_short":"Jan 19-25","label_long":"JAN 19-25","total_calories":19506,"percent":85,"target_calories":2800,"weekly_calories":{"days":[{"day":"S","value":2240},{"day":"M","value":2713},{"day":"T","value":3158},{"day":"W","value":2313},{"day":"T","value":3200},{"day":"F","value":3174},{"day":"S","value":2708}]},"weekly_macros":{"days":[{"day":"S","carbs":40,"fat":40,"protein":20},{"day":"M","carbs":47,"fat":38,"protein":15},{"day":"T","carbs":49,"fat":29,"protein":22},{"day":"W","carbs":55,"fat":34,"protein":11},{"day":"T","carbs":49,"fat":38,"protein":13},{"day":"F","carbs":50,"fat":37,"protein":13},{"day":"S","carbs":46,"fat":39,"protein":15}]}},{"label_short":"Jan 26-1","label_long":"JAN 26-1","total_calories":9767,"percent":85,"target_calories":1400,"weekly_calories":{"days":[{"day":"S","value":1216},{"day":"M","value":1755},{"day":"T","value":1032},{"day":"W","value":1217},{"day":"T","value":1765},{"day":"F","value":1666},{"day":"S","value":1116}]},"weekly_macros":{"days":[{"day":"S","carbs":47,"fat":28,"protein":25},{"day":"M","carbs":50,"fat":32,"protein":18},{"day":"T","carbs":60,"fat":26,"protein":14},{"day":"W","carbs":44,"fat":34,"protein":22},{"day":"T","carbs":58,"fat":27,"protein":15},{"day":"F","carbs":50,"fat":28,"protein":22},{"day":"S","carbs":42,"fat":39,"protein":19}]}},{"label_short":"Feb 2-8","label_long":"FEB 2-8","total_calories":11588,"percent":85,"target_calories":1650,"weekly_calories":{"days":[{"day":"S","value":1780},{"day":"M","value":1544},{"day":"T","value":1741},{"day":"W","value":1776},{"day":"T","value":1362},{"day":"F","value":1761},{"day":"S","value":1624}]},"weekly_macros":{"days":[{"day":"S","carbs":49,"fat":31,"protein":20},{"day":"M","carbs":50,"fat":34,"protein":16},{"day":"T","carbs":50,"fat":40,"protein":10},{"day":"W","carbs":49,"fat":30,"protein":21},{"day":"T","carbs":55,"fat":32,"protein":13},{"day":"F","carbs":45,"fat":30,"protein":25},{"day":"S","carbs":44,"fat":31,"protein":25}]}},{"label_short":"Feb 9-15","label_long":"FEB 9-15","total_calories":12594,"percent":85,"target_calories":1800,"weekly_calories":{"days":[{"day":"S","value":2232},{"day":"M","value":1433},{"day":"T","value":1446},{"day":"W","value":1400},{"day":"T","value":1988},{"day":"F","value":2138},{"day":"S","value":1957}]},"weekly_macros":{"days":[{"day":"S","carbs":44,"fat":40,"protein":16},{"day":"M","carbs":55,"fat":32,"protein":13},{"day":"T","carbs":48,"fat":38,"protein":14},{"day":"W","carbs":58,"fat":27,"protein":15},{"day":"T","carbs":54,"fat":27,"protein":19},{"day":"F","carbs":50,"fat":35,"protein":15},{"day":"S","carbs":55,"fat":26,"protein":19}]}},{"label_short":"Feb 16-22","label_long":"FEB 16-22","total_calories":17274,"percent":86,"target_calories":2450,"weekly_calories":{"days":[{"day":"S","value":2055},{"day":"M","value":2081},{"day":"T","value":2551},{"day":"W","value":2400},{"day":"T","value":2687},{"day":"F","value":2444},{"day":"S","value":3056}]},"weekly_macros":{"days":[{"day":"S","carbs":47,"fat":30,"protein":23},{"day":"M","carbs":45,"fat":31,"protein":24},{"day":"T","carbs":52,"fat":30,"protein":18},{"day":"W","carbs":43,"fat":35,"protein":22},{"day":"T","carbs":51,"fat":39,"protein":10},{"day":"F","carbs":60,"fat":26,"protein":14},{"day":"S","carbs":44,"fat":36,"protein":20}]}},{"label_short":"Feb 23-1","label_long":"FEB 23-1","total_calories":18391,"percent":84,"target_calories":2650,"weekly_calories":{"days":[{"day":"S","value":2670},{"day":"M","value":2104},{"day":"T","value":2632},{"day":"W","value":3148},{"day":"T","value":3190},{"day":"F","value":2218},{"day":"S","value":2429}]},"weekly_macros":{"days":[{"day":"S","carbs":60,"fat":30,"protein":10},{"day":"M","carbs":49,"fat":28,"protein":23},{"day":"T","carbs":51,"fat":34,"protein":15},{"day":"W","carbs":50,"fat":25,"protein":25},{"day":"T","carbs":58,"fat":29,"protein":13},{"day":"F","carbs":58,"fat":25,"protein":17},{"day":"S","carbs":46,"fat":29,"protein":25}]}},{"label_short":"Mar 2-8","label_long":"MAR 2-8","total_calories":8738,"percent":85,"target_calories":1250,"weekly_calories":{"days":[{"day":"S","value":1076},{"day":"M","value":920},{"day":"T","value":1313},{"day":"W","value":1069},{"day":"T","value":1796},{"day":"F","value":886},{"day":"S","value":1678}]},"weekly_macros":{"days":[{"day":"S","carbs":49,"fat":30,"protein":21},{"day":"M","carbs":53,"fat":32,"protein":15},{"day":"T","carbs":45,"fat":33,"protein":22},{"day":"W","carbs":48,"fat":31,"protein":21},{"day":"T","carbs":55,"fat":25,"protein":20},{"day":"F","carbs":52,"fat":33,"protein":15},{"day":"S","carbs":53,"fat":26,"protein":21}]}},{"label_short":"Mar 9-15","label_long":"MAR 9-15","total_calories":10555,"percent":85,"target_calories":1500,"weekly_calories":{"days":[{"day":"S","value":1681},{"day":"M","value":1560},{"day":"T","value":1469},{"day":"W","value":1781},{"day":"T","value":1147},{"day":"F","value":1257},{"day":"S","value":1660}]},"weekly_macros":{"days":[{"day":"S","carbs":56,"fat":32,"protein":12},{"day":"M","carbs":46,"fat":39,"protein":15},{"day":"T","carbs":42,"fat":35,"protein":23},{"day":"W","carbs":46,"fat":32,"protein":22},{"day":"T","carbs":48,"fat":35,"protein":17},{"day":"F","carbs":51,"fat":30,"protein":19},{"day":"S","carbs":43,"fat":35,"protein":22}]}},{"label_short":"Mar 16-22","label_long":"MAR 16-22","total_calories":13903,"percent":84,"target_calories":2000,"weekly_calories":{"days":[{"day":"S","value":1615},{"day":"M","value":2258},{"day":"T","value":1668},{"day":"W","value":2053},{"day":"T","value":3180},{"day":"F","value":1602},{"day":"S","value":1527}]},"weekly_macros":{"days":[{"day":"S","carbs":60,"fat":30,"protein":10},{"day":"M","carbs":59,"fat":30,"protein":11},{"day":"T","carbs":50,"fat":34,"protein":16},{"day":"W","carbs":45,"fat":38,"protein":17},{"day":"T","carbs":41,"fat":38,"protein":21},{"day":"F","carbs":50,"fat":39,"protein":11},{"day":"S","carbs":58,"fat":32,"protein":10}]}},{"label_short":"Mar 23-29","label_long":"MAR 23-29","total_calories":16819,"percent":85,"target_calories":2400,"weekly_calories":{"days":[{"day":"S","value":2651},{"day":"M","value":2367},{"day":"T","value":2916},{"day":"W","value":2053},{"day":"T","value":1964},{"day":"F","value":2244},{"day":"S","value":2624}]},"weekly_macros":{"days":[{"day":"S","carbs":56,"fat":31,"protein":13},{"day":"M","carbs":42,"fat":36,"protein":22},{"day":"T","carbs":47,"fat":39,"protein":14},{"day":"W","carbs":58,"fat":30,"protein":12},{"day":"T","carbs":43,"fat":34,"protein":23},{"day":"F","carbs":54,"fat":32,"protein":14},{"day":"S","carbs":52,"fat":29,"protein":19}]}},{"label_short":"Mar 30-5","label_long":"MAR 30-5","total_calories":20772,"percent":86,"target_calories":2950,"weekly_calories":{"days":[{"day":"S","value":3200},{"day":"M","value":3200},{"day":"T","value":3200},{"day":"W","value":3045},{"day":"T","value":2147},{"day":"F","value":2933},{"day":"S","value":3047}]},"weekly_macros":{"days":[{"day":"S","carbs":42,"fat":38,"protein":20},{"day":"M","carbs":48,"fat":28,"protein":24},{"day":"T","carbs":41,"fat":37,"protein":22},{"day":"W","carbs":50,"fat":26,"protein":24},{"day":"T","carbs":50,"fat":35,"protein":15},{"day":"F","carbs":47,"fat":30,"protein":23},{"day":"S","carbs":40,"fat":38,"protein":22}]}},{"label_short":"Apr 6-12","label_long":"APR 6-12","total_calories":8186,"percent":86,"target_calories":1150,"weekly_calories":{"days":[{"day":"S","value":1438},{"day":"M","value":1305},{"day":"T","value":1445},{"day":"W","value":1201},{"day":"T","value":973},{"day":"F","value":948},{"day":"S","value":876}]},"weekly_macros":{"days":[{"day":"S","carbs":53,"fat":33,"protein":14},{"day":"M","carbs":51,"fat":26,"protein":23},{"day":"T","carbs":50,"fat":30,"protein":20},{"day":"W","carbs":52,"fat":34,"protein":14},{"day":"T","carbs":53,"fat":25,"protein":22},{"day":"F","carbs":52,"fat":35,"protein":13},{"day":"S","carbs":46,"fat":29,"protein":25}]}},{"label_short":"Apr 13-19","label_long":"APR 13-19","total_calories":9824,"percent":85,"target_calories":1400,"weekly_calories":{"days":[{"day":"S","value":1407},{"day":"M","value":1410},{"day":"T","value":1532},{"day":"W","value":1313},{"day":"T","value":1169},{"day":"F","value":1529},{"day":"S","value":1464}]},"weekly_macros":{"days":[{"day":"S","carbs":47,"fat":32,"protein":21},{"day":"M","carbs":58,"fat":30,"protein":12},{"day":"T","carbs":51,"fat":29,"protein":20},{"day":"W","carbs":59,"fat":25,"protein":16},{"day":"T","carbs":60,"fat":28,"protein":12},{"day":"F","carbs":48,"fat":34,"protein":18},{"day":"S","carbs":45,"fat":40,"protein":15}]}},{"label_short":"Apr 20-26","label_long":"APR 20-26","total_calories":14611,"percent":84,"target_calories":2100,"weekly_calories":{"days":[{"day":"S","value":2248},{"day":"M","value":1746},{"day":"T","value":2140},{"day":"W","value":2487},{"day":"T","value":1936},{"day":"F","value":2209},{"day":"S","value":1845}]},"weekly_macros":{"days":[{"day":"S","carbs":58,"fat":26,"protein":16},{"day":"M","carbs":47,"fat":30,"protein":23},{"day":"T","carbs":47,"fat":30,"protein":23},{"day":"W","carbs":44,"fat":40,"protein":16},{"day":"T","carbs":42,"fat":34,"protein":24},{"day":"F","carbs":57,"fat":29,"protein":14},{"day":"S","carbs":51,"fat":31,"protein":18}]}},{"label_short":"Apr 27-3","label_long":"APR 27-3","total_calories":17751,"percent":85,"target_calories":2550,"weekly_calories":{"days":[{"day":"S","value":2835},{"day":"M","value":2971},{"day":"T","value":1946},{"day":"W","value":3070},{"day":"T","value":2182},{"day":"F","value":2008},{"day":"S","value":2739}]},"weekly_macros":{"days":[{"day":"S","carbs":48,"fat":31,"protein":21},{"day":"M","carbs":53,"fat":32,"protein":15},{"day":"T","carbs":49,"fat":34,"protein":17},{"day":"W","carbs":52,"fat":26,"protein":22},{"day":"T","carbs":50,"fat":34,"protein":16},{"day":"F","carbs":57,"fat":28,"protein":15},{"day":"S","carbs":52,"fat":28,"protein":20}]}},{"label_short":"May 4-10","label_long":"MAY 4-10","total_calories":18296,"percent":85,"target_calories":2600,"weekly_calories":{"days":[{"day":"S","value":2728},{"day":"M","value":2324},{"day":"T","value":2674},{"day":"W","value":2110},{"day":"T","value":2345},{"day":"F","value":3022},{"day":"S","value":3093}]},"weekly_macros":{"days":[{"day":"S","carbs":47,"fat":37,"protein":16},{"day":"M","carbs":44,"fat":40,"protein":16},{"day":"T","carbs":50,"fat":33,"protein":17},{"day":"W","carbs":51,"fat":28,"protein":21},{"day":"T","carbs":45,"fat":37,"protein":18},{"day":"F","carbs":55,"fat":35,"protein":10},{"day":"S","carbs":55,"fat":35,"protein":10}]}},{"label_short":"May 11-17","label_long":"MAY 11-17","total_calories":9584,"percent":86,"target_calories":1350,"weekly_calories":{"days":[{"day":"S","value":1310},{"day":"M","value":1675},{"day":"T","value":1351},{"day":"W","value":1109},{"day":"T","value":1051},{"day":"F","value":1345},{"day":"S","value":1743}]},"weekly_macros":{"days":[{"day":"S","carbs":41,"fat":37,"protein":22},{"day":"M","carbs":50,"fat":32,"protein":18},{"day":"T","carbs":44,"fat":33,"protein":23},{"day":"W","carbs":58,"fat":32,"protein":10},{"day":"T","carbs":44,"fat":40,"protein":16},{"day":"F","carbs":48,"fat":27,"protein":25},{"day":"S","carbs":48,"fat":27,"protein":25}]}},{"label_short":"May 18-24","label_long":"MAY 18-24","total_calories":2895,"percent":85,"target_calories":1450,"weekly_calories":{"days":[{"day":"S","value":1532},{"day":"M","value":1363},{"day":"T","value":0},{"day":"W","value":0},{"day":"T","value":0},{"day":"F","value":0},{"day":"S","value":0}]},"weekly_macros":{"days":[{"day":"S","carbs":48,"fat":39,"protein":13},{"day":"M","carbs":40,"fat":36,"protein":24},{"day":"T","carbs":0,"fat":0,"protein":0},{"day":"W","carbs":0,"fat":0,"protein":0},{"day":"T","carbs":0,"fat":0,"protein":0},{"day":"F","carbs":0,"fat":0,"protein":0},{"day":"S","carbs":0,"fat":0,"protein":0}]}}]</script>
+    </main>
+
+        <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+
+        <nav class="app-bottom-nav d-lg-none" aria-label="Main">
+        <ul class="app-bottom-nav-pill list-unstyled d-flex align-items-center justify-content-evenly mb-0">
+            <li>
+                <a href="/" class="app-bottom-nav-link" aria-label="Home">
+                    <span class="icon-nav icon-nav-home" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/stats" class="app-bottom-nav-link active" aria-label="Stats">
+                    <span class="icon-nav icon-nav-stats" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/cooking-planner" class="app-bottom-nav-link" aria-label="Cooking Planner">
+                    <span class="icon-nav icon-nav-planner" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/profile" class="app-bottom-nav-link" aria-label="My Profile">
+                    <span class="icon-nav icon-nav-profile" aria-hidden="true"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+        <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>

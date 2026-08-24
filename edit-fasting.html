@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumetics — Select your  fasting goal</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="onboarding-page">
+    <div class="onboarding-viewport">
+                    <header class="onboarding-header pt-4 pt-md-5">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="onboarding-header-slot">
+                    <a href="/profile" class="app-icon-btn" aria-label="Back">
+        <span class="icon-arrow icon-arrow-left" aria-hidden="true"></span>
+    </a>
+            </div>
+            <div class="onboarding-header-slot">
+                    <a href="/profile" class="app-icon-btn" aria-label="Close">
+        <span class="icon-close" aria-hidden="true"></span>
+    </a>
+            </div>
+        </div>
+    </header>
+
+
+        <main class="onboarding-main flex-grow-1 d-flex flex-column align-items-md-center w-100">
+                                
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-10 col-xl-8 mx-auto">
+                <h1 class="onboarding-step-title mt-3 text-center mb-5 pb-3">Select your <br> fasting goal</h1>
+
+                <form id="onboarding-form" method="get" action="/profile" class="needs-validation block-submit-button-until-form-filled" novalidate>
+                        
+
+
+    <div class="fasting-pills pt-md-7 mb-lg-5" data-fasting-goal>
+                                            <label class="fasting-pill fasting-pill-14h">
+                <input type="radio" class="visually-hidden" name="fasting_goal" value="14h" required>
+                <span class="fasting-pill-label">14:10</span>
+                <span class="fasting-pill-value">14 h</span>
+            </label>
+                                            <label class="fasting-pill fasting-pill-16h">
+                <input type="radio" class="visually-hidden" name="fasting_goal" value="16h" checked>
+                <span class="fasting-pill-label">16:8</span>
+                <span class="fasting-pill-value">16 h</span>
+            </label>
+                                            <label class="fasting-pill fasting-pill-18h">
+                <input type="radio" class="visually-hidden" name="fasting_goal" value="18h">
+                <span class="fasting-pill-label">18:6</span>
+                <span class="fasting-pill-value">18 h</span>
+            </label>
+                                            <label class="fasting-pill fasting-pill-20h">
+                <input type="radio" class="visually-hidden" name="fasting_goal" value="20h">
+                <span class="fasting-pill-label">20:4</span>
+                <span class="fasting-pill-value">20 h</span>
+            </label>
+                                            <label class="fasting-pill fasting-pill-36h">
+                <input type="radio" class="visually-hidden" name="fasting_goal" value="36h">
+                <span class="fasting-pill-label">36 h-fast</span>
+                <span class="fasting-pill-value">36 h</span>
+            </label>
+            </div>
+
+    <div class="mt-7 mx-auto">
+                    <div class="d-none" data-fasting-helper="14h">
+                    <div class="info-helper position-relative bg-white rounded-4 p-3">
+                    <span class="badge badge-info badge-info-easy fw-normal position-absolute top-0 end-0 me-2 translate-middle-y">Easy</span>
+                <p class="info-helper-title fw-semibold mb-3">Eating window: <span class="text-primary">10 hours</span></p>
+        <p class="info-helper-body mb-0">14:10 fasting: simple, sustainable, effective. Eat within a 10-hour window.</p>
+    </div>
+
+            </div>
+                    <div class="d-none" data-fasting-helper="16h">
+                    <div class="info-helper position-relative bg-white rounded-4 p-3">
+                    <span class="badge badge-info badge-info-moderate fw-normal position-absolute top-0 end-0 me-2 translate-middle-y">Moderate</span>
+                <p class="info-helper-title fw-semibold mb-3">Eating window: <span class="text-primary">8 hours</span></p>
+        <p class="info-helper-body mb-0">16:8 fasting: simple, sustainable, effective. Eat within an 8-hour window.</p>
+    </div>
+
+            </div>
+                    <div class="d-none" data-fasting-helper="18h">
+                    <div class="info-helper position-relative bg-white rounded-4 p-3">
+                    <span class="badge badge-info badge-info-challenging fw-normal position-absolute top-0 end-0 me-2 translate-middle-y">Challenging</span>
+                <p class="info-helper-title fw-semibold mb-3">Eating window: <span class="text-primary">6 hours</span></p>
+        <p class="info-helper-body mb-0">18:6 fasting: simple, sustainable, effective. Eat within a 6-hour window.</p>
+    </div>
+
+            </div>
+                    <div class="d-none" data-fasting-helper="20h">
+                    <div class="info-helper position-relative bg-white rounded-4 p-3">
+                    <span class="badge badge-info badge-info-hard fw-normal position-absolute top-0 end-0 me-2 translate-middle-y">Hard</span>
+                <p class="info-helper-title fw-semibold mb-3">Eating window: <span class="text-primary">4 hours</span></p>
+        <p class="info-helper-body mb-0">20:4 fasting: simple, sustainable, effective. Eat within a 4-hour window.</p>
+    </div>
+
+            </div>
+                    <div class="d-none" data-fasting-helper="36h">
+                    <div class="info-helper position-relative bg-white rounded-4 p-3">
+                    <span class="badge badge-info badge-info-expert fw-normal position-absolute top-0 end-0 me-2 translate-middle-y">Expert</span>
+                <p class="info-helper-title fw-semibold mb-3">36 h fasting: <span class="text-primary">36 hours</span></p>
+        <p class="info-helper-body mb-0">36-hour fasting: advanced but effective. Fast for 36 hours between eating days.</p>
+    </div>
+
+            </div>
+            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+                    <div class="onboarding-cta d-flex justify-content-center mt-auto mt-md-5 pt-3 pt-md-0 px-3 w-100">
+                                    <button type="submit" form="onboarding-form" class="btn btn-dark onboarding-next-btn" disabled>
+                Save            </button>
+            </div>
+        </main>
+    </div>
+
+                <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+    
+        <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>

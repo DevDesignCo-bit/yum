@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooking Planner — Yumetics</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="app-page cooking-planner-blue">
+        <div class="sticky-top app-navbar-sticky">
+        <nav class="navbar bg-primary overflow-hidden position-relative d-flex d-lg-none px-4 app-navbar-mobile">
+            <a href="/" class="navbar-brand p-0 m-0 d-flex align-items-center">
+                <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+            </a>
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="117" height="121" class="app-navbar-mascot rtl-flip">
+        </nav>
+
+                    <div class="container d-none d-lg-block">
+                <nav class="navbar bg-primary rounded-pill overflow-hidden position-relative flex-nowrap d-flex app-navbar-pill" aria-label="Main">
+                    <a href="/" class="navbar-brand p-0 ms-5 ps-xl-3 d-flex align-items-center">
+                        <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+                    </a>
+                    <ul class="nav flex-nowrap align-items-center ms-7 ms-xl-auto me-auto">
+                        <li class="nav-item"><a href="/" class="nav-link text-uppercase fw-bold">Home</a></li>
+                        <li class="nav-item"><a href="/stats" class="nav-link text-uppercase fw-bold">Stats</a></li>
+                        <li class="nav-item"><a href="/cooking-planner" class="nav-link text-uppercase fw-bold active">Cooking Planner</a></li>
+                        <li class="nav-item"><a href="/profile" class="nav-link text-uppercase fw-bold">My Profile</a></li>
+                    </ul>
+                    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="192" height="199" class="app-navbar-mascot rtl-flip">
+                </nav>
+            </div>
+            </div>
+
+
+    <main class="app-main flex-grow-1">
+            <section class="app-page-header">
+    <div class="container">
+        <div class="app-page-header-content d-flex align-items-start gap-3">
+                <a href="/cooking-planner" class="app-icon-btn" aria-label="Back">
+        <span class="icon-arrow icon-arrow-left" aria-hidden="true"></span>
+    </a>
+
+            <h1 class="app-page-title mb-0 fs-page-title">Cooking Planner</h1>
+        </div>
+            </div>
+</section>
+
+    <section class="container mt-lg-6">
+        <div class="cooking-planner-tabs">
+            <span class="cooking-planner-tab fw-extrabold">Party planner</span>
+        </div>
+
+        <div class="cooking-planner-panel ">
+                <div class="party-planner-inner mx-auto">
+        <h2 class="party-planner-intro text-center fw-extrabold">Set guests, event, and diet.<br>AI plans your menu!</h2>
+
+        <form method="post" action="/party-planing-result" class="needs-validation" novalidate>
+            <div class="row gx-3 gy-4 party-planner-settings">
+                <div class="col-6 col-lg-3">
+                    <label for="difficulty" class="party-planner-field-label fw-semibold fs-8 d-block mb-2">Difficulty Level</label>
+                    <select class="tom-select" name="difficulty" id="difficulty">
+                        <option value="easy" selected>Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <label for="guests" class="party-planner-field-label fw-semibold fs-8 d-block mb-2">Number of Guests</label>
+                    <select class="tom-select" name="guests" id="guests">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5" selected>5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                            </select>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label for="event" class="party-planner-field-label fw-semibold fs-8 d-block mb-2">Type of event</label>
+                    <select class="tom-select" name="event" id="event">
+                        <option value="christmas" selected>Christmas</option>
+                        <option value="picnic">Picnic</option>
+                        <option value="family_gathering">Family gathering</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-field party-planner-block">
+                <p class="fw-semibold fs-7 mb-1">What type of diet does your group prefer?</p>
+                <p class="fw-light fs-8 mb-4">*Required, select one option</p>
+                <div class="cooking-planner-options d-flex flex-wrap gap-2">
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="none" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                                <span class="option-card-title">None</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="vegetarian" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/vegetarian.png" alt="" width="40" height="40">                <span class="option-card-title">Vegetarian</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="vegan" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/veggies.png" alt="" width="40" height="40">                <span class="option-card-title">Vegan</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="low_carb" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/low-carb.png" alt="" width="40" height="40">                <span class="option-card-title">Low Carb</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="paleo" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/meat.png" alt="" width="40" height="40">                <span class="option-card-title">Paleo</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="ketogenic" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/ketogenic.png" alt="" width="40" height="40">                <span class="option-card-title">Ketogenic</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="radio" name="diet" value="high_protein" class="visually-hidden" required>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/protein-icon.png" alt="" width="40" height="40">                <span class="option-card-title">High Protein</span>
+            </span>
+                    </span>
+    </label>
+
+                                    </div>
+                <div class="invalid-feedback">Please select an option</div>
+            </div>
+
+            <div class="form-field party-planner-block">
+                <p class="fw-semibold fs-7 mb-4">Any restrictions or allergies in the group?</p>
+                <div class="cooking-planner-options d-flex flex-wrap gap-2">
+                                                        <label class="option-card">
+        <input type="checkbox" name="allergies[]" value="meat" class="visually-hidden">
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/meat.png" alt="" width="40" height="40">                <span class="option-card-title">All Meat</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="checkbox" name="allergies[]" value="dairy" class="visually-hidden">
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/dairy.png" alt="" width="40" height="40">                <span class="option-card-title">Dairy</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="checkbox" name="allergies[]" value="eggs" class="visually-hidden">
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/eggs.png" alt="" width="40" height="40">                <span class="option-card-title">Eggs</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="checkbox" name="allergies[]" value="animal_products" class="visually-hidden">
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/animal-products.png" alt="" width="40" height="40">                <span class="option-card-title">Animal Products</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="checkbox" name="allergies[]" value="seafood" class="visually-hidden">
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/seafood.png" alt="" width="40" height="40">                <span class="option-card-title">Seafood</span>
+            </span>
+                    </span>
+    </label>
+
+                                                        <label class="option-card">
+        <input type="checkbox" name="allergies[]" value="nuts" class="visually-hidden">
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/nuts.png" alt="" width="40" height="40">                <span class="option-card-title">Nuts</span>
+            </span>
+                    </span>
+    </label>
+
+                                    </div>
+            </div>
+
+            <div class="text-center party-planner-actions">
+                <button type="submit" class="btn btn-dark rounded-pill fs-6 fw-medium party-planner-generate">Generate recipes</button>
+            </div>
+        </form>
+    </div>
+        </div>
+    </section>
+    </main>
+
+        <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+
+        <nav class="app-bottom-nav d-lg-none" aria-label="Main">
+        <ul class="app-bottom-nav-pill list-unstyled d-flex align-items-center justify-content-evenly mb-0">
+            <li>
+                <a href="/" class="app-bottom-nav-link" aria-label="Home">
+                    <span class="icon-nav icon-nav-home" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/stats" class="app-bottom-nav-link" aria-label="Stats">
+                    <span class="icon-nav icon-nav-stats" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/cooking-planner" class="app-bottom-nav-link active" aria-label="Cooking Planner">
+                    <span class="icon-nav icon-nav-planner" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/profile" class="app-bottom-nav-link" aria-label="My Profile">
+                    <span class="icon-nav icon-nav-profile" aria-hidden="true"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+        <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>

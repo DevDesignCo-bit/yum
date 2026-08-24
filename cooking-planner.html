@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooking Planner — Yumetics</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="app-page">
+        <div class="sticky-top app-navbar-sticky">
+        <nav class="navbar bg-primary overflow-hidden position-relative d-flex d-lg-none px-4 app-navbar-mobile">
+            <a href="/" class="navbar-brand p-0 m-0 d-flex align-items-center">
+                <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+            </a>
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="117" height="121" class="app-navbar-mascot rtl-flip">
+        </nav>
+
+                    <div class="container d-none d-lg-block">
+                <nav class="navbar bg-primary rounded-pill overflow-hidden position-relative flex-nowrap d-flex app-navbar-pill" aria-label="Main">
+                    <a href="/" class="navbar-brand p-0 ms-5 ps-xl-3 d-flex align-items-center">
+                        <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+                    </a>
+                    <ul class="nav flex-nowrap align-items-center ms-7 ms-xl-auto me-auto">
+                        <li class="nav-item"><a href="/" class="nav-link text-uppercase fw-bold">Home</a></li>
+                        <li class="nav-item"><a href="/stats" class="nav-link text-uppercase fw-bold">Stats</a></li>
+                        <li class="nav-item"><a href="/cooking-planner" class="nav-link text-uppercase fw-bold active">Cooking Planner</a></li>
+                        <li class="nav-item"><a href="/profile" class="nav-link text-uppercase fw-bold">My Profile</a></li>
+                    </ul>
+                    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="192" height="199" class="app-navbar-mascot rtl-flip">
+                </nav>
+            </div>
+            </div>
+
+
+    <main class="app-main flex-grow-1">
+            <section class="container text-center pb-5 pb-md-7">
+        <h1 class="cooking-planner-index-title fw-black mt-5 mt-lg-8 pt-lg-4 mb-0">Cooking Planner</h1>
+
+        <div class="row justify-content-center my-4 my-md-5">
+            <div class="col-12 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+                <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/shared/cooking-planner.png"
+                     alt="" aria-hidden="true" class="img-fluid">
+            </div>
+        </div>
+
+        <div class="row justify-content-center text-start text-md-center text-body-muted mt-6 mt-lg-0">
+            <div class="col-12 col-md-8 col-lg-6 col-xxl-5">
+                <p class="mb-3"><strong>Snap &amp; cook:</strong> Snap your pantry, get main dishes.</p>
+                <p class="mb-0"><strong>Party planner:</strong> Enter guests and vibe, get a full menu</p>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column align-items-center gap-3 mt-5 mt-md-6">
+            <button type="button" class="btn btn-dark rounded-pill fw-semibold" data-bs-toggle="modal" data-bs-target="#snap-cook-modal">📸 Snap &amp; Cook</button>
+            <a href="/party-planner" class="btn btn-white bg-transparent rounded-pill fw-semibold">📝 Party Planner</a>
+        </div>
+    </section>
+    </main>
+
+        <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+
+        <nav class="app-bottom-nav d-lg-none" aria-label="Main">
+        <ul class="app-bottom-nav-pill list-unstyled d-flex align-items-center justify-content-evenly mb-0">
+            <li>
+                <a href="/" class="app-bottom-nav-link" aria-label="Home">
+                    <span class="icon-nav icon-nav-home" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/stats" class="app-bottom-nav-link" aria-label="Stats">
+                    <span class="icon-nav icon-nav-stats" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/cooking-planner" class="app-bottom-nav-link active" aria-label="Cooking Planner">
+                    <span class="icon-nav icon-nav-planner" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/profile" class="app-bottom-nav-link" aria-label="My Profile">
+                    <span class="icon-nav icon-nav-profile" aria-hidden="true"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+        <div class="modal fade snap-cook-modal" id="snap-cook-modal" tabindex="-1"
+     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-transparent border-0 shadow-none p-0 pt-6 pt-md-0 overflow-hidden position-relative justify-content-center text-center text-white">
+            <div class="position-relative z-1 px-4 pb-8">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                        <h2 class="snap-cook-title fw-extrabold mb-2 text-white">Cooking Planner</h2>
+                        <p class="snap-cook-subtitle mb-0 mt-4">Best Practices for Snap &amp; Cook tool</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-4 mt-md-5 mb-5">
+                    <div class="col-auto">
+                        <img class="snap-cook-illustration" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/snap-and-cook.png" alt="" aria-hidden="true">
+                    </div>
+                </div>
+                <div class="row justify-content-center mb-5 mt-lg-8">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                        <p class="snap-cook-text mb-0">Ensure your photos are bright and well-lit. Avoid blurriness and keep them sharp.</p>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <a href="/snap-and-cook" class="btn btn-dark onboarding-next-btn rounded-pill">
+                            Got it <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <img class="snap-cook-pot" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/illustrations/strong.png" alt="" aria-hidden="true">
+        </div>
+    </div>
+</div>
+    <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>

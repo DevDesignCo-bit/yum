@@ -1,0 +1,245 @@
+(() => {
+  'use strict';
+
+  const STORAGE_KEY = 'yumetics-calorie-tracker-v1';
+  const onboarding = (() => { try { return JSON.parse(localStorage.getItem('yumetics-onboarding-v1')) || {}; } catch (_) { return {}; } })();
+  const GOALS = onboarding.plan || { calories: 1400, carbs: 185, fats: 71, proteins: 128 };
+  const DEFAULT_STATE = {
+    calories: 450,
+    carbs: 120,
+    fats: 43,
+    proteins: 100,
+    meals: []
+  };
+
+  const mealCatalog = {
+    'margherita-pizza': { name: 'Margherita pizza', calories: 540, carbs: 66, fats: 20, proteins: 24 },
+    'garden-salad': { name: 'Garden salad', calories: 220, carbs: 17, fats: 14, proteins: 7 },
+    'grilled-chicken': { name: 'Grilled chicken', calories: 410, carbs: 2, fats: 15, proteins: 57 },
+    'french-fries': { name: 'French fries', calories: 380, carbs: 50, fats: 18, proteins: 5 },
+    'pasta-bowl': { name: 'Pasta bowl', calories: 520, carbs: 81, fats: 15, proteins: 19 },
+    'tomato-soup': { name: 'Tomato soup', calories: 180, carbs: 28, fats: 6, proteins: 5 }
+  };
+  const correctionCatalog = {
+    tiramisu: { name: 'Tiramisu', calories: 480, carbs: 43, fats: 30, proteins: 7, ingredients: [{ name: 'Mascarpone cream', grams: 85 }, { name: 'Ladyfingers', grams: 45 }, { name: 'Cocoa powder', grams: 5 }] },
+    pizza: { name: 'Pizza slice', calories: 540, carbs: 66, fats: 20, proteins: 24, ingredients: [{ name: 'Pizza base', grams: 110 }, { name: 'Cheese', grams: 55 }, { name: 'Tomato sauce', grams: 35 }] },
+    pasta: { name: 'Pasta plate', calories: 520, carbs: 81, fats: 15, proteins: 19, ingredients: [{ name: 'Cooked pasta', grams: 180 }, { name: 'Tomato sauce', grams: 110 }, { name: 'Cheese', grams: 20 }] },
+    salad: { name: 'Salad bowl', calories: 220, carbs: 17, fats: 14, proteins: 7, ingredients: [{ name: 'Salad vegetables', grams: 180 }, { name: 'Dressing', grams: 20 }, { name: 'Toppings', grams: 35 }] },
+    chicken: { name: 'Grilled chicken plate', calories: 410, carbs: 2, fats: 15, proteins: 57, ingredients: [{ name: 'Grilled chicken', grams: 170 }, { name: 'Vegetables', grams: 130 }, { name: 'Olive oil', grams: 10 }] }
+  };
+
+  const safeState = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && Object.keys(DEFAULT_STATE).every((key) => key in saved)) return saved;
+    } catch (_) { /* A fresh session is enough if storage is unavailable. */ }
+    return { ...DEFAULT_STATE, meals: [] };
+  };
+
+  let state = safeState();
+  let selectedMeal = null;
+  let analyzedMeal = null;
+  let selectedPhoto = '';
+
+  const persist = () => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) { /* Keep the page usable without storage. */ }
+  };
+
+  const number = (value) => Math.round(value).toLocaleString('en-US');
+  const percentage = (value, goal) => Math.min(100, Math.max(0, (value / goal) * 100));
+
+  const updateMacro = (className, value, goal) => {
+    const macro = document.querySelector(`.${className}`);
+    if (!macro) return;
+    const item = macro.closest('.calories-intake-macro');
+    const num = item?.querySelector('.calories-intake-macro-num');
+    const fill = item?.querySelector('.calories-intake-macro-fill');
+    if (num) num.textContent = number(value);
+    if (fill) fill.style.width = `${percentage(value, goal)}%`;
+  };
+
+  const renderMeals = () => {
+    const list = document.querySelector('.home-meals');
+    if (!list || !state.meals.length) return;
+    list.innerHTML = state.meals.slice(-6).map((meal) => `
+      <li class="home-meal" title="${meal.name}: ${number(meal.calories)} kcal">
+        <img src="${meal.image || 'https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg'}" alt="${meal.name}" width="75" height="75">
+      </li>`).join('');
+  };
+
+  const render = () => {
+    const intake = document.querySelector('.calories-intake');
+    if (!intake) return;
+    const value = intake.querySelector('.calories-intake-value > span:last-child');
+    const fill = intake.querySelector('.calories-intake-bar-fill');
+    const remaining = intake.querySelector('.calories-intake-remaining');
+    if (value) value.innerHTML = `${number(state.calories)}<span class="calories-intake-unit text-neutral-300">kcal</span>`;
+    if (fill) fill.style.width = `${percentage(state.calories, GOALS.calories)}%`;
+    if (remaining) {
+      const difference = GOALS.calories - state.calories;
+      remaining.textContent = difference >= 0
+        ? `${number(difference)} kcal under your goal`
+        : `${number(Math.abs(difference))} kcal over your goal`;
+    }
+    updateMacro('calories-intake-macro-fill-carbs', state.carbs, GOALS.carbs);
+    updateMacro('calories-intake-macro-fill-fats', state.fats, GOALS.fats);
+    updateMacro('calories-intake-macro-fill-proteins', state.proteins, GOALS.proteins);
+    renderMeals();
+    const petName = document.querySelector('.home-hero-name');
+    if (petName && onboarding.plan?.petName) petName.textContent = onboarding.plan.petName;
+  };
+
+  const modalElement = document.getElementById('recent-meals-modal');
+  const showMealPicker = () => {
+    if (window.bootstrap?.Modal && modalElement) window.bootstrap.Modal.getOrCreateInstance(modalElement).show();
+    else if (modalElement) { modalElement.classList.add('show'); modalElement.style.display = 'block'; }
+  };
+  const hideMealPicker = () => {
+    if (window.bootstrap?.Modal && modalElement) window.bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+    else if (modalElement) { modalElement.classList.remove('show'); modalElement.style.display = 'none'; }
+  };
+
+  const showModal = (id) => {
+    const element = document.getElementById(id);
+    if (window.bootstrap?.Modal && element) window.bootstrap.Modal.getOrCreateInstance(element).show();
+    else if (element) { element.classList.add('show'); element.style.display = 'block'; }
+  };
+  const hideModal = (id) => {
+    const element = document.getElementById(id);
+    if (window.bootstrap?.Modal && element) window.bootstrap.Modal.getOrCreateInstance(element).hide();
+    else if (element) { element.classList.remove('show'); element.style.display = 'none'; }
+  };
+
+  const setResult = (meal) => {
+    document.querySelector('#ai-meal-result-title').textContent = meal.name;
+    const photo = document.querySelector('.ai-meal-result-photo');
+    if (photo && selectedPhoto) { photo.src = selectedPhoto; photo.alt = meal.name; }
+    const calories = document.querySelector('.ai-meal-result .icon-flame')?.parentElement;
+    if (calories) calories.innerHTML = `<span class="icon-flame"></span> ${number(meal.calories)} <span class="fs-7 fw-medium text-body-muted">kcal</span>`;
+    const legend = document.querySelectorAll('.macro-balance-legend-value');
+    [meal.carbs, meal.fats, meal.proteins].forEach((value, index) => { if (legend[index]) legend[index].innerHTML = `${number(value)}<span class="macro-balance-legend-unit">g</span>`; });
+    const bars = document.querySelectorAll('.segmented-bar > span');
+    [meal.carbs, meal.fats, meal.proteins].forEach((value, index) => { if (bars[index]) bars[index].style.flex = Math.max(1, value); });
+    const grid = document.querySelector('.ai-meal-result .row.g-3');
+    if (grid && meal.ingredients.length) grid.innerHTML = meal.ingredients.map((ingredient) => `<div class="col-12 col-md-6"><div class="d-flex align-items-center justify-content-between bg-white rounded-3 ps-4 pe-2 py-3"><span class="fw-medium text-body-muted">${ingredient.name}</span><span class="d-inline-flex align-items-center bg-white shadow-sm rounded-3 px-3 py-2 fw-semibold">${number(ingredient.grams)}g</span></div></div>`).join('');
+    let correction = document.querySelector('#meal-correction');
+    if (!correction) {
+      correction = document.createElement('div');
+      correction.id = 'meal-correction'; correction.className = 'mt-2 fs-8 text-body-muted';
+      const label = document.createElement('label'); label.htmlFor = 'meal-correction-select'; label.textContent = 'Is this not right? ';
+      const select = document.createElement('select'); select.id = 'meal-correction-select'; select.className = 'form-select form-select-sm d-inline-block w-auto ms-1';
+      select.append(new Option('Choose the food', ''), ...Object.entries(correctionCatalog).map(([key, item]) => new Option(item.name, key)));
+      select.addEventListener('change', () => {
+        const replacement = correctionCatalog[select.value];
+        if (!replacement) return;
+        analyzedMeal = { ...replacement, image: analyzedMeal?.image || '' };
+        setResult(analyzedMeal);
+      });
+      correction.append(label, select);
+      document.querySelector('.ai-meal-result-title')?.closest('.col-12')?.append(correction);
+    }
+    const correctionSelect = document.querySelector('#meal-correction-select');
+    const matched = Object.entries(correctionCatalog).find(([, item]) => item.name === meal.name)?.[0] || '';
+    if (correctionSelect) correctionSelect.value = matched;
+  };
+
+  const makeThumbnail = (dataUrl) => new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement('canvas'); canvas.width = canvas.height = 120;
+      const context = canvas.getContext('2d');
+      const side = Math.min(image.width, image.height);
+      context.drawImage(image, (image.width - side) / 2, (image.height - side) / 2, side, side, 0, 0, 120, 120);
+      resolve(canvas.toDataURL('image/jpeg', .72));
+    };
+    image.onerror = () => resolve('');
+    image.src = dataUrl;
+  });
+
+  const estimateMealFromPhoto = async (dataUrl) => {
+    const response = await fetch('/api/food-analysis', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: dataUrl, mode: 'meal' })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'We could not analyze this photo.');
+    if (result.needsClarification) {
+      result.name = `${result.name} (please verify)`;
+    }
+    return result;
+  };
+
+  const choosePhoto = () => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/jpeg,image/png,image/webp'; input.hidden = true;
+    input.addEventListener('change', () => {
+      const file = input.files?.[0];
+      input.remove();
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) return window.alert('Choose an image smaller than 8 MB.');
+      const reader = new FileReader();
+      reader.onload = async () => {
+        selectedPhoto = String(reader.result);
+        document.querySelector('[data-analyzing-photo]').src = selectedPhoto;
+        showModal('ai-meal-analyzing-modal');
+        try {
+          const [meal, thumbnail] = await Promise.all([estimateMealFromPhoto(selectedPhoto, file.name), makeThumbnail(selectedPhoto)]);
+          analyzedMeal = { ...meal, image: thumbnail };
+          setResult(analyzedMeal);
+          hideModal('ai-meal-analyzing-modal');
+          showModal('ai-meal-result-modal');
+        } catch (error) {
+          hideModal('ai-meal-analyzing-modal');
+          window.alert(error.message);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    document.body.append(input); input.click();
+  };
+
+  document.addEventListener('click', (event) => {
+    const addButton = event.target.closest('[data-add-meal]');
+    if (addButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      choosePhoto();
+    }
+  }, true);
+
+  document.querySelectorAll('input[name="recent-meal"]').forEach((input) => {
+    input.addEventListener('change', () => {
+      selectedMeal = mealCatalog[input.value] || null;
+      const useButton = document.querySelector('.recent-meals-use');
+      if (useButton) useButton.disabled = !selectedMeal;
+    });
+  });
+
+  document.querySelector('.recent-meals-use')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!selectedMeal) return;
+    state.calories += selectedMeal.calories;
+    state.carbs += selectedMeal.carbs;
+    state.fats += selectedMeal.fats;
+    state.proteins += selectedMeal.proteins;
+    state.meals.push(selectedMeal);
+    persist();
+    render();
+    hideMealPicker();
+  });
+
+  document.querySelector('[data-ai-meal-confirm]')?.addEventListener('click', (event) => {
+    event.preventDefault(); event.stopImmediatePropagation();
+    if (!analyzedMeal) return;
+    const servings = Math.max(1, Number(document.querySelector('.ai-meal-result-input')?.value) || 1);
+    const meal = Object.fromEntries(Object.entries(analyzedMeal).map(([key, value]) => [key, typeof value === 'number' ? Math.round(value * servings) : value]));
+    state.calories += meal.calories; state.carbs += meal.carbs; state.fats += meal.fats; state.proteins += meal.proteins;
+    state.meals.push(meal); persist(); render(); hideModal('ai-meal-result-modal');
+    const message = document.querySelector('[data-meal-success-message]');
+    if (message) message.textContent = `${meal.name} added to today.`;
+    showModal('ai-meal-success-sheet');
+  }, true);
+
+  render();
+})();

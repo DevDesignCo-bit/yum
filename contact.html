@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us — Yumetics</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="app-page">
+        <div class="sticky-top app-navbar-sticky">
+        <nav class="navbar bg-primary overflow-hidden position-relative d-flex d-lg-none px-4 app-navbar-mobile">
+            <a href="/" class="navbar-brand p-0 m-0 d-flex align-items-center">
+                <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+            </a>
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="117" height="121" class="app-navbar-mascot rtl-flip">
+        </nav>
+
+                    <div class="container d-none d-lg-block">
+                <nav class="navbar bg-primary rounded-pill overflow-hidden position-relative flex-nowrap d-flex app-navbar-pill" aria-label="Main">
+                    <a href="/" class="navbar-brand p-0 ms-5 ps-xl-3 d-flex align-items-center">
+                        <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+                    </a>
+                    <ul class="nav flex-nowrap align-items-center ms-7 ms-xl-auto me-auto">
+                        <li class="nav-item"><a href="/" class="nav-link text-uppercase fw-bold">Home</a></li>
+                        <li class="nav-item"><a href="/stats" class="nav-link text-uppercase fw-bold">Stats</a></li>
+                        <li class="nav-item"><a href="/cooking-planner" class="nav-link text-uppercase fw-bold">Cooking Planner</a></li>
+                        <li class="nav-item"><a href="/profile" class="nav-link text-uppercase fw-bold">My Profile</a></li>
+                    </ul>
+                    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="192" height="199" class="app-navbar-mascot rtl-flip">
+                </nav>
+            </div>
+            </div>
+
+
+    <main class="app-main flex-grow-1">
+            <section class="app-page-header app-page-header-with-illustration">
+    <div class="container">
+        <div class="app-page-header-content d-flex align-items-start gap-3">
+                <a href="/" class="app-icon-btn" aria-label="Back">
+        <span class="icon-arrow icon-arrow-left" aria-hidden="true"></span>
+    </a>
+
+            <h1 class="app-page-title mb-0">Contact Us</h1>
+        </div>
+                    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/illustrations/contact.png"
+                 alt=""
+                 aria-hidden="true"
+                 class="app-page-illustration">
+            </div>
+</section>
+
+    <section class="contact-content container pb-5 pb-md-7">
+        <p class="app-content-header gap-for-illustration">We are here for you! How can we help?</p>
+
+        <div class="row justify-content-center">
+            <div class="contact-form-wrap col-md-10 col-lg-8">
+                <form class="contact-form needs-validation" novalidate method="post" action="#">
+                    <div class="row contact-row">
+                        <div class="col-md-6">
+                            <input type="email" name="email" class="form-control fw-normal"
+                                   placeholder="Enter email: Example@gmail.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <select name="issue" class="tom-select" required>
+                                <option value="">Select Issue</option>
+                                <option value="freeze">App freezes</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="subscription">Subscription</option>
+                                <option value="download">Download</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <textarea name="message" class="form-control contact-textarea fw-normal"
+                                      placeholder="Describe your issue here"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center align-items-center gy-5 gx-lg-3 mt-5 mt-lg-7">
+                        <div class="col-12 col-md-8 col-lg-6">
+                            <p class="mb-2">Attachement</p>
+                            <div class="d-flex align-items-center gap-3 contact-attach-control" data-file-picker>
+                                <label for="contact-file" class="btn btn-white contact-attach-btn mb-0 fw-normal flex-shrink-0">Choose File</label>
+                                <span class="small contact-attach-name text-truncate flex-fill" data-file-name data-empty-text="No file chosen">No file chosen</span>
+                                <button type="button" class="btn btn-link contact-attach-reset p-0 d-none flex-shrink-0 text-decoration-underline text-body" data-file-reset>Reset</button>
+                                <input type="file" id="contact-file" name="attachment" class="d-none">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-8 col-lg-6 contact-recaptcha d-flex justify-content-start justify-content-lg-end">
+                            <div class="g-recaptcha"
+     data-callback="capcha_filled"
+     data-expired-callback="capcha_expired"
+     data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4 mt-md-6">
+                        <button type="submit" class="btn btn-dark">Send</button>
+                    </div>
+
+                    <div class="contact-wifi-alert bg-white rounded py-3 px-4 small text-center mx-auto">Wi-fi User not detected</div>
+                </form>
+            </div>
+        </div>
+    </section>
+    </main>
+
+        <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+
+        <nav class="app-bottom-nav d-lg-none" aria-label="Main">
+        <ul class="app-bottom-nav-pill list-unstyled d-flex align-items-center justify-content-evenly mb-0">
+            <li>
+                <a href="/" class="app-bottom-nav-link" aria-label="Home">
+                    <span class="icon-nav icon-nav-home" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/stats" class="app-bottom-nav-link" aria-label="Stats">
+                    <span class="icon-nav icon-nav-stats" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/cooking-planner" class="app-bottom-nav-link" aria-label="Cooking Planner">
+                    <span class="icon-nav icon-nav-planner" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/profile" class="app-bottom-nav-link" aria-label="My Profile">
+                    <span class="icon-nav icon-nav-profile" aria-hidden="true"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+            <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    let allowSubmit = false;
+    function capcha_filled() { allowSubmit = true; }
+    function capcha_expired() { allowSubmit = false; }
+</script>
+
+</body>
+</html>

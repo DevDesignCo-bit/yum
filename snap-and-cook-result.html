@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooking Planner — Yumetics</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="app-page cooking-planner-peach">
+        <div class="sticky-top app-navbar-sticky">
+        <nav class="navbar bg-primary overflow-hidden position-relative d-flex d-lg-none px-4 app-navbar-mobile">
+            <a href="/" class="navbar-brand p-0 m-0 d-flex align-items-center">
+                <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+            </a>
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="117" height="121" class="app-navbar-mascot rtl-flip">
+        </nav>
+
+                    <div class="container d-none d-lg-block">
+                <nav class="navbar bg-primary rounded-pill overflow-hidden position-relative flex-nowrap d-flex app-navbar-pill" aria-label="Main">
+                    <a href="/" class="navbar-brand p-0 ms-5 ps-xl-3 d-flex align-items-center">
+                        <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/app/logo-white.svg" alt="Yumetics" width="146" height="17">
+                    </a>
+                    <ul class="nav flex-nowrap align-items-center ms-7 ms-xl-auto me-auto">
+                        <li class="nav-item"><a href="/" class="nav-link text-uppercase fw-bold">Home</a></li>
+                        <li class="nav-item"><a href="/stats" class="nav-link text-uppercase fw-bold">Stats</a></li>
+                        <li class="nav-item"><a href="/cooking-planner" class="nav-link text-uppercase fw-bold active">Cooking Planner</a></li>
+                        <li class="nav-item"><a href="/profile" class="nav-link text-uppercase fw-bold">My Profile</a></li>
+                    </ul>
+                    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/navbar.svg" alt="" aria-hidden="true" width="192" height="199" class="app-navbar-mascot rtl-flip">
+                </nav>
+            </div>
+            </div>
+
+
+    <main class="app-main flex-grow-1">
+            <section class="app-page-header">
+    <div class="container">
+        <div class="app-page-header-content d-flex align-items-start gap-3">
+                <a href="/snap-and-cook" class="app-icon-btn" aria-label="Back">
+        <span class="icon-arrow icon-arrow-left" aria-hidden="true"></span>
+    </a>
+
+            <h1 class="app-page-title mb-0 fs-page-title">Cooking Planner</h1>
+        </div>
+            </div>
+</section>
+
+    <section class="container mt-lg-6">
+        <div class="cooking-planner-tabs">
+            <span class="cooking-planner-tab fw-extrabold">Snap & Cook</span>
+        </div>
+
+        <div class="cooking-planner-panel px-md-7 pt-md-6">
+                    <p class="fs-8 text-body-muted mb-3">
+        <span class="fw-semibold">Detected:</span>
+        🥦 Broccoli | 🧀 Cheese | 🍅 Tomato    </p>
+
+            <p class="party-planner-result-based fw-medium fs-8 mb-2">Menu based on:</p>
+    <div class="swiper menu-based-carousel cooking-planner-options" data-pill-carousel>
+        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <label class="option-card option-card-disabled bg-neutral-200">
+        <input type="checkbox" name="restriction" value="Vegan" class="visually-hidden" disabled>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/veggies.png" alt="" width="40" height="40">                <span class="option-card-title">Vegan</span>
+            </span>
+                    </span>
+    </label>
+
+                </div>
+                            <div class="swiper-slide">
+                                <label class="option-card option-card-disabled bg-neutral-200">
+        <input type="checkbox" name="restriction" value="Non Dairy" class="visually-hidden" disabled>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/dairy.png" alt="" width="40" height="40">                <span class="option-card-title">Non Dairy</span>
+            </span>
+                    </span>
+    </label>
+
+                </div>
+                            <div class="swiper-slide">
+                                <label class="option-card option-card-disabled bg-neutral-200">
+        <input type="checkbox" name="restriction" value="Low Carb" class="visually-hidden" disabled>
+        <span class="option-card-body">
+            <span class="option-card-header">
+                <img class="option-card-icon" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/icons/low-carb.png" alt="" width="40" height="40">                <span class="option-card-title">Low Carb</span>
+            </span>
+                    </span>
+    </label>
+
+                </div>
+                    </div>
+    </div>
+
+
+    <p class="fs-7 text-body-muted mt-4 mt-md-6 mb-3 pt-3 pt-md-0 mb-lg-5">Based on your preferences, find the best recipes here</p>
+
+        <div class="row gy-4 g-lg-4 gy-lg-5 justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Vegan Lasagna</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 20 min</li>
+                        <li>🍳 Cook: 40 min</li>
+                        <li>🔥 350 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="0" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegan</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Tempeh Curry</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 15 min</li>
+                        <li>🍳 Cook: 35 min</li>
+                        <li>🔥 420 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="1" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegan</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Quinoa Chilli</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 20 min</li>
+                        <li>🍳 Cook: 40 min</li>
+                        <li>🔥 350 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="2" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegan</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Broccoli Stir-Fry</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 10 min</li>
+                        <li>🍳 Cook: 15 min</li>
+                        <li>🔥 280 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="3" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Low Carb</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Cheesy Veggie Bake</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 25 min</li>
+                        <li>🍳 Cook: 45 min</li>
+                        <li>🔥 480 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="4" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegetarian</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Tomato Basil Pasta</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 10 min</li>
+                        <li>🍳 Cook: 20 min</li>
+                        <li>🔥 390 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="5" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegan</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Stuffed Peppers</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 20 min</li>
+                        <li>🍳 Cook: 35 min</li>
+                        <li>🔥 310 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="6" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegan</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Lentil Shepherd’s Pie</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 25 min</li>
+                        <li>🍳 Cook: 50 min</li>
+                        <li>🔥 440 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="7" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Vegan</span>
+            </article>
+
+            </div>
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-4 mb-2 mb-lg-0">
+                    <article class="recipes-list-card position-relative rounded-3 p-2 h-100">
+        <div class="d-flex gap-3 h-100">
+            <img class="recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover"
+                src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg" alt="" width="103" height="103">
+            <div class="d-flex flex-column flex-grow-1 min-w-0 py-2 pe-2">
+                <h3 class="recipes-list-card-title fw-bold mb-2 text-truncate">Roasted Veggie Bowl</h3>
+                <div class="d-flex justify-content-between gap-2 flex-grow-1">
+                    <ul class="recipes-list-card-meta list-unstyled fs-8 mb-0 align-self-start">
+                        <li>⏱ Prep: 15 min</li>
+                        <li>🍳 Cook: 30 min</li>
+                        <li>🔥 360 kcal</li>
+                    </ul>
+                    <button type="button" data-recipe-index="8" class="btn btn-outline-dark btn-sm rounded-pill ps-4 recipes-list-card-cta d-inline-flex align-items-center gap-2 align-self-end flex-shrink-0">
+                        View
+                        <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    <span class="recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2">Low Carb</span>
+            </article>
+
+            </div>
+            </div>
+
+    <div class="text-center mt-5 mt-md-8">
+        <form method="post" action="/snap-and-cook-result">
+            <button type="submit" class="btn btn-white bg-transparent rounded-pill fw-semibold d-inline-flex align-items-center gap-2 px-4 party-planner-regenerate">
+                <span class="icon-refresh" aria-hidden="true"></span>
+                Regenerate recipes
+            </button>
+        </form>
+    </div>
+
+                                                                                                                            <script type="application/json" id="view-recipe-data">[{"name":"Vegan Lasagna","tag":"Vegan","prep_min":20,"cook_min":40,"calories":350,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Tempeh Curry","tag":"Vegan","prep_min":15,"cook_min":35,"calories":420,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Quinoa Chilli","tag":"Vegan","prep_min":20,"cook_min":40,"calories":350,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Broccoli Stir-Fry","tag":"Low Carb","prep_min":10,"cook_min":15,"calories":280,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Cheesy Veggie Bake","tag":"Vegetarian","prep_min":25,"cook_min":45,"calories":480,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Tomato Basil Pasta","tag":"Vegan","prep_min":10,"cook_min":20,"calories":390,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Stuffed Peppers","tag":"Vegan","prep_min":20,"cook_min":35,"calories":310,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Lentil Shepherd\u2019s Pie","tag":"Vegan","prep_min":25,"cook_min":50,"calories":440,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"},{"name":"Roasted Veggie Bowl","tag":"Low Carb","prep_min":15,"cook_min":30,"calories":360,"image":"images\/food\/burger.jpg","description":"Layers of tender pasta, rich tomato sauce, and creamy vegan cheese with fresh vegetables.","ingredients":["250g pasta sheets","2 cups tomato sauce","200g vegan cheese","Mixed vegetables"],"instructions":[{"title":"Prep","description":"Slice the vegetables and prepare the sauce."},{"title":"Layer & bake","description":"Layer pasta, sauce and cheese, then bake until golden."}],"image_url":"https:\/\/yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com\/cme-1306\/ltr\/images\/food\/burger.jpg"}]</script>
+        </div>
+    </section>
+    </main>
+
+        <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+
+        <nav class="app-bottom-nav d-lg-none" aria-label="Main">
+        <ul class="app-bottom-nav-pill list-unstyled d-flex align-items-center justify-content-evenly mb-0">
+            <li>
+                <a href="/" class="app-bottom-nav-link" aria-label="Home">
+                    <span class="icon-nav icon-nav-home" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/stats" class="app-bottom-nav-link" aria-label="Stats">
+                    <span class="icon-nav icon-nav-stats" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/cooking-planner" class="app-bottom-nav-link active" aria-label="Cooking Planner">
+                    <span class="icon-nav icon-nav-planner" aria-hidden="true"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/profile" class="app-bottom-nav-link" aria-label="My Profile">
+                    <span class="icon-nav icon-nav-profile" aria-hidden="true"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+        <div class="modal fade view-recipe" id="view-recipe-modal" tabindex="-1" aria-labelledby="view-recipe-title" aria-hidden="true">
+    <div class="modal-dialog view-recipe-dialog">
+        <div class="modal-content view-recipe-content bg-beige-500 shadow-none border-0 overflow-hidden position-relative">
+
+                        <button type="button" data-view-recipe-save
+                    class="view-recipe-chip view-recipe-save position-absolute top-0 start-0 m-3 m-lg-6 mt-lg-5"
+                    aria-label="Toggle saved" aria-pressed="false">
+                <span data-view-recipe-save-icon class="icon-bookmark" aria-hidden="true"></span>
+            </button>
+            <button type="button"
+                    class="btn-close view-recipe-chip view-recipe-close position-absolute top-0 end-0 m-3 m-lg-6 mt-lg-5"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+
+            <div class="row g-0">
+                <div class="col-12 col-lg-6 view-recipe-image-col">
+                    <img data-view-recipe-image class="view-recipe-image w-100 object-fit-cover mt-lg-3" src="" alt="">
+                </div>
+
+                <div class="col-12 col-lg-6 view-recipe-body">
+                    <span data-view-recipe-tag class="recipe-tag d-inline-block fs-8 px-4 py-1 rounded-2 mb-2"></span>
+                    <h2 id="view-recipe-title" data-view-recipe-title class="view-recipe-title fw-bold mt-0 mb-2"></h2>
+                    <p data-view-recipe-description class="view-recipe-description mb-2"></p>
+
+                    <ul class="list-unstyled d-flex flex-wrap fs-8 view-recipe-meta mb-4">
+                        <li>⏱ Prep: <span data-view-recipe-prep>0</span> min</li>
+                        <li>🍳 Cook: <span data-view-recipe-cook>0</span> min</li>
+                        <li>🔥 <span data-view-recipe-calories>0</span> kcal</li>
+                    </ul>
+
+                    <ul class="nav nav-pills view-recipe-tabs gap-2 mb-4" role="tablist">
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link active w-100 rounded-pill fw-bold" id="view-recipe-tab-ingredients"
+                                    data-bs-toggle="tab" data-bs-target="#view-recipe-pane-ingredients"
+                                    type="button" role="tab" aria-controls="view-recipe-pane-ingredients" aria-selected="true">Ingredients</button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100 rounded-pill fw-bold" id="view-recipe-tab-instructions"
+                                    data-bs-toggle="tab" data-bs-target="#view-recipe-pane-instructions"
+                                    type="button" role="tab" aria-controls="view-recipe-pane-instructions" aria-selected="false">Instructions</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="view-recipe-pane-ingredients" role="tabpanel" aria-labelledby="view-recipe-tab-ingredients">
+                            <article class="view-recipe-step position-relative rounded-3 pe-3 py-3">
+                                <span class="view-recipe-step-num position-absolute">01</span>
+                                <h3 class="view-recipe-step-title fw-bold mb-2">Ingredients</h3>
+                                <ul data-view-recipe-ingredients class="view-recipe-step-list list-unstyled fs-8 mb-0"></ul>
+                            </article>
+                        </div>
+                        <div class="tab-pane fade" id="view-recipe-pane-instructions" role="tabpanel" aria-labelledby="view-recipe-tab-instructions">
+                            <div data-view-recipe-instructions class="d-flex flex-column gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>

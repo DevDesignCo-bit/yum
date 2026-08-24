@@ -1,0 +1,230 @@
+[
+  {
+    "route": "/qa",
+    "url": "https://stage.yumetics.com/qa",
+    "file": "qa.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/lp",
+    "url": "https://stage.yumetics.com/lp",
+    "file": "lp.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/otp",
+    "url": "https://stage.yumetics.com/otp",
+    "file": "otp.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/wifi",
+    "url": "https://stage.yumetics.com/wifi",
+    "file": "wifi.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/wifi-operator-country-selector",
+    "url": "https://stage.yumetics.com/wifi-operator-country-selector",
+    "file": "wifi-operator-country-selector.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/wifi-no-number",
+    "url": "https://stage.yumetics.com/wifi-no-number",
+    "file": "wifi-no-number.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/onboarding",
+    "url": "https://stage.yumetics.com/onboarding",
+    "file": "onboarding.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/",
+    "url": "https://stage.yumetics.com/",
+    "file": "home.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/sad-pot",
+    "url": "https://stage.yumetics.com/sad-pot",
+    "file": "sad-pot.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/happy-carrot",
+    "url": "https://stage.yumetics.com/happy-carrot",
+    "file": "happy-carrot.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/sad-carrot",
+    "url": "https://stage.yumetics.com/sad-carrot",
+    "file": "sad-carrot.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/happy-banana",
+    "url": "https://stage.yumetics.com/happy-banana",
+    "file": "happy-banana.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/sad-banana",
+    "url": "https://stage.yumetics.com/sad-banana",
+    "file": "sad-banana.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-activate-fasting",
+    "url": "https://stage.yumetics.com/home-activate-fasting",
+    "file": "home-activate-fasting.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-fasting-active",
+    "url": "https://stage.yumetics.com/home-fasting-active",
+    "file": "home-fasting-active.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-fasting-in-progress",
+    "url": "https://stage.yumetics.com/home-fasting-in-progress",
+    "file": "home-fasting-in-progress.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-fasting-paused",
+    "url": "https://stage.yumetics.com/home-fasting-paused",
+    "file": "home-fasting-paused.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-fasting-goal-achieved",
+    "url": "https://stage.yumetics.com/home-fasting-goal-achieved",
+    "file": "home-fasting-goal-achieved.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-fasting-completed",
+    "url": "https://stage.yumetics.com/home-fasting-completed",
+    "file": "home-fasting-completed.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/home-recommendation",
+    "url": "https://stage.yumetics.com/home-recommendation",
+    "file": "home-recommendation.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/login",
+    "url": "https://stage.yumetics.com/login",
+    "file": "login.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/terms",
+    "url": "https://stage.yumetics.com/terms",
+    "file": "terms.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/faq",
+    "url": "https://stage.yumetics.com/faq",
+    "file": "faq.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/contact",
+    "url": "https://stage.yumetics.com/contact",
+    "file": "contact.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/profile",
+    "url": "https://stage.yumetics.com/profile",
+    "file": "profile.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/profile-few",
+    "url": "https://stage.yumetics.com/profile-few",
+    "file": "profile-few.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/profile-empty",
+    "url": "https://stage.yumetics.com/profile-empty",
+    "file": "profile-empty.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/profile-long",
+    "url": "https://stage.yumetics.com/profile-long",
+    "file": "profile-long.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/stats",
+    "url": "https://stage.yumetics.com/stats",
+    "file": "stats.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/cooking-planner",
+    "url": "https://stage.yumetics.com/cooking-planner",
+    "file": "cooking-planner.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/snap-and-cook",
+    "url": "https://stage.yumetics.com/snap-and-cook",
+    "file": "snap-and-cook.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/snap-and-cook-result",
+    "url": "https://stage.yumetics.com/snap-and-cook-result",
+    "file": "snap-and-cook-result.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/party-planner",
+    "url": "https://stage.yumetics.com/party-planner",
+    "file": "party-planner.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/party-planing-result",
+    "url": "https://stage.yumetics.com/party-planing-result",
+    "file": "party-planing-result.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/charts",
+    "url": "https://stage.yumetics.com/charts",
+    "file": "charts.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/error/404",
+    "url": "https://stage.yumetics.com/error/404",
+    "file": "error--404.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/error/500",
+    "url": "https://stage.yumetics.com/error/500",
+    "file": "error--500.html",
+    "status": "downloaded"
+  },
+  {
+    "route": "/error/subscription",
+    "url": "https://stage.yumetics.com/error/subscription",
+    "file": "error--subscription.html",
+    "status": "downloaded"
+  }
+]

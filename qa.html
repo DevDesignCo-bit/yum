@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumetics — QA Flows</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="">
+<main class="container py-4 py-md-5" style="max-width: 640px;">
+    <header class="text-center mb-4 mb-md-5">
+        <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/logo.svg" alt="Yumetics" style="width: 8.5rem">
+        <h1 class="h3 mt-4 mb-1">QA — Test Flows</h1>
+        <p class="text-secondary mb-0">Pick a flow to start at its first page.</p>
+    </header>
+
+    <div class="list-group">
+                    <a href="/lp" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>3G</strong>
+                        <code class="text-secondary small">/lp</code>
+                    </div>
+                                            <div class="small text-secondary">Landing → confirm → thank-you</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/otp" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>OTP</strong>
+                        <code class="text-secondary small">/otp</code>
+                    </div>
+                                            <div class="small text-secondary">MSISDN → PIN → thank-you</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/wifi" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>WiFi</strong>
+                        <code class="text-secondary small">/wifi</code>
+                    </div>
+                                            <div class="small text-secondary">MSISDN → PIN → thank-you</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/wifi-operator-country-selector" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>WiFi (operator unknown)</strong>
+                        <code class="text-secondary small">/wifi-operator-country-selector</code>
+                    </div>
+                                            <div class="small text-secondary">Operator/country picker → PIN → thank-you</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/wifi-no-number" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>WiFi (no number)</strong>
+                        <code class="text-secondary small">/wifi-no-number</code>
+                    </div>
+                                            <div class="small text-secondary">No-number fallback → country-not-supported modal</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/onboarding" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Onboarding</strong>
+                        <code class="text-secondary small">/onboarding</code>
+                    </div>
+                                            <div class="small text-secondary">Intro → ~20 onboarding steps → plan summary</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home</strong>
+                        <code class="text-secondary small">/</code>
+                    </div>
+                                            <div class="small text-secondary">App home dashboard — happy pot, 3 hearts</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/sad-pot" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home (sad pot)</strong>
+                        <code class="text-secondary small">/sad-pot</code>
+                    </div>
+                                            <div class="small text-secondary">Home dashboard — sad pot, 1 heart</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/happy-carrot" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home (happy carrot)</strong>
+                        <code class="text-secondary small">/happy-carrot</code>
+                    </div>
+                                            <div class="small text-secondary">Home dashboard — happy carrot, 3 hearts</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/sad-carrot" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home (sad carrot)</strong>
+                        <code class="text-secondary small">/sad-carrot</code>
+                    </div>
+                                            <div class="small text-secondary">Home dashboard — sad carrot, 1 heart</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/happy-banana" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home (happy banana)</strong>
+                        <code class="text-secondary small">/happy-banana</code>
+                    </div>
+                                            <div class="small text-secondary">Home dashboard — happy banana, 3 hearts</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/sad-banana" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home (sad banana)</strong>
+                        <code class="text-secondary small">/sad-banana</code>
+                    </div>
+                                            <div class="small text-secondary">Home dashboard — sad banana, 1 heart</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-activate-fasting" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Fasting: Activate</strong>
+                        <code class="text-secondary small">/home-activate-fasting</code>
+                    </div>
+                                            <div class="small text-secondary">Home → pick a fasting goal (no pre-selection) → active state</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-fasting-active" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Fasting: Active</strong>
+                        <code class="text-secondary small">/home-fasting-active</code>
+                    </div>
+                                            <div class="small text-secondary">Fasting set up (0%, Start enabled) + setup-complete sheet auto-shows</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-fasting-in-progress" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Fasting: In Progress</strong>
+                        <code class="text-secondary small">/home-fasting-in-progress</code>
+                    </div>
+                                            <div class="small text-secondary">Fasting running (15:00:00, Stop) → Stop opens Fasting Ended sheet</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-fasting-paused" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Fasting: Paused</strong>
+                        <code class="text-secondary small">/home-fasting-paused</code>
+                    </div>
+                                            <div class="small text-secondary">Fasting paused (08:32:16, Restart) — restart resumes in-progress</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-fasting-goal-achieved" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Fasting: Goal Achieved</strong>
+                        <code class="text-secondary small">/home-fasting-goal-achieved</code>
+                    </div>
+                                            <div class="small text-secondary">Goal reached (16:00:00, 100%, Start disabled)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-fasting-completed" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Fasting: Completed</strong>
+                        <code class="text-secondary small">/home-fasting-completed</code>
+                    </div>
+                                            <div class="small text-secondary">End-fasting confirm → fast over (card OFF) + &quot;Fasting Completed&quot; happy-pot sheet</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/home-recommendation" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Home: Recommendation</strong>
+                        <code class="text-secondary small">/home-recommendation</code>
+                    </div>
+                                            <div class="small text-secondary">Home with top &quot;Finish the nutrition test&quot; recommendation banner</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/login" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Login</strong>
+                        <code class="text-secondary small">/login</code>
+                    </div>
+                                            <div class="small text-secondary">Standalone phone-login screen</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/terms" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Terms</strong>
+                        <code class="text-secondary small">/terms</code>
+                    </div>
+                                            <div class="small text-secondary">Terms &amp; Conditions page</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/faq" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>FAQ</strong>
+                        <code class="text-secondary small">/faq</code>
+                    </div>
+                                            <div class="small text-secondary">FAQ page with Bootstrap collapse accordion</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/contact" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Contact</strong>
+                        <code class="text-secondary small">/contact</code>
+                    </div>
+                                            <div class="small text-secondary">Contact Us form page</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/profile" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Profile</strong>
+                        <code class="text-secondary small">/profile</code>
+                    </div>
+                                            <div class="small text-secondary">My Profile page (shell only — content TBD)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/profile-few" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Profile (few)</strong>
+                        <code class="text-secondary small">/profile-few</code>
+                    </div>
+                                            <div class="small text-secondary">Profile with 2 saved recipes — checks short-list mascot behaviour</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/profile-empty" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Profile (empty)</strong>
+                        <code class="text-secondary small">/profile-empty</code>
+                    </div>
+                                            <div class="small text-secondary">Profile with 0 saved recipes — checks empty-state</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/profile-long" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Profile (long)</strong>
+                        <code class="text-secondary small">/profile-long</code>
+                    </div>
+                                            <div class="small text-secondary">Profile with 1 recipe whose Instructions tab has 20 steps</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/stats" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Stats</strong>
+                        <code class="text-secondary small">/stats</code>
+                    </div>
+                                            <div class="small text-secondary">Weekly Stats page (header + progress ring; charts TBD)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/cooking-planner" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Cooking Planner</strong>
+                        <code class="text-secondary small">/cooking-planner</code>
+                    </div>
+                                            <div class="small text-secondary">Cooking Planner index — Snap &amp; Cook / Party Planner choices</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/snap-and-cook" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Snap &amp; Cook</strong>
+                        <code class="text-secondary small">/snap-and-cook</code>
+                    </div>
+                                            <div class="small text-secondary">Snap &amp; Cook tool (opened from the index &quot;Got it&quot; popup)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/snap-and-cook-result" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Snap &amp; Cook Result</strong>
+                        <code class="text-secondary small">/snap-and-cook-result</code>
+                    </div>
+                                            <div class="small text-secondary">Snap &amp; Cook generated recipes grid (Detected ingredients + 9 recipes)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/party-planner" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Party Planner</strong>
+                        <code class="text-secondary small">/party-planner</code>
+                    </div>
+                                            <div class="small text-secondary">Party Planner form (difficulty, guests, event, diet, allergies)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/party-planing-result" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Party Planner Result</strong>
+                        <code class="text-secondary small">/party-planing-result</code>
+                    </div>
+                                            <div class="small text-secondary">Generated menu — courses, recipe cards, regenerate</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/charts" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Charts debug</strong>
+                        <code class="text-secondary small">/charts</code>
+                    </div>
+                                            <div class="small text-secondary">Internal chart playground (trajectory / macro / fasting)</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/error/404" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>404</strong>
+                        <code class="text-secondary small">/error/404</code>
+                    </div>
+                                            <div class="small text-secondary">Page not found</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/error/500" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>500</strong>
+                        <code class="text-secondary small">/error/500</code>
+                    </div>
+                                            <div class="small text-secondary">Server error</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+                    <a href="/error/subscription" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <strong>Subscription Error</strong>
+                        <code class="text-secondary small">/error/subscription</code>
+                    </div>
+                                            <div class="small text-secondary">Subscription / billing failure</div>
+                                    </div>
+                <span aria-hidden="true">›</span>
+            </a>
+            </div>
+</main>
+    <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>

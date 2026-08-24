@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumetics — Select Your  Virtual Pet!</title>
+            <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
+    </head>
+<body class="onboarding-page">
+    <div class="onboarding-viewport">
+                            <header class="onboarding-header pt-4 pt-md-5">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="onboarding-header-slot">
+                    <a href="/onboarding/virtual-pet-intro" class="app-icon-btn" aria-label="Back">
+        <span class="icon-arrow icon-arrow-left" aria-hidden="true"></span>
+    </a>
+            </div>
+            <div class="onboarding-header-slot">
+                    <a href="/onboarding/summary" class="app-icon-btn" aria-label="Close">
+        <span class="icon-close" aria-hidden="true"></span>
+    </a>
+            </div>
+        </div>
+    </header>
+
+    
+        <main class="onboarding-main flex-grow-1 d-flex flex-column align-items-md-center w-100">
+                <div class="container">
+        <h1 class="fs-2 fw-black lh-1 text-center mt-3 mb-4 d-md-none">Select Your <br> Virtual Pet!</h1>
+
+        <div class="row align-items-center g-1 g-md-4 g-xxl-5">
+            <div class="col-md-6 text-center">
+                    <form id="onboarding-form" method="get" action="/onboarding/pet-name" class="pet-carousel-form needs-validation" novalidate>
+        <div class="pet-carousel swiper mx-auto mx-lg-5 mt-4" data-pet-carousel>
+            <button type="button" class="pet-carousel-prev" data-pet-prev aria-label="Previous pet">
+                <span class="icon-caret icon-caret-left" aria-hidden="true"></span>
+            </button>
+
+            <div class="pet-carousel-track swiper-wrapper" data-pet-track>
+                                    <label class="pet-slide swiper-slide" data-pet-slide data-subtitle="This pet encourages you to enjoy more homemade meals. Simple, tasty, and good for your body!">
+                        <input type="radio" class="visually-hidden" name="pet" value="pot" checked>
+                        <img class="" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/pot/animations/happy.webp" alt="Pot" decoding="async">
+                    </label>
+                                    <label class="pet-slide swiper-slide" data-pet-slide data-subtitle="This pet pushes you to eat more veggies and stay energized!">
+                        <input type="radio" class="visually-hidden" name="pet" value="carrot">
+                        <img class="" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/carrot/animations/happy.webp" alt="Carrot" decoding="async">
+                    </label>
+                                    <label class="pet-slide swiper-slide" data-pet-slide data-subtitle="This pet wants you to fuel up with fruit. Quick energy, natural sweet!">
+                        <input type="radio" class="visually-hidden" name="pet" value="banana">
+                        <img class="" src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets/banana/animations/happy.webp" alt="Banana" decoding="async">
+                    </label>
+                            </div>
+
+            <button type="button" class="pet-carousel-next" data-pet-next aria-label="Next pet">
+                <span class="icon-caret icon-caret-right" aria-hidden="true"></span>
+            </button>
+        </div>
+    </form>
+            </div>
+
+            <div class="col-md-6 col-xl-5 text-center">
+                <h1 class="onboarding-hero-heading mx-lg-4 mx-xxl-0 mb-4 mb-lg-5 mt-lg-5 pt-lg-3 d-none d-md-block">Select Your <br> Virtual Pet!</h1>
+                        <div class="pet-subtitle-stack px-3 px-md-0 mb-4 mb-lg-5 mt-4">
+                    <p class="onboarding-hero-subtitle is-visible"
+               data-pet-subtitle
+               data-pet-id="pot"
+               >This pet encourages you to enjoy more homemade meals. Simple, tasty, and good for your body!</p>
+                    <p class="onboarding-hero-subtitle"
+               data-pet-subtitle
+               data-pet-id="carrot"
+               aria-hidden="true">This pet pushes you to eat more veggies and stay energized!</p>
+                    <p class="onboarding-hero-subtitle"
+               data-pet-subtitle
+               data-pet-id="banana"
+               aria-hidden="true">This pet wants you to fuel up with fruit. Quick energy, natural sweet!</p>
+            </div>
+                                    <button type="submit" form="onboarding-form" class="btn btn-dark onboarding-next-btn mt-lg-5 d-none d-md-inline-flex">
+        Next <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>
+    </button>
+            </div>
+        </div>
+    </div>
+                        <div class="onboarding-cta d-flex justify-content-center mt-auto mt-md-5 pt-3 pt-md-0 px-3 w-100 d-md-none">
+                                    <button type="submit" form="onboarding-form" class="btn btn-dark onboarding-next-btn">
+                Next <span class="icon-chevron icon-chevron-right" aria-hidden="true"></span>            </button>
+            </div>
+
+        </main>
+    </div>
+
+                <footer class="footer pt-4 mt-3 text-center">
+        <div class="container">
+            <ul class="footer-links list-unstyled mb-2">
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">TC</a></li>
+            </ul>
+            <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+        </div>
+    </footer>
+
+    
+        <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script><script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>
+</body>
+</html>
+
