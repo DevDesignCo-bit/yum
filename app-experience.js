@@ -444,15 +444,17 @@
     empty.textContent = inThisWeek.length ? `${inThisWeek.length} meal${inThisWeek.length === 1 ? '' : 's'} logged this week.` : 'No meals logged this week yet.';
   };
 
-  const renderWeeklyStats = () => {
+  const renderWeeklyStats = (selectedWeekStart = null) => {
     if (!document.title.includes('Stats')) return;
     const tracker = read('yumetics-calorie-tracker-v1');
     const plan = onboarding.plan || {};
     const dailyGoal = Number(plan.calories) || 1400;
     const now = new Date();
-    const weekStart = new Date(now);
+    const currentWeekStart = new Date(now);
+    currentWeekStart.setHours(0, 0, 0, 0);
+    currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay());
+    const weekStart = selectedWeekStart ? new Date(Number(selectedWeekStart)) : new Date(currentWeekStart);
     weekStart.setHours(0, 0, 0, 0);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
     const dayStart = (offset) => {
       const date = new Date(weekStart);
       date.setDate(date.getDate() + offset);
@@ -485,41 +487,43 @@
     const number = (value) => Math.round(value).toLocaleString('en-US');
 
     document.querySelectorAll('.stats-calendar-label, [data-weekly-stats-label]').forEach((label) => { label.textContent = weekLabel; });
-    const ring = document.querySelector('.progress-ring');
-    if (ring) ring.style.setProperty('--ring-arc-percent', String(Math.min(100, Math.round((totalCalories / (dailyGoal * 7)) * 100))));
-    const ringValue = document.querySelector('.progress-ring-value');
-    if (ringValue) ringValue.textContent = number(totalCalories);
-    const calorieGoal = document.querySelector('.calories-chart-value > span:last-child');
-    if (calorieGoal) calorieGoal.replaceChildren(document.createTextNode(number(dailyGoal)), Object.assign(document.createElement('span'), { className: 'calories-chart-unit', textContent: 'kcal' }));
+    document.querySelectorAll('.progress-ring').forEach((ring) => {
+      ring.style.setProperty('--ring-arc-percent', String(Math.min(100, Math.round((totalCalories / (dailyGoal * 7)) * 100))));
+    });
+    document.querySelectorAll('.progress-ring-value').forEach((ringValue) => { ringValue.textContent = number(totalCalories); });
 
     const maxValue = Math.max(dailyGoal, ...days.map((day) => day.calories), 1);
     document.querySelectorAll('.calories-chart-graph').forEach((graph) => {
       graph.dataset.minCal = '0'; graph.dataset.maxCal = String(maxValue);
     });
-    const axisLabels = document.querySelectorAll('.calories-chart-y-label');
-    if (axisLabels[0]) axisLabels[0].textContent = number(maxValue);
-    if (axisLabels[1]) axisLabels[1].textContent = number(maxValue / 2);
-    if (axisLabels[2]) axisLabels[2].textContent = '0';
-    document.querySelectorAll('.calories-chart-bar').forEach((bar, index) => {
-      const value = days[index]?.calories || 0;
-      bar.style.height = `${(value / maxValue) * 100}%`;
-      bar.setAttribute('aria-label', `${['S', 'M', 'T', 'W', 'T', 'F', 'S'][index]}: ${number(value)} kcal`);
+    document.querySelectorAll('.calories-chart').forEach((chart) => {
+      const calorieTotal = chart.querySelector('.calories-chart-value > span:last-child');
+      if (calorieTotal) calorieTotal.replaceChildren(document.createTextNode(number(totalCalories)), Object.assign(document.createElement('span'), { className: 'calories-chart-unit', textContent: 'kcal' }));
+      const axisLabels = chart.querySelectorAll('.calories-chart-y-label');
+      if (axisLabels[0]) axisLabels[0].textContent = number(maxValue);
+      if (axisLabels[1]) axisLabels[1].textContent = number(maxValue / 2);
+      if (axisLabels[2]) axisLabels[2].textContent = '0';
+      chart.querySelectorAll('.calories-chart-bar').forEach((bar, index) => {
+        const value = days[index]?.calories || 0;
+        bar.style.height = `${(value / maxValue) * 100}%`;
+        bar.setAttribute('aria-label', `${['S', 'M', 'T', 'W', 'T', 'F', 'S'][index]}: ${number(value)} kcal`);
+      });
     });
 
     const macroCalories = { carbs: total('carbs') * 4, fats: total('fats') * 9, proteins: total('proteins') * 4 };
     const macroTotal = macroCalories.carbs + macroCalories.fats + macroCalories.proteins;
     const macroPercentages = ['carbs', 'fats', 'proteins'].map((key) => macroTotal ? Math.round((macroCalories[key] / macroTotal) * 100) : 0);
-    document.querySelectorAll('.weekly-macros-summary').forEach((summary) => {
-      summary.querySelectorAll('.weekly-macros-summary-value').forEach((value, index) => { value.textContent = `${macroPercentages[index]}%`; });
-    });
-    document.querySelectorAll('.weekly-macros-bar').forEach((bar, index) => {
-      const day = days[index] || { carbs: 0, fats: 0, proteins: 0 };
-      const values = [day.carbs, day.fats, day.proteins];
-      const hasData = values.some(Boolean);
-      bar.style.height = hasData ? '100%' : '0%';
-      ['carbs', 'fat', 'protein'].forEach((key, valueIndex) => {
-        const segment = bar.querySelector(`.macro-balance-bar-${key}`);
-        if (segment) segment.style.flex = Math.max(1, values[valueIndex]);
+    document.querySelectorAll('.weekly-macros').forEach((chart) => {
+      chart.querySelectorAll('.weekly-macros-summary-value').forEach((value, index) => { value.textContent = `${macroPercentages[index]}%`; });
+      chart.querySelectorAll('.weekly-macros-bar').forEach((bar, index) => {
+        const day = days[index] || { carbs: 0, fats: 0, proteins: 0 };
+        const values = [day.carbs, day.fats, day.proteins];
+        const hasData = values.some(Boolean);
+        bar.style.height = hasData ? '100%' : '0%';
+        ['carbs', 'fat', 'protein'].forEach((key, valueIndex) => {
+          const segment = bar.querySelector(`.macro-balance-bar-${key}`);
+          if (segment) segment.style.flex = Math.max(1, values[valueIndex]);
+        });
       });
     });
 
@@ -528,11 +532,27 @@
     const weekList = document.querySelector('[data-weekly-stats-carousel] .swiper-wrapper');
     if (weekList) {
       weekList.replaceChildren();
-      const slide = document.createElement('div'); slide.className = 'swiper-slide weekly-stats-week-slide';
-      const button = document.createElement('button'); button.type = 'button'; button.className = 'weekly-stats-week active d-flex flex-column align-items-center justify-content-center border-0';
-      const month = document.createElement('span'); month.className = 'weekly-stats-week-month'; month.textContent = weekLabel.split(' ')[0].toLowerCase().replace(/^./, (letter) => letter.toUpperCase());
-      const range = document.createElement('span'); range.className = 'weekly-stats-week-range'; range.textContent = weekLabel.slice(weekLabel.indexOf(' ') + 1);
-      button.append(month, range); slide.append(button); weekList.append(slide);
+      const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'short' });
+      const selectedTime = weekStart.getTime();
+      // Keep the familiar selector design, but fill it with real calendar weeks
+      // instead of the prototype's old January/February demo data.
+      Array.from({ length: 5 }, (_, index) => {
+        const start = new Date(currentWeekStart); start.setDate(start.getDate() - (4 - index) * 7);
+        const end = new Date(start); end.setDate(end.getDate() + 6);
+        const slide = document.createElement('div'); slide.className = 'swiper-slide weekly-stats-week-slide';
+        const button = document.createElement('button'); button.type = 'button';
+        button.className = `weekly-stats-week d-flex flex-column align-items-center justify-content-center border-0${start.getTime() === selectedTime ? ' active' : ''}`;
+        button.dataset.weekStart = String(start.getTime());
+        const month = document.createElement('span'); month.className = 'weekly-stats-week-month'; month.textContent = monthFormatter.format(start);
+        const range = document.createElement('span'); range.className = 'weekly-stats-week-range'; range.textContent = `${start.getDate()}-${end.getDate()}`;
+        button.append(month, range); slide.append(button); weekList.append(slide);
+        button.addEventListener('click', (event) => {
+          event.preventDefault(); event.stopPropagation();
+          renderWeeklyStats(button.dataset.weekStart);
+        }, true);
+      });
+      const carousel = weekList.closest('[data-weekly-stats-carousel]');
+      if (carousel) carousel.dataset.currentWeekIndex = '4';
     }
     const statsSection = document.querySelector('.stats-content');
     const existingNotice = document.querySelector('[data-weekly-stats-empty]');
@@ -542,6 +562,11 @@
       notice.className = 'text-center text-body-muted mt-3 mb-0';
       notice.textContent = 'No meals logged this week yet.';
       statsSection.querySelector('.row.g-3')?.before(notice);
+    }
+    const statsModal = document.querySelector('#weekly-stats-modal');
+    if (statsModal && !statsModal.dataset.liveWeeksBound) {
+      statsModal.dataset.liveWeeksBound = 'true';
+      statsModal.addEventListener('shown.bs.modal', () => window.setTimeout(() => renderWeeklyStats(), 0));
     }
   };
 
@@ -553,6 +578,5 @@
   initPartyPlanner();
   renderPlannerResults();
   renderPartyResults();
-  initWeeklyStats();
   renderWeeklyStats();
 })();
