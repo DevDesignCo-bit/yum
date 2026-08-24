@@ -74,8 +74,6 @@
       .map((value) => labels[key]?.[value] || value).join(', ') || 'Not selected';
     // Keep the original summary layout: its existing four design rows now carry
     // the user's choices instead of appending a separate card below it.
-    const planTitle = document.querySelector('.summary-card-plan .summary-card-title');
-    if (planTitle) planTitle.textContent = `A plan for ${answers.pet_name || 'Pepi'} and your ${labels.pet[answers.pet] || 'Pot'}`;
     const planRows = [
       `Goal: ${weight} kg → ${targetWeight} kg`,
       `Focus: ${list('habits')}`,
