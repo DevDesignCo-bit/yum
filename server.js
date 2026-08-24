@@ -141,7 +141,10 @@ http.createServer(async (req, res) => {
     try { return sendJson(res, 200, await analyzeFood(await readJson(req))); }
     catch (error) { return sendJson(res, error.status || 500, { error: error.message || 'Unable to analyze this image.' }); }
   }
-  if (req.method !== 'GET' && req.method !== 'HEAD') return sendJson(res, 405, { error: 'Method not allowed.' });
+  // The prototype pages contain a few regular forms. Serve their result pages on submit
+  // instead of exposing a technical 405 message while no database is involved.
+  const staticFormSubmit = req.method === 'POST' && Boolean(routes[pathname]);
+  if (req.method !== 'GET' && req.method !== 'HEAD' && !staticFormSubmit) return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
