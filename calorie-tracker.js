@@ -45,6 +45,11 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) { /* Keep the page usable without storage. */ }
   };
 
+  // Keep a timestamp with each entry so Weekly Stats can report real calendar weeks.
+  const logMeal = (meal) => {
+    state.meals.push({ ...meal, loggedAt: new Date().toISOString() });
+  };
+
   const number = (value) => Math.round(value).toLocaleString('en-US');
   const percentage = (value, goal) => Math.min(100, Math.max(0, (value / goal) * 100));
 
@@ -60,11 +65,46 @@
 
   const renderMeals = () => {
     const list = document.querySelector('.home-meals');
-    if (!list || !state.meals.length) return;
+    if (!list) return;
+    if (!state.meals.length) { list.replaceChildren(); return; }
     list.innerHTML = state.meals.slice(-6).map((meal) => `
       <li class="home-meal" title="${meal.name}: ${number(meal.calories)} kcal">
         <img src="${meal.image || 'https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg'}" alt="${meal.name}" width="75" height="75">
       </li>`).join('');
+  };
+
+  const renderRecentMeals = () => {
+    const wrapper = document.querySelector('.recent-meals-carousel .swiper-wrapper');
+    const useButton = document.querySelector('.recent-meals-use');
+    if (!wrapper) return;
+    selectedMeal = null;
+    if (useButton) useButton.disabled = true;
+    wrapper.replaceChildren();
+    const recentMeals = state.meals.slice(-12).reverse();
+    if (!recentMeals.length) {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide text-center text-body-muted py-4';
+      slide.textContent = 'No recent meals yet.';
+      wrapper.append(slide);
+      return;
+    }
+    recentMeals.forEach((meal, index) => {
+      const slide = document.createElement('div'); slide.className = 'swiper-slide';
+      const label = document.createElement('label'); label.className = 'recent-meal-item mt-1';
+      const input = document.createElement('input');
+      input.type = 'radio'; input.name = 'recent-meal'; input.value = String(index); input.className = 'visually-hidden';
+      input.addEventListener('change', () => {
+        selectedMeal = meal;
+        if (useButton) useButton.disabled = false;
+      });
+      const photo = document.createElement('span'); photo.className = 'recent-meal-photo';
+      const image = document.createElement('img');
+      image.src = meal.image || 'https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg';
+      image.alt = meal.name || 'Meal'; image.width = 95; image.height = 94;
+      const name = document.createElement('span'); name.className = 'recent-meal-name fw-extrabold fs-7'; name.textContent = meal.name || 'Meal';
+      const calories = document.createElement('span'); calories.className = 'recent-meal-kcal fw-medium text-body-muted'; calories.textContent = `${number(meal.calories || 0)} kcal`;
+      photo.append(image); label.append(input, photo, name, calories); slide.append(label); wrapper.append(slide);
+    });
   };
 
   const render = () => {
@@ -85,12 +125,14 @@
     updateMacro('calories-intake-macro-fill-fats', state.fats, GOALS.fats);
     updateMacro('calories-intake-macro-fill-proteins', state.proteins, GOALS.proteins);
     renderMeals();
+    renderRecentMeals();
     const petName = document.querySelector('.home-hero-name');
     if (petName && onboarding.plan?.petName) petName.textContent = onboarding.plan.petName;
   };
 
   const modalElement = document.getElementById('recent-meals-modal');
   const showMealPicker = () => {
+    renderRecentMeals();
     if (window.bootstrap?.Modal && modalElement) window.bootstrap.Modal.getOrCreateInstance(modalElement).show();
     else if (modalElement) { modalElement.classList.add('show'); modalElement.style.display = 'block'; }
   };
@@ -208,14 +250,6 @@
     }
   }, true);
 
-  document.querySelectorAll('input[name="recent-meal"]').forEach((input) => {
-    input.addEventListener('change', () => {
-      selectedMeal = mealCatalog[input.value] || null;
-      const useButton = document.querySelector('.recent-meals-use');
-      if (useButton) useButton.disabled = !selectedMeal;
-    });
-  });
-
   document.querySelector('.recent-meals-use')?.addEventListener('click', (event) => {
     event.preventDefault();
     if (!selectedMeal) return;
@@ -223,7 +257,7 @@
     state.carbs += selectedMeal.carbs;
     state.fats += selectedMeal.fats;
     state.proteins += selectedMeal.proteins;
-    state.meals.push(selectedMeal);
+    logMeal(selectedMeal);
     persist();
     render();
     hideMealPicker();
@@ -235,7 +269,7 @@
     const servings = Math.max(1, Number(document.querySelector('.ai-meal-result-input')?.value) || 1);
     const meal = Object.fromEntries(Object.entries(analyzedMeal).map(([key, value]) => [key, typeof value === 'number' ? Math.round(value * servings) : value]));
     state.calories += meal.calories; state.carbs += meal.carbs; state.fats += meal.fats; state.proteins += meal.proteins;
-    state.meals.push(meal); persist(); render(); hideModal('ai-meal-result-modal');
+    logMeal(meal); persist(); render(); hideModal('ai-meal-result-modal');
     const message = document.querySelector('[data-meal-success-message]');
     if (message) message.textContent = `${meal.name} added to today.`;
     showModal('ai-meal-success-sheet');

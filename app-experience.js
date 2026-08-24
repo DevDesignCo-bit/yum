@@ -230,7 +230,12 @@
     const lowCarb = diet === 'low_carb' || diet === 'ketogenic';
     const highProtein = diet === 'high_protein' || diet === 'paleo';
     const tag = vegan ? 'Vegan' : vegetarian ? 'Vegetarian' : lowCarb ? 'Low Carb' : highProtein ? 'High Protein' : 'Balanced';
-    const occasion = { christmas: 'festive', picnic: 'picnic', family_gathering: 'family-style' }[event] || 'shared';
+    const occasion = {
+      christmas: 'festive', picnic: 'picnic', family_gathering: 'family-style',
+      friends_gathering: 'friends-and-sharing', birthday_kids: 'kid-friendly birthday',
+      birthday_adults: 'birthday celebration', game_night: 'game-night',
+      movie_night: 'movie-night', summer_party: 'summer party', halloween: 'Halloween'
+    }[event] || 'shared';
     const time = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 8 : 0;
     const menu = vegan
       ? [['Crispy vegetable crostini', 210, 12, 8, ['wholegrain bread', 'tomatoes', 'herbs']], ['Creamy chickpea curry', 460, 15, 28, ['chickpeas', 'vegetables', 'coconut milk']], ['Berry coconut pots', 260, 10, 0, ['berries', 'coconut yogurt', 'oats']]]
@@ -357,7 +362,13 @@
     if (!state.recipes?.length) return;
     const recipes = state.recipes;
     const settings = state.settings || {};
-    const labels = { christmas: 'Christmas', picnic: 'Picnic', family_gathering: 'Family gathering', easy: 'Easy', medium: 'Medium', hard: 'Advanced' };
+    const labels = {
+      christmas: 'Christmas', picnic: 'Picnic', family_gathering: 'Family gathering',
+      friends_gathering: 'Friends gathering', birthday_kids: 'Birthday party - Kids',
+      birthday_adults: 'Birthday party - Adults', game_night: 'Game night',
+      movie_night: 'Movie night', summer_party: 'Summer party', halloween: 'Halloween',
+      easy: 'Easy', medium: 'Medium', hard: 'Advanced'
+    };
     const summary = [...document.querySelectorAll('.cooking-planner-panel > p.d-flex .fw-light')];
     if (summary[0]) summary[0].textContent = labels[settings.event] || 'Family gathering';
     if (summary[1]) summary[1].textContent = `${settings.guests || 5} people`;
@@ -384,6 +395,156 @@
     });
   };
 
+  const initWeeklyStats = () => {
+    if (!document.title.includes('Stats')) return;
+    let tracker = { meals: [] };
+    try { tracker = JSON.parse(localStorage.getItem('yumetics-calorie-tracker-v1') || '{"meals":[]}'); } catch (_) { /* Empty stats are valid for a new demo. */ }
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const weekStart = new Date(today); weekStart.setDate(today.getDate() - today.getDay());
+    const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+    const inThisWeek = (tracker.meals || []).filter((meal) => {
+      const date = new Date(meal.loggedAt || 0); date.setHours(0, 0, 0, 0);
+      return Number.isFinite(date.getTime()) && date >= weekStart && date <= weekEnd;
+    });
+    const days = Array.from({ length: 7 }, (_, index) => ({ calories: 0, carbs: 0, fats: 0, proteins: 0 }));
+    inThisWeek.forEach((meal) => {
+      const index = new Date(meal.loggedAt).getDay(); const day = days[index];
+      day.calories += Number(meal.calories) || 0; day.carbs += Number(meal.carbs) || 0; day.fats += Number(meal.fats) || 0; day.proteins += Number(meal.proteins) || 0;
+    });
+    const total = days.reduce((sum, day) => sum + day.calories, 0);
+    const totalMacros = days.reduce((sum, day) => ({ carbs: sum.carbs + day.carbs, fats: sum.fats + day.fats, proteins: sum.proteins + day.proteins }), { carbs: 0, fats: 0, proteins: 0 });
+    const label = (date) => `${date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()} ${date.getDate()}`;
+    const weekLabel = `${label(weekStart)}-${weekEnd.getDate()}`;
+    document.querySelectorAll('.stats-calendar-label, [data-weekly-stats-label]').forEach((element) => { element.textContent = weekLabel; });
+    const goal = Number(onboarding.plan?.calories) || 0;
+    const max = Math.max(goal || 1, ...days.map((day) => day.calories), 1);
+    document.querySelectorAll('.calories-chart-value > span:last-child').forEach((element) => { element.innerHTML = `${Math.round(total).toLocaleString('en-US')}<span class="calories-chart-unit">kcal</span>`; });
+    document.querySelectorAll('.calories-chart-bar').forEach((bar, index) => {
+      const calories = Math.round(days[index]?.calories || 0); bar.style.height = `${Math.min(100, (calories / max) * 100)}%`; bar.setAttribute('aria-label', `${['S', 'M', 'T', 'W', 'T', 'F', 'S'][index]}: ${calories} kcal`);
+    });
+    const axis = document.querySelectorAll('.calories-chart-y-label');
+    if (axis[0]) axis[0].textContent = Math.round(max).toLocaleString('en-US');
+    if (axis[1]) axis[1].textContent = Math.round(max / 2).toLocaleString('en-US');
+    if (axis[2]) axis[2].textContent = '0';
+    const macroTotal = totalMacros.carbs + totalMacros.fats + totalMacros.proteins;
+    const macroValues = [totalMacros.carbs, totalMacros.fats, totalMacros.proteins].map((value) => macroTotal ? Math.round((value / macroTotal) * 100) : 0);
+    document.querySelectorAll('.weekly-macros-summary-value').forEach((element, index) => { element.textContent = `${macroValues[index] || 0}%`; });
+    document.querySelectorAll('.weekly-macros-bars .weekly-macros-bar').forEach((bar, index) => {
+      const day = days[index] || {}; const values = [day.carbs || 0, day.fats || 0, day.proteins || 0];
+      bar.querySelectorAll('span').forEach((part, partIndex) => { part.style.flex = String(values[partIndex]); });
+    });
+    const ring = document.querySelector('.progress-ring');
+    if (ring) ring.style.setProperty('--ring-arc-percent', String(goal ? Math.min(100, Math.round((total / (goal * 7)) * 100)) : 0));
+    document.querySelectorAll('.progress-ring-value').forEach((element) => { element.textContent = Math.round(total).toLocaleString('en-US'); });
+    let empty = document.querySelector('[data-weekly-empty]');
+    if (!empty) {
+      empty = document.createElement('p'); empty.dataset.weeklyEmpty = 'true'; empty.className = 'text-center text-body-muted mt-3 mb-0';
+      document.querySelector('.stats-content')?.append(empty);
+    }
+    empty.textContent = inThisWeek.length ? `${inThisWeek.length} meal${inThisWeek.length === 1 ? '' : 's'} logged this week.` : 'No meals logged this week yet.';
+  };
+
+  const renderWeeklyStats = () => {
+    if (!document.title.includes('Stats')) return;
+    const tracker = read('yumetics-calorie-tracker-v1');
+    const plan = onboarding.plan || {};
+    const dailyGoal = Number(plan.calories) || 1400;
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setHours(0, 0, 0, 0);
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    const dayStart = (offset) => {
+      const date = new Date(weekStart);
+      date.setDate(date.getDate() + offset);
+      return date;
+    };
+    const sameLocalDay = (first, second) => first.getFullYear() === second.getFullYear()
+      && first.getMonth() === second.getMonth() && first.getDate() === second.getDate();
+    const days = Array.from({ length: 7 }, (_, index) => ({ date: dayStart(index), calories: 0, carbs: 0, fats: 0, proteins: 0 }));
+    (Array.isArray(tracker.meals) ? tracker.meals : []).forEach((meal) => {
+      if (!meal.loggedAt) return; // Ignore the old demo meals that predate date tracking.
+      const loggedAt = new Date(meal.loggedAt);
+      if (Number.isNaN(loggedAt.getTime())) return;
+      const day = days.find((item) => sameLocalDay(item.date, loggedAt));
+      if (!day) return;
+      day.calories += Number(meal.calories) || 0;
+      day.carbs += Number(meal.carbs) || 0;
+      day.fats += Number(meal.fats) || 0;
+      day.proteins += Number(meal.proteins) || 0;
+    });
+    const total = (key) => days.reduce((sum, day) => sum + day[key], 0);
+    const totalCalories = total('calories');
+    const formatWeek = () => {
+      const end = dayStart(6);
+      const month = new Intl.DateTimeFormat('en-US', { month: 'short' });
+      const startMonth = month.format(weekStart).toUpperCase();
+      const endMonth = month.format(end).toUpperCase();
+      return `${startMonth} ${weekStart.getDate()}-${endMonth === startMonth ? '' : `${endMonth} `}${end.getDate()}`;
+    };
+    const weekLabel = formatWeek();
+    const number = (value) => Math.round(value).toLocaleString('en-US');
+
+    document.querySelectorAll('.stats-calendar-label, [data-weekly-stats-label]').forEach((label) => { label.textContent = weekLabel; });
+    const ring = document.querySelector('.progress-ring');
+    if (ring) ring.style.setProperty('--ring-arc-percent', String(Math.min(100, Math.round((totalCalories / (dailyGoal * 7)) * 100))));
+    const ringValue = document.querySelector('.progress-ring-value');
+    if (ringValue) ringValue.textContent = number(totalCalories);
+    const calorieGoal = document.querySelector('.calories-chart-value > span:last-child');
+    if (calorieGoal) calorieGoal.replaceChildren(document.createTextNode(number(dailyGoal)), Object.assign(document.createElement('span'), { className: 'calories-chart-unit', textContent: 'kcal' }));
+
+    const maxValue = Math.max(dailyGoal, ...days.map((day) => day.calories), 1);
+    document.querySelectorAll('.calories-chart-graph').forEach((graph) => {
+      graph.dataset.minCal = '0'; graph.dataset.maxCal = String(maxValue);
+    });
+    const axisLabels = document.querySelectorAll('.calories-chart-y-label');
+    if (axisLabels[0]) axisLabels[0].textContent = number(maxValue);
+    if (axisLabels[1]) axisLabels[1].textContent = number(maxValue / 2);
+    if (axisLabels[2]) axisLabels[2].textContent = '0';
+    document.querySelectorAll('.calories-chart-bar').forEach((bar, index) => {
+      const value = days[index]?.calories || 0;
+      bar.style.height = `${(value / maxValue) * 100}%`;
+      bar.setAttribute('aria-label', `${['S', 'M', 'T', 'W', 'T', 'F', 'S'][index]}: ${number(value)} kcal`);
+    });
+
+    const macroCalories = { carbs: total('carbs') * 4, fats: total('fats') * 9, proteins: total('proteins') * 4 };
+    const macroTotal = macroCalories.carbs + macroCalories.fats + macroCalories.proteins;
+    const macroPercentages = ['carbs', 'fats', 'proteins'].map((key) => macroTotal ? Math.round((macroCalories[key] / macroTotal) * 100) : 0);
+    document.querySelectorAll('.weekly-macros-summary').forEach((summary) => {
+      summary.querySelectorAll('.weekly-macros-summary-value').forEach((value, index) => { value.textContent = `${macroPercentages[index]}%`; });
+    });
+    document.querySelectorAll('.weekly-macros-bar').forEach((bar, index) => {
+      const day = days[index] || { carbs: 0, fats: 0, proteins: 0 };
+      const values = [day.carbs, day.fats, day.proteins];
+      const hasData = values.some(Boolean);
+      bar.style.height = hasData ? '100%' : '0%';
+      ['carbs', 'fat', 'protein'].forEach((key, valueIndex) => {
+        const segment = bar.querySelector(`.macro-balance-bar-${key}`);
+        if (segment) segment.style.flex = Math.max(1, values[valueIndex]);
+      });
+    });
+
+    const oldData = document.querySelector('#weekly-stats-data');
+    if (oldData) oldData.textContent = '[]';
+    const weekList = document.querySelector('[data-weekly-stats-carousel] .swiper-wrapper');
+    if (weekList) {
+      weekList.replaceChildren();
+      const slide = document.createElement('div'); slide.className = 'swiper-slide weekly-stats-week-slide';
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'weekly-stats-week active d-flex flex-column align-items-center justify-content-center border-0';
+      const month = document.createElement('span'); month.className = 'weekly-stats-week-month'; month.textContent = weekLabel.split(' ')[0].toLowerCase().replace(/^./, (letter) => letter.toUpperCase());
+      const range = document.createElement('span'); range.className = 'weekly-stats-week-range'; range.textContent = weekLabel.slice(weekLabel.indexOf(' ') + 1);
+      button.append(month, range); slide.append(button); weekList.append(slide);
+    }
+    const statsSection = document.querySelector('.stats-content');
+    const existingNotice = document.querySelector('[data-weekly-stats-empty]');
+    if (!totalCalories && statsSection && !existingNotice) {
+      const notice = document.createElement('p');
+      notice.dataset.weeklyStatsEmpty = 'true';
+      notice.className = 'text-center text-body-muted mt-3 mb-0';
+      notice.textContent = 'No meals logged this week yet.';
+      statsSection.querySelector('.row.g-3')?.before(notice);
+    }
+  };
+
   applySelectedPet();
   initPetSaving();
   document.querySelectorAll('#ai-meal-analyzing-modal .text-blue-800').forEach((element) => { element.textContent = 'Analyzing your photo'; });
@@ -392,4 +553,6 @@
   initPartyPlanner();
   renderPlannerResults();
   renderPartyResults();
+  initWeeklyStats();
+  renderWeeklyStats();
 })();

@@ -26,6 +26,17 @@
     const text = (selector, value) => { const element = document.querySelector(selector); if (element) element.textContent = value; };
     text('.onboarding-step-title', `Reach ${targetWeight} kg by ${formattedDate}`);
     text('.trajectory-pill-start', `${weight} KG`); text('.trajectory-pill-target', `${targetWeight} KG`);
+    const trajectoryPath = document.querySelector('.trajectory-path');
+    if (trajectoryPath) {
+      // Maintain is horizontal; a gain goal rises towards the target, while a loss goal falls.
+      const direction = Math.sign(targetWeight - weight);
+      const path = direction === 0
+        ? 'M2.9126 38.5 L244.156 38.5'
+        : direction > 0
+          ? 'M2.9126 74.7715 C60 74.6097 145 38 244.156 2.93521'
+          : 'M2.9126 2.93521 C60 38 145 74.6097 244.156 74.7715';
+      trajectoryPath.setAttribute('d', path);
+    }
     text('.summary-card-nutrition .summary-metric-value', goalCalories.toLocaleString('en-US'));
     text('.summary-card-hydration .summary-metric-value', water);
     const fastingValues = document.querySelectorAll('.fasting-summary-value');
