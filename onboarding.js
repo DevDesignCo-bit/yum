@@ -2,7 +2,10 @@
   'use strict';
   const KEY = 'yumetics-onboarding-v1';
   const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (_) { return {}; } };
-  const save = (data) => localStorage.setItem(KEY, JSON.stringify(data));
+  const save = (data) => {
+    localStorage.setItem(KEY, JSON.stringify(data));
+    Object.assign(answers, data);
+  };
   const answers = read();
 
   const renderSummary = () => {
@@ -89,7 +92,8 @@
     const planDescription = document.querySelector('.summary-card-plan .summary-card-desc');
     if (planDescription) planDescription.textContent = `Created from your profile: ${labels.gender[answers.gender] || '—'}, ${age} years, ${height} cm. Your selected character will support your plan.`;
     answers.plan = { calories: goalCalories, carbs, fats, proteins: protein, water, weight, targetWeight, fasting, petName: answers.pet_name || 'Pepi', pet: answers.pet || 'pot' };
-    answers.completed = true; save(answers); localStorage.removeItem('yumetics-calorie-tracker-v1');
+    // Updating an onboarding choice must never erase meals the person has logged.
+    answers.completed = true; save(answers);
   };
 
   document.querySelectorAll('input, select, textarea').forEach((field) => {
@@ -98,6 +102,31 @@
     if (field.type === 'checkbox') field.checked = Array.isArray(saved) && saved.includes(field.value);
     else if (field.type === 'radio') field.checked = saved === field.value;
     else field.value = saved;
+  });
+
+  const onboardingForm = document.querySelector('#onboarding-form');
+  const saveFieldImmediately = (field) => {
+    if (!field?.name || field.disabled) return;
+    const next = read();
+    const formFields = [...(onboardingForm?.elements || [])].filter((item) => item.name === field.name);
+    const normalized = field.name.replace(/\[\]$/, '');
+    if (field.name.endsWith('[]')) {
+      next[normalized] = formFields.filter((item) => item.checked).map((item) => item.value);
+    } else if (field.type === 'radio') {
+      if (!field.checked) return;
+      next[field.name] = field.value;
+    } else if (field.type === 'checkbox') {
+      next[field.name] = field.checked ? field.value : '';
+    } else {
+      next[field.name] = field.value;
+    }
+    save(next);
+  };
+  // Save each answer as it is entered. This includes the weight wheel, so an
+  // accidental refresh or leaving the onboarding does not lose the choice.
+  onboardingForm?.querySelectorAll('input, select, textarea').forEach((field) => {
+    field.addEventListener('input', () => saveFieldImmediately(field));
+    field.addEventListener('change', () => saveFieldImmediately(field));
   });
 
   document.querySelectorAll('form[action^="/onboarding/"]').forEach((form) => {
