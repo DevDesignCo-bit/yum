@@ -5,6 +5,7 @@
   const PLANNER_KEY = 'yumetics-local-planner-v1';
   const PARTY_KEY = 'yumetics-party-planner-v1';
   const FASTING_KEY = 'yumetics-fasting-v1';
+  const SAVED_RECIPES_KEY = 'yumetics-saved-recipes-v1';
   const read = (key) => { try { return JSON.parse(localStorage.getItem(key) || sessionStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
   const save = (key, value) => {
     try {
@@ -23,7 +24,11 @@
     '/assets/recipes/avocado-cucumber-bites.png',
     '/assets/recipes/quinoa-bowl.png',
     '/assets/recipes/chickpea-skillet.png',
-    '/assets/recipes/vegetable-curry.png'
+    '/assets/recipes/vegetable-curry.png',
+    '/assets/recipes/roasted-vegetable-gratin.png',
+    '/assets/recipes/salmon-rice-bowl.png',
+    '/assets/recipes/creamy-mushroom-pasta.png',
+    '/assets/recipes/sweet-potato-tacos.png'
   ];
   const petColors = { pot: '#ff4c2c', carrot: '#ffb15f', banana: '#97d7ff' };
   const homeColors = { blue: '#97D5FF', red: '#FF8B8E', green: '#CEE8BB', orange: '#FFC891', purple: '#B176FF' };
@@ -153,6 +158,10 @@
 
   const recipeImageIndex = (name) => {
     const value = String(name || '').toLowerCase();
+    if (/gratin|bake/.test(value)) return 8;
+    if (/salmon/.test(value)) return 9;
+    if (/mushroom.*pasta|creamy.*pasta/.test(value)) return 10;
+    if (/taco|wrap/.test(value)) return 11;
     if (/bruschetta|crostini|tomato/.test(value)) return 0;
     if (/curry|chickpea/.test(value)) return 1;
     if (/parfait|berry|yogurt|mousse|crumble/.test(value)) return 2;
@@ -172,6 +181,64 @@
     ],
     image_url: recipeImages[(imageIndex == null ? recipeImageIndex(name) : imageIndex) % recipeImages.length]
   });
+
+  const recipeId = (item) => `${String(item?.name || '').trim().toLowerCase()}|${String(item?.tag || '').trim().toLowerCase()}`;
+  const savedRecipes = () => {
+    const value = read(SAVED_RECIPES_KEY);
+    return Array.isArray(value) ? value : [];
+  };
+  const isSavedRecipe = (item) => savedRecipes().some((saved) => recipeId(saved) === recipeId(item));
+  const toggleSavedRecipe = (item) => {
+    const all = savedRecipes(); const id = recipeId(item);
+    const existing = all.findIndex((saved) => recipeId(saved) === id);
+    if (existing >= 0) all.splice(existing, 1);
+    else all.unshift({ ...item, image_url: item.image_url || recipeImages[recipeImageIndex(item.name) % recipeImages.length] });
+    save(SAVED_RECIPES_KEY, all);
+    return existing < 0;
+  };
+  let activeRecipe = null;
+
+  const syncRecipeSaveControl = (item) => {
+    const saved = isSavedRecipe(item);
+    document.querySelectorAll('[data-view-recipe-save]').forEach((button) => {
+      button.classList.toggle('is-saved', saved);
+      button.setAttribute('aria-pressed', String(saved));
+      button.setAttribute('aria-label', saved ? 'Remove saved recipe' : 'Save recipe');
+      button.title = saved ? 'Remove from saved recipes' : 'Save recipe';
+    });
+  };
+
+  const renderSavedRecipes = () => {
+    const listModal = document.querySelector('#recipes-list-modal');
+    if (!listModal) return;
+    const host = listModal.querySelector('h2')?.parentElement;
+    if (!host) return;
+    host.querySelectorAll('[data-saved-recipes-render]').forEach((element) => element.remove());
+    const recipes = savedRecipes();
+    const content = document.createElement('div'); content.dataset.savedRecipesRender = 'true';
+    if (!recipes.length) {
+      const empty = document.createElement('p');
+      empty.className = 'flex-grow-1 d-flex align-items-center justify-content-center text-center fw-bold text-neutral-300 fs-3 mb-0 my-5 my-lg-7 pt-lg-4';
+      empty.textContent = 'You don’t have any saved recipes yet'; content.append(empty);
+    } else {
+      const grid = document.createElement('div'); grid.className = 'recipes-list-grid mt-lg-5';
+      recipes.forEach((item, index) => {
+        const card = document.createElement('article'); card.className = 'recipes-list-card position-relative rounded-3 p-2 mb-3';
+        const row = document.createElement('div'); row.className = 'd-flex gap-3 h-100';
+        const image = document.createElement('img'); image.className = 'recipes-list-card-image rounded-3 flex-shrink-0 object-fit-cover'; image.width = 103; image.height = 103; image.src = item.image_url || recipeImages[recipeImageIndex(item.name) % recipeImages.length]; image.alt = item.name;
+        const details = document.createElement('div'); details.className = 'd-flex flex-column flex-grow-1 min-w-0 py-2 pe-2';
+        const title = document.createElement('h3'); title.className = 'recipes-list-card-title fw-bold mb-2 text-truncate'; title.textContent = item.name;
+        const meta = document.createElement('p'); meta.className = 'fs-8 text-body-muted mb-2'; meta.textContent = `⏱ ${item.prep_min} min  ·  🔥 ${item.calories} kcal`;
+        const actions = document.createElement('div'); actions.className = 'd-flex gap-2 mt-auto';
+        const view = document.createElement('button'); view.type = 'button'; view.className = 'btn btn-outline-dark btn-sm rounded-pill px-3'; view.dataset.savedRecipeIndex = String(index); view.textContent = 'View';
+        const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn btn-link btn-sm text-secondary text-decoration-none px-1'; remove.dataset.removeSavedRecipe = String(index); remove.textContent = 'Remove';
+        actions.append(view, remove); details.append(title, meta, actions); row.append(image, details); card.append(row);
+        const tag = document.createElement('span'); tag.className = 'recipe-tag recipes-list-card-tag position-absolute top-0 translate-middle-y fs-8 px-4 py-1 rounded-2'; tag.textContent = item.tag || 'Recipe'; card.append(tag); grid.append(card);
+      });
+      content.append(grid);
+    }
+    host.append(content);
+  };
 
   const buildRecipes = (profile, preferences) => {
     const diet = preferences.diet || '';
@@ -239,15 +306,15 @@
     }[event] || 'shared';
     const time = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 8 : 0;
     const menu = vegan
-      ? [['Crispy vegetable crostini', 210, 12, 8, ['wholegrain bread', 'tomatoes', 'herbs']], ['Creamy chickpea curry', 460, 15, 28, ['chickpeas', 'vegetables', 'coconut milk']], ['Berry coconut pots', 260, 10, 0, ['berries', 'coconut yogurt', 'oats']]]
+      ? [['Crispy vegetable crostini', 210, 12, 8, ['wholegrain bread', 'tomatoes', 'herbs']], ['Sweet potato black bean tacos', 440, 15, 20, ['sweet potato', 'black beans', 'avocado']], ['Berry coconut pots', 260, 10, 0, ['berries', 'coconut yogurt', 'oats']]]
       : vegetarian
         ? [['Herb tomato bruschetta', 220, 12, 8, ['bread', 'tomatoes', 'fresh herbs']], ['Roasted vegetable gratin', 510, 18, 35, ['seasonal vegetables', 'cheese', 'potatoes']], ['Warm fruit crumble', 320, 15, 25, ['seasonal fruit', 'oats', 'cinnamon']]]
         : lowCarb
           ? [['Avocado cucumber bites', 190, 12, 0, ['avocado', 'cucumber', 'lemon']], ['Lemon chicken tray bake', 520, 15, 32, ['chicken', 'vegetables', 'lemon']], ['Greek yogurt berry cups', 240, 8, 0, ['greek yogurt', 'berries', 'seeds']]]
           : highProtein
-            ? [['Protein hummus board', 260, 12, 0, ['hummus', 'vegetables', 'seeds']], ['Herb chicken & quinoa', 560, 18, 30, ['chicken', 'quinoa', 'vegetables']], ['Cocoa protein mousse', 280, 10, 0, ['yogurt', 'cocoa', 'berries']]]
-            : [['Seasonal sharing platter', 260, 15, 0, ['vegetables', 'bread', 'dip']], ['Roasted vegetable & chicken bake', 540, 18, 35, ['chicken', 'vegetables', 'herbs']], ['Fruit yogurt parfaits', 300, 10, 0, ['fruit', 'yogurt', 'granola']]];
-    return menu.map(([name, calories, prep, cook, ingredients], index) => recipe(name, tag, calories, prep + time, cook + time, ingredients, `A ${occasion} recipe scaled for ${guests} guests.`, index));
+          ? [['Protein hummus board', 260, 12, 0, ['hummus', 'vegetables', 'seeds']], ['Glazed salmon rice bowl', 560, 18, 25, ['salmon', 'rice', 'edamame']], ['Cocoa protein mousse', 280, 10, 0, ['yogurt', 'cocoa', 'berries']]]
+          : [['Seasonal sharing platter', 260, 15, 0, ['vegetables', 'bread', 'dip']], ['Creamy mushroom pasta', 520, 15, 22, ['mushrooms', 'pasta', 'spinach']], ['Fruit yogurt parfaits', 300, 10, 0, ['fruit', 'yogurt', 'granola']]];
+    return menu.map(([name, calories, prep, cook, ingredients]) => recipe(name, tag, calories, prep + time, cook + time, ingredients, `A ${occasion} recipe scaled for ${guests} guests.`));
   };
 
   const initSnapAndCook = () => {
@@ -293,6 +360,7 @@
   };
 
   const fillRecipeModal = (item) => {
+    activeRecipe = item;
     const set = (selector, value) => { const element = document.querySelector(selector); if (element) element.textContent = value; };
     set('[data-view-recipe-tag]', item.tag); set('[data-view-recipe-title]', item.name); set('[data-view-recipe-description]', item.description);
     set('[data-view-recipe-prep]', item.prep_min); set('[data-view-recipe-cook]', item.cook_min); set('[data-view-recipe-calories]', item.calories);
@@ -302,8 +370,38 @@
     const steps = document.querySelector('[data-view-recipe-instructions]');
     if (steps) steps.replaceChildren(...item.instructions.map((step, index) => { const article = document.createElement('article'); article.className = 'view-recipe-step position-relative rounded-3 pe-3 py-3'; const heading = document.createElement('h3'); heading.className = 'view-recipe-step-title fw-bold mb-2'; heading.textContent = `${String(index + 1).padStart(2, '0')} ${step.title}`; const text = document.createElement('p'); text.className = 'mb-0 fs-8'; text.textContent = step.description; article.append(heading, text); return article; }));
     const modal = document.querySelector('#view-recipe-modal');
+    syncRecipeSaveControl(item);
     if (window.bootstrap?.Modal && modal) window.bootstrap.Modal.getOrCreateInstance(modal).show();
     else if (modal) { modal.classList.add('show'); modal.style.display = 'block'; }
+  };
+
+  const initSavedRecipes = () => {
+    const source = document.querySelector('#view-recipe-data');
+    let sourceRecipes = [];
+    try { sourceRecipes = JSON.parse(source?.textContent || '[]'); } catch (_) { sourceRecipes = []; }
+    renderSavedRecipes();
+    document.addEventListener('click', (event) => {
+      const saveButton = event.target.closest('[data-view-recipe-save]');
+      if (saveButton && activeRecipe) {
+        event.preventDefault(); event.stopImmediatePropagation();
+        toggleSavedRecipe(activeRecipe); syncRecipeSaveControl(activeRecipe); renderSavedRecipes();
+        return;
+      }
+      const savedView = event.target.closest('[data-saved-recipe-index]');
+      if (savedView) {
+        event.preventDefault(); event.stopImmediatePropagation(); fillRecipeModal(savedRecipes()[Number(savedView.dataset.savedRecipeIndex) || 0]);
+        return;
+      }
+      const remove = event.target.closest('[data-remove-saved-recipe]');
+      if (remove) {
+        event.preventDefault(); event.stopImmediatePropagation();
+        const recipes = savedRecipes(); recipes.splice(Number(remove.dataset.removeSavedRecipe) || 0, 1); save(SAVED_RECIPES_KEY, recipes); renderSavedRecipes();
+        return;
+      }
+      const trigger = event.target.closest('[data-recipe-index]');
+      if (!trigger || !sourceRecipes.length) return;
+      event.preventDefault(); event.stopImmediatePropagation(); fillRecipeModal(sourceRecipes[Number(trigger.dataset.recipeIndex) || 0]);
+    }, true);
   };
 
   const renderPlannerResults = () => {
@@ -722,6 +820,7 @@
   initPartyPlanner();
   renderPlannerResults();
   renderPartyResults();
+  initSavedRecipes();
   initEntryFlow();
   initFasting();
   renderWeeklyStats();

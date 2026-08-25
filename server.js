@@ -53,6 +53,12 @@ const localStyles = `
       background: #fff; color: #17181b; font-size: 1.65rem; font-weight: 700; text-align: center;
     }
     .pin-digit:focus { border-color: #17181b; outline: 3px solid rgba(23, 24, 27, .12); }
+    .view-recipe-save.is-saved { background: #17181b !important; color: #fff !important; }
+    .home-card-calories.is-goal-reached { background: linear-gradient(145deg, #ecfff2 0%, #c9f4d6 100%); box-shadow: 0 10px 25px rgba(59, 155, 91, .18); }
+    .home-card-calories.is-goal-reached .calories-intake-bar-fill { background: #36a65e !important; }
+    .home-card-calories.is-goal-reached .calories-intake-remaining { color: #17723a !important; }
+    .home-card-calories.is-goal-over { background: linear-gradient(145deg, #fff6e9 0%, #ffe1af 100%); }
+    .home-card-calories.is-goal-over .calories-intake-bar-fill { background: #ee8d25 !important; }
   </style>`;
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;

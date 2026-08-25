@@ -113,11 +113,19 @@
     const value = intake.querySelector('.calories-intake-value > span:last-child');
     const fill = intake.querySelector('.calories-intake-bar-fill');
     const remaining = intake.querySelector('.calories-intake-remaining');
+    const card = intake.closest('.home-card-calories');
     if (value) value.innerHTML = `${number(state.calories)}<span class="calories-intake-unit text-neutral-300">kcal</span>`;
     if (fill) fill.style.width = `${percentage(state.calories, GOALS.calories)}%`;
+    const reachedGoal = Number(GOALS.calories) > 0 && state.calories >= Number(GOALS.calories);
+    if (card) {
+      card.classList.toggle('is-goal-reached', reachedGoal);
+      card.classList.toggle('is-goal-over', reachedGoal && state.calories > Number(GOALS.calories));
+    }
     if (remaining) {
       const difference = GOALS.calories - state.calories;
-      remaining.textContent = difference >= 0
+      remaining.textContent = reachedGoal
+        ? (difference === 0 ? 'Daily goal reached — great job!' : `Daily goal reached · ${number(Math.abs(difference))} kcal over`)
+        : difference >= 0
         ? `${number(difference)} kcal under your goal`
         : `${number(Math.abs(difference))} kcal over your goal`;
     }
