@@ -62,7 +62,7 @@ const localStyles = `
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;
 const routes = {
-  '/': 'onboarding.html', '/home': 'home.html', '/qa': 'qa.html', '/lp': 'lp.html', '/pin': 'entry-pin.html',
+  '/': 'lp.html', '/home': 'home.html', '/qa': 'qa.html', '/lp': 'lp.html', '/pin': 'entry-pin.html',
   '/wifi': 'wifi.html', '/wifi-operator-country-selector': 'wifi-operator-country-selector.html', '/wifi-no-number': 'wifi-no-number.html', '/onboarding': 'onboarding.html',
   '/sad-pot': 'sad-pot.html', '/happy-carrot': 'happy-carrot.html', '/sad-carrot': 'sad-carrot.html', '/happy-banana': 'happy-banana.html', '/sad-banana': 'sad-banana.html',
   '/home-activate-fasting': 'home-activate-fasting.html', '/home-fasting-active': 'home-fasting-active.html', '/home-fasting-in-progress': 'home-fasting-in-progress.html', '/home-fasting-paused': 'home-fasting-paused.html', '/home-fasting-goal-achieved': 'home-fasting-goal-achieved.html', '/home-fasting-completed': 'home-fasting-completed.html', '/home-recommendation': 'home-recommendation.html',

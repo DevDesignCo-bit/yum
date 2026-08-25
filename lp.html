@@ -25,11 +25,16 @@
                                             <h1 class="hero-heading mx-1 mx-md-0 mb-md-5"><span class="text-primary">AI</span>-Meal prep &amp; tracking, made <span class="text-primary">fun</span></h1>
                     
                                             <div class="form-pill pt-2 pt-md-0">
-                            <form action="/pin">
-                                                                                                    <a href="/pin?flow=lp" class="entry-continue">Continue</a>
-                                                                <p class="text-center fs-8 fw-light mt-2 pt-1">For Only XX/Week</p>
+                            <form method="get" action="/pin" class="needs-validation" novalidate>
+                                <input type="hidden" name="flow" value="lp">
+                                <div class="form-field form-gap">
+                                    <label class="form-label" for="phone">Enter your phone number:</label>
+                                    <input type="tel" class="form-control text-center" name="phone" placeholder="+48 478 877 5497" id="phone" required autocomplete="tel">
+                                    <div class="invalid-feedback">Please enter a valid phone number *</div>
+                                </div>
+                                <button type="submit" class="entry-continue border-0 mt-3">Continue</button>
+                                <p class="text-center fs-8 fw-light mt-2 pt-1">For Only XX/Week</p>
                             </form>
-                            <a href="/onboarding" class="d-block text-center text-primary fw-semibold text-decoration-none mt-3">Start onboarding directly</a>
                         </div>
                     
                     

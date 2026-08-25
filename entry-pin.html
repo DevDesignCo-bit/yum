@@ -3,39 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumetics — PIN verification</title>
+  <title>Yumetics Store</title>
   <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
 </head>
 <body class="landing-page">
-  <div class="min-vh-100 d-flex flex-column align-items-center position-relative overflow-hidden">
-    <div class="text-center pt-3 pt-xl-4 pb-5 mt-xl-4">
-      <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/logo.svg" alt="Yumetics" style="width: 8.5rem">
-    </div>
-    <main class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-6 col-lg-4 text-center mt-4 pt-1">
-          <h1 class="fw-black fs-35px fs-xl-1 lh-1 mb-3">Enter PIN</h1>
-          <p class="mb-4" data-pin-context>Enter the 4-digit PIN to continue.</p>
-          <form class="needs-validation form-pill" data-pin-form novalidate>
-            <div class="form-field form-gap">
-              <label class="form-label text-center w-100" for="pin-digit-1">PIN code</label>
-              <div class="pin-row" aria-label="Four digit PIN">
-                <input id="pin-digit-1" class="pin-digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="First PIN digit">
-                <input class="pin-digit" inputmode="numeric" maxlength="1" aria-label="Second PIN digit">
-                <input class="pin-digit" inputmode="numeric" maxlength="1" aria-label="Third PIN digit">
-                <input class="pin-digit" inputmode="numeric" maxlength="1" aria-label="Fourth PIN digit">
+  <section class="banner d-md-none">
+    <a href="/lp" class="banner-logo">
+      <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/logo.svg" alt="Yumetics">
+    </a>
+    <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/landing/banner.png" alt="" class="banner-bg">
+  </section>
+  <section class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5">
+          <a href="/lp" class="hero-logo d-none d-md-block">
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/logo.svg" alt="Yumetics">
+          </a>
+          <h1 class="hero-heading mx-1 mx-md-0 mb-md-5"><span class="text-primary">AI</span>-Meal prep &amp; tracking, made <span class="text-primary">fun</span></h1>
+          <div class="form-pill pt-2 pt-md-0">
+            <form class="needs-validation" data-pin-form novalidate>
+              <div class="form-field form-gap">
+                <label class="form-label" for="pin">Enter your PIN:</label>
+                <input id="pin" name="pin" type="text" class="form-control text-center" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="5678" autocomplete="one-time-code" required aria-describedby="pin-error">
+                <div id="pin-error" class="invalid-feedback">Please enter your PIN *</div>
               </div>
-            </div>
-          </form>
-          <a href="/onboarding" class="entry-continue mt-4">Verify PIN &amp; continue</a>
-          <a href="/onboarding" class="d-inline-block mt-4 text-primary fw-semibold text-decoration-none">Skip PIN and start onboarding</a>
+              <button type="submit" class="entry-continue border-0 mt-3">Continue</button>
+              <p class="text-center fs-8 fw-light mt-2 pt-1">For Only XX/Week</p>
+            </form>
+          </div>
+          <div class="hero-description mt-4">
+            <p>Yumetics is a digital experience where caring for a virtual pet helps you develop healthier nutrition habits. Using AI, Yumetics scans your meals to estimate calories and nutritional values, supporting your personal goals. This information is for educational purposes only and does not replace professional medical advice. The cost will be added to your phone bill, and you can cancel anytime in your <a href="#">account settings</a>.</p>
+          </div>
+        </div>
+        <div class="col-md-6 offset-md-1 d-none d-md-block mt-1">
+          <div class="hero-image">
+            <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/landing/banner-lg.png" alt="" class="img-fluid">
+          </div>
         </div>
       </div>
-    </main>
-    <div class="right-bottom-decor rtl-flip">
-      <img src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/mascot-big.svg" alt="" class="img-fluid">
     </div>
-  </div>
+  </section>
+  <footer class="footer pt-4 mt-3 text-center">
+    <div class="container">
+      <ul class="footer-links list-unstyled mb-2">
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/terms">TC</a></li>
+      </ul>
+      <p class="footer-copyright mb-0 mt-4">&copy;Yumetics all the rights reserved</p>
+    </div>
+  </footer>
   <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/runtime.b3ae8917.js" defer></script>
   <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/34.681df9f3.js" defer></script>
   <script src="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.3888181a.js" defer></script>

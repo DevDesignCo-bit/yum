@@ -723,34 +723,21 @@
         const continuation = form.querySelector('a[href^="/pin"]');
         if (continuation) { form.insertAdjacentElement('afterend', continuation); }
         form.addEventListener('submit', (event) => {
-          if (!form.checkValidity()) return form.reportValidity();
+          if (!form.checkValidity()) { event.preventDefault(); return form.reportValidity(); }
           save('yumetics-entry-flow-v1', { method });
         });
       });
       return;
     }
     if (route !== '/pin') return;
-    const flow = new URLSearchParams(window.location.search).get('flow');
-    const label = document.querySelector('[data-pin-context]');
-    if (label) {
-      label.textContent = flow === 'wifi' ? 'Wi-Fi flow — enter the 4-digit PIN to continue.' : 'LP flow — enter the 4-digit PIN to continue.';
-    }
     const form = document.querySelector('[data-pin-form]');
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!form.checkValidity()) return form.reportValidity();
       window.location.assign('/onboarding');
     });
-    const digits = [...document.querySelectorAll('.pin-digit')];
-    digits.forEach((digit, index) => {
-      digit.addEventListener('input', () => {
-        digit.value = digit.value.replace(/\D/g, '').slice(0, 1);
-        if (digit.value && digits[index + 1]) digits[index + 1].focus();
-      });
-      digit.addEventListener('keydown', (event) => {
-        if (event.key === 'Backspace' && !digit.value && digits[index - 1]) digits[index - 1].focus();
-      });
-    });
+    const pin = document.querySelector('#pin');
+    pin?.addEventListener('input', () => { pin.value = pin.value.replace(/\D/g, '').slice(0, 4); });
   };
 
   const initWeeklyStats = () => {
