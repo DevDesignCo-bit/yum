@@ -67,13 +67,19 @@
     const storeForm = document.querySelector('[data-store-form]');
     if (storeForm) {
       const colorOptions = [...storeForm.querySelectorAll('input[name="color"]')];
-      const updateStoreSelection = () => {
-        const selectedColor = colorOptions.find((option) => option.checked)?.value;
+      const getActiveStoreSlide = () => storeForm.querySelector('[data-store-slide].swiper-slide-active');
+      const updateStoreSelection = (selectedPet) => {
+        const activeSlide = getActiveStoreSlide();
+        const activePet = activeSlide?.dataset.petId;
+        const pet = ['pot', 'carrot', 'banana'].includes(selectedPet) ? selectedPet : activePet;
+        const selectedColor = colorOptions.find((option) => option.checked)?.value || onboarding.home_color;
         storeForm.querySelectorAll('[data-store-slide]').forEach((slide) => {
           const option = slide.querySelector('input[name="pet"]');
-          const selected = Boolean(option?.checked);
+          // The visual carousel duplicates slides.  Highlight only its current card,
+          // otherwise a hidden duplicate can keep the old character selected.
+          const selected = slide === activeSlide && option?.value === pet;
           slide.classList.toggle('is-selected', selected);
-          if (selected) slide.style.setProperty('--selected-pet-color', homeColors[selectedColor] || homeColors[onboarding.home_color] || petColors[option.value] || petColors.pot);
+          if (selected) slide.style.setProperty('--selected-pet-color', homeColors[selectedColor] || petColors[option.value] || petColors.pot);
         });
       };
       const updateColorSelection = (preview = false) => {
@@ -82,28 +88,53 @@
           if (preview && option.checked) document.querySelectorAll('.home-hero').forEach((hero) => hero.style.setProperty('--home-hill-color', homeColors[option.value] || homeColors.blue));
         });
       };
+      const syncCarouselSelection = () => {
+        const activeSlide = getActiveStoreSlide();
+        const pet = activeSlide?.dataset.petId;
+        if (!['pot', 'carrot', 'banana'].includes(pet)) return;
+        const activeOption = activeSlide.querySelector('input[name="pet"]');
+        if (activeOption && !activeOption.checked) activeOption.checked = true;
+        updateStoreSelection(pet);
+      };
       const currentPet = onboarding.pet || onboarding.plan?.pet;
       if (currentPet) {
-        const option = [...storeForm.querySelectorAll('input[name="pet"]')].find((input) => input.value === currentPet);
-        if (option) {
-          option.checked = true;
-          queueMicrotask(() => option.closest('label')?.click());
+        const matchingOption = [...storeForm.querySelectorAll('input[name="pet"]')].find((input) => input.value === currentPet);
+        if (matchingOption) {
+          matchingOption.checked = true;
+          // Let Swiper bring the saved character back into view; the observer below
+          // then applies the card state only after the slide is actually active.
+          window.setTimeout(() => matchingOption.closest('label')?.click(), 0);
         }
       }
       const savedColor = onboarding.home_color;
       const savedColorOption = colorOptions.find((option) => option.value === savedColor);
       if (savedColorOption) savedColorOption.checked = true;
-      updateStoreSelection();
+      if (!currentPet) syncCarouselSelection();
       updateColorSelection();
-      storeForm.addEventListener('change', updateStoreSelection);
+      storeForm.addEventListener('change', (event) => {
+        if (event.target.matches('input[name="pet"]')) updateStoreSelection(event.target.value);
+        else updateStoreSelection();
+      });
       storeForm.addEventListener('change', () => updateColorSelection(true));
+      storeForm.querySelectorAll('[data-store-prev], [data-store-next], [data-store-slide]').forEach((control) => {
+        control.addEventListener('click', () => window.setTimeout(syncCarouselSelection, 260));
+      });
+      const track = storeForm.querySelector('[data-store-track]');
+      if (track && window.MutationObserver) {
+        let pendingSync = false;
+        new MutationObserver(() => {
+          if (pendingSync) return;
+          pendingSync = true;
+          window.requestAnimationFrame(() => { pendingSync = false; syncCarouselSelection(); });
+        }).observe(track, { subtree: true, attributes: true, attributeFilter: ['class'] });
+      }
       storeForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        const pet = storeForm.querySelector('input[name="pet"]:checked')?.value;
+        const pet = getActiveStoreSlide()?.dataset.petId || storeForm.querySelector('input[name="pet"]:checked')?.value;
         const color = storeForm.querySelector('input[name="color"]:checked')?.value;
         if (!pet) return;
         savePet(pet, undefined, color);
-        updateStoreSelection();
+        updateStoreSelection(pet);
         updateColorSelection();
         applySelectedPet();
         const modal = storeForm.closest('.modal');
