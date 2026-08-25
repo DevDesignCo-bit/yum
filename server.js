@@ -47,12 +47,6 @@ const localStyles = `
       text-align: center;
       text-decoration: none;
     }
-    .pin-row { display: flex; justify-content: center; gap: .65rem; }
-    .pin-digit {
-      width: 3.25rem; height: 3.75rem; border: 2px solid #d8dde5; border-radius: .8rem;
-      background: #fff; color: #17181b; font-size: 1.65rem; font-weight: 700; text-align: center;
-    }
-    .pin-digit:focus { border-color: #17181b; outline: 3px solid rgba(23, 24, 27, .12); }
     .view-recipe-save.is-saved { background: #fff !important; color: #17181b !important; box-shadow: 0 3px 10px rgba(20, 25, 35, .16); }
     .view-recipe-save.is-saved [data-view-recipe-save-icon] { color: #17181b !important; }
     .home-card-calories.is-goal-complete .calories-intake-remaining { color: #49b96c !important; }
