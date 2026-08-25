@@ -5,6 +5,7 @@
   const PLANNER_KEY = 'yumetics-local-planner-v1';
   const PARTY_KEY = 'yumetics-party-planner-v1';
   const FASTING_KEY = 'yumetics-fasting-v1';
+  const WATER_KEY = 'yumetics-water-v1';
   const SAVED_RECIPES_KEY = 'yumetics-saved-recipes-v1';
   const read = (key) => { try { return JSON.parse(localStorage.getItem(key) || sessionStorage.getItem(key) || '{}'); } catch (_) { return {}; } };
   const save = (key, value) => {
@@ -166,6 +167,60 @@
     if (values[4]) values[4].textContent = `${onboarding.plan.weight} kg`;
     if (values[5] && onboarding.diet?.length) values[5].textContent = onboarding.diet.map(titleCase).join(', ');
     if (values[6]) values[6].textContent = onboarding.allergies?.length ? onboarding.allergies.map(titleCase).join(', ') : 'None';
+  };
+
+  const localDay = (date = new Date()) => {
+    const offset = date.getTimezoneOffset() * 60 * 1000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+  };
+
+  const initWaterTracker = () => {
+    const trackers = [...document.querySelectorAll('[data-water-tracker]')];
+    if (!trackers.length) return;
+    const dailyGoal = Math.max(250, Number(onboarding.plan?.water) || 2000);
+    let water = { days: {}, ...read(WATER_KEY) };
+    if (!water.days || typeof water.days !== 'object') water.days = {};
+    const today = localDay();
+    const amountForToday = () => Math.max(0, Number(water.days[today]) || 0);
+    const persistWater = () => {
+      // Keep the browser record compact while retaining enough history for the demo.
+      const oldest = new Date(); oldest.setDate(oldest.getDate() - 60);
+      const oldestDay = localDay(oldest);
+      Object.keys(water.days).forEach((day) => { if (day < oldestDay) delete water.days[day]; });
+      save(WATER_KEY, water);
+    };
+    const renderWater = () => {
+      const amount = amountForToday();
+      trackers.forEach((tracker) => {
+        const glassMl = Math.max(1, Number(tracker.dataset.glassMl) || 250);
+        const filledGlasses = Math.ceil(amount / glassMl);
+        tracker.querySelectorAll('[data-water-ml]').forEach((value) => { value.textContent = amount.toLocaleString('en-US'); });
+        tracker.querySelectorAll('.water-glass').forEach((glass, index) => {
+          const filled = index < filledGlasses;
+          glass.dataset.filled = filled ? '1' : '0';
+          const image = glass.querySelector('img');
+          if (image) image.src = filled ? tracker.dataset.glassFullSrc : tracker.dataset.glassEmptySrc;
+        });
+        tracker.querySelector('[data-water-add]')?.setAttribute('aria-label', `Add ${glassMl} ml of water. ${amount} of ${dailyGoal} ml logged today.`);
+      });
+    };
+    trackers.forEach((tracker) => {
+      tracker.querySelector('[data-water-add]')?.addEventListener('click', (event) => {
+        // The prototype ships with a display-only click handler.  Take ownership
+        // in capture phase so the on-screen number always matches the saved record.
+        event.preventDefault(); event.stopImmediatePropagation();
+        const glassMl = Math.max(1, Number(tracker.dataset.glassMl) || 250);
+        water.days[today] = amountForToday() + glassMl;
+        persistWater(); renderWater();
+      }, true);
+    });
+    window.addEventListener('storage', (event) => {
+      if (event.key !== WATER_KEY) return;
+      water = { days: {}, ...read(WATER_KEY) };
+      if (!water.days || typeof water.days !== 'object') water.days = {};
+      renderWater();
+    });
+    renderWater();
   };
 
   const readPhoto = (file) => new Promise((resolve, reject) => {
@@ -534,10 +589,15 @@
 
     const hoursFrom = (value) => Math.max(1, Number.parseInt(String(value || ''), 10) || 16);
     const defaultHours = hoursFrom(onboarding.fasting_goal || onboarding.plan?.fasting || 16);
-    let fasting = { goalHours: defaultHours, status: 'off', elapsedMs: 0, startedAt: null, ...read(FASTING_KEY) };
+    let fasting = { goalHours: defaultHours, status: 'off', elapsedMs: 0, startedAt: null, history: [], ...read(FASTING_KEY) };
     fasting.goalHours = hoursFrom(fasting.goalHours);
     fasting.elapsedMs = Math.max(0, Number(fasting.elapsedMs) || 0);
-    const persistFasting = () => save(FASTING_KEY, fasting);
+    if (!['off', 'ready', 'active', 'paused', 'completed'].includes(fasting.status)) fasting.status = 'off';
+    if (!Array.isArray(fasting.history)) fasting.history = [];
+    const persistFasting = () => {
+      fasting.updatedAt = Date.now();
+      save(FASTING_KEY, fasting);
+    };
     const saveGoalToProfile = () => {
       const next = { ...read(ONBOARDING_KEY), fasting_goal: `${fasting.goalHours}h` };
       next.plan = { ...(next.plan || {}), fasting: fasting.goalHours };
@@ -552,9 +612,19 @@
       return [hours, minutes, rest].map((part) => String(part).padStart(2, '0')).join(':');
     };
     const caption = () => `Goal: ${fasting.goalHours} h fast • eating window ${Math.max(0, 24 - fasting.goalHours)} h`;
+    const rememberSession = (completed) => {
+      const endedAt = Date.now();
+      const startedAt = Number(fasting.startedAt) || Math.max(0, endedAt - elapsedMs());
+      const session = { startedAt, endedAt, elapsedMs: Math.max(0, Math.round(elapsedMs())), goalHours: fasting.goalHours, completed: Boolean(completed) };
+      const last = fasting.history[fasting.history.length - 1];
+      if (!last || last.startedAt !== session.startedAt || last.endedAt !== session.endedAt) fasting.history = [...fasting.history.slice(-29), session];
+      fasting.lastSession = session;
+    };
+    let lastCheckpointAt = Date.now();
     const render = () => {
       const elapsed = elapsedMs(); const complete = elapsed >= totalMs();
       if (complete && fasting.status === 'active') {
+        rememberSession(true);
         fasting = { ...fasting, status: 'completed', elapsedMs: totalMs(), startedAt: null }; persistFasting();
         if (window.location.pathname === '/home-fasting-in-progress') window.location.assign('/home-fasting-goal-achieved');
         return;
@@ -577,6 +647,9 @@
         const link = offCard.querySelector('a[href="/home-activate-fasting"]');
         if (link) { link.href = fasting.status === 'active' ? '/home-fasting-in-progress' : '/home-fasting-active'; link.textContent = fasting.status === 'active' ? 'Continue' : 'Start Fasting'; }
       }
+      if (fasting.status === 'active' && Date.now() - lastCheckpointAt >= 60 * 1000) {
+        fasting.elapsedMs = elapsed; fasting.startedAt = Date.now(); lastCheckpointAt = Date.now(); persistFasting();
+      }
     };
 
     document.querySelectorAll('[data-fasting-goal] input[name="fasting_goal"]').forEach((input) => {
@@ -593,7 +666,7 @@
     });
 
     const start = () => {
-      fasting = { ...fasting, status: 'active', startedAt: Date.now() }; persistFasting();
+      fasting = { ...fasting, status: 'active', startedAt: Date.now() }; lastCheckpointAt = Date.now(); persistFasting();
       window.location.assign('/home-fasting-in-progress');
     };
     if (window.location.pathname === '/home-fasting-active') {
@@ -612,7 +685,7 @@
       startNow.addEventListener('click', (event) => { event.preventDefault(); start(); }, true);
     }
     document.querySelectorAll('#fasting-ended-sheet a[href="/home-fasting-completed"]').forEach((button) => button.addEventListener('click', (event) => {
-      event.preventDefault(); fasting = { ...fasting, status: 'off', elapsedMs: 0, startedAt: null }; persistFasting(); window.location.assign('/home-fasting-completed');
+      event.preventDefault(); rememberSession(false); fasting = { ...fasting, status: 'off', elapsedMs: 0, startedAt: null }; persistFasting(); window.location.assign('/home-fasting-completed');
     }, true));
     // The designed Start links all lead here. Starting directly from this
     // screen should also create a working fast instead of a static mock state.
@@ -620,8 +693,7 @@
       fasting = { ...fasting, status: 'active', elapsedMs: fasting.status === 'paused' ? fasting.elapsedMs : 0, startedAt: Date.now() }; persistFasting();
     }
     if (window.location.pathname === '/home-fasting-paused' && fasting.status === 'active') { fasting.status = 'paused'; fasting.elapsedMs = elapsedMs(); fasting.startedAt = null; persistFasting(); }
-    if (window.location.pathname === '/home-fasting-goal-achieved') { fasting = { ...fasting, status: 'completed', elapsedMs: totalMs(), startedAt: null }; persistFasting(); }
-    if (window.location.pathname === '/home-fasting-completed') { fasting = { ...fasting, status: 'off', elapsedMs: 0, startedAt: null }; persistFasting(); }
+    if (window.location.pathname === '/home-fasting-goal-achieved' && fasting.status !== 'completed') { rememberSession(true); fasting = { ...fasting, status: 'completed', elapsedMs: totalMs(), startedAt: null }; persistFasting(); }
     render();
     if (fasting.status === 'active') window.setInterval(render, 1000);
   };
@@ -853,6 +925,7 @@
 
   applySelectedPet();
   initPetSaving();
+  initWaterTracker();
   document.querySelectorAll('#ai-meal-analyzing-modal .text-blue-800').forEach((element) => { element.textContent = 'Analyzing your photo'; });
   updateProfileFromPlan();
   initSnapAndCook();
