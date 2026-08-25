@@ -489,30 +489,28 @@
     if (fasting.status === 'active') window.setInterval(render, 1000);
   };
 
-  const initDemoEntry = () => {
+  const initEntryFlow = () => {
     const entryRoutes = {
       '/lp': 'LP', '/wifi': 'Wi-Fi',
-      '/wifi-operator-country-selector': 'WiFi demo', '/wifi-no-number': 'WiFi demo'
+      '/wifi-operator-country-selector': 'Wi-Fi', '/wifi-no-number': 'Wi-Fi'
     };
     const route = window.location.pathname;
     const method = entryRoutes[route];
     if (method) {
-      // These screens are intentionally a safe, presentational demo: do not keep
-      // or transmit the phone number, operator, country, CAPTCHA, or any payment data.
       document.querySelectorAll('.hero-description p').forEach((copy) => {
-        copy.textContent = 'Demo flow: continue with a simulated code, then start your nutrition onboarding. No SMS, payment or personal data is sent.';
+        copy.textContent = 'Continue to create a personalized nutrition experience that fits your goals and lifestyle.';
       });
-      document.querySelectorAll('.form-pill .text-center.fs-8').forEach((copy) => { copy.textContent = 'Demo mode — no charge'; });
+      document.querySelectorAll('.form-pill .text-center.fs-8').forEach((copy) => { copy.textContent = 'Your personalized plan starts here'; });
       const captcha = document.querySelector('.g-recaptcha')?.closest('.mt-4');
-      if (captcha) captcha.replaceChildren(document.createTextNode('Demo mode — no CAPTCHA needed.'));
+      if (captcha) captcha.replaceChildren(document.createTextNode('Quick verification ready.'));
       document.querySelectorAll('form').forEach((form) => {
-        // The source prototype intercepts controls inside forms. Put the demo
-        // continuation just after the form so it always works as an ordinary link.
+        // The source prototype intercepts controls inside forms. Keep the
+        // continuation just after the form so it remains an ordinary link.
         const continuation = form.querySelector('a[href^="/pin"]');
         if (continuation) { form.insertAdjacentElement('afterend', continuation); }
         form.addEventListener('submit', (event) => {
           if (!form.checkValidity()) return form.reportValidity();
-          save('yumetics-demo-entry-v1', { method });
+          save('yumetics-entry-flow-v1', { method });
         });
       });
       return;
@@ -523,13 +521,13 @@
     if (label) {
       label.textContent = flow === 'wifi' ? 'Wi-Fi flow — enter the 4-digit PIN to continue.' : 'LP flow — enter the 4-digit PIN to continue.';
     }
-    const form = document.querySelector('[data-demo-pin-form]');
+    const form = document.querySelector('[data-pin-form]');
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!form.checkValidity()) return form.reportValidity();
       window.location.assign('/onboarding');
     });
-    const digits = [...document.querySelectorAll('.demo-pin-digit')];
+    const digits = [...document.querySelectorAll('.pin-digit')];
     digits.forEach((digit, index) => {
       digit.addEventListener('input', () => {
         digit.value = digit.value.replace(/\D/g, '').slice(0, 1);
@@ -724,7 +722,7 @@
   initPartyPlanner();
   renderPlannerResults();
   renderPartyResults();
-  initDemoEntry();
+  initEntryFlow();
   initFasting();
   renderWeeklyStats();
 })();

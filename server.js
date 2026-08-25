@@ -35,7 +35,7 @@ const localStyles = `
       outline: 3px solid #1b2538;
       outline-offset: 3px;
     }
-    .demo-entry-continue {
+    .entry-continue {
       display: block;
       width: 100%;
       padding: .85rem 1.25rem;
@@ -47,12 +47,12 @@ const localStyles = `
       text-align: center;
       text-decoration: none;
     }
-    .demo-pin-row { display: flex; justify-content: center; gap: .65rem; }
-    .demo-pin-digit {
+    .pin-row { display: flex; justify-content: center; gap: .65rem; }
+    .pin-digit {
       width: 3.25rem; height: 3.75rem; border: 2px solid #d8dde5; border-radius: .8rem;
       background: #fff; color: #17181b; font-size: 1.65rem; font-weight: 700; text-align: center;
     }
-    .demo-pin-digit:focus { border-color: #17181b; outline: 3px solid rgba(23, 24, 27, .12); }
+    .pin-digit:focus { border-color: #17181b; outline: 3px solid rgba(23, 24, 27, .12); }
   </style>`;
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;
