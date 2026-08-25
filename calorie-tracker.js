@@ -127,12 +127,13 @@
     if (card) {
       // Keep the original clean card and red intake bar at every level.
       card.classList.remove('is-goal-reached');
+      card.classList.toggle('is-goal-complete', reachedGoal);
       card.classList.toggle('is-goal-over', reachedGoal && state.calories > Number(GOALS.calories));
     }
     if (remaining) {
       const difference = GOALS.calories - state.calories;
       remaining.textContent = reachedGoal
-        ? (difference === 0 ? 'Daily goal reached' : `+${number(Math.abs(difference))} kcal above your goal`)
+        ? 'Completed!'
         : difference >= 0
         ? `${number(difference)} kcal under your goal`
         : `${number(Math.abs(difference))} kcal over your goal`;

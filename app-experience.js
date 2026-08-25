@@ -845,8 +845,13 @@
     const number = (value) => Math.round(value).toLocaleString('en-US');
 
     document.querySelectorAll('.stats-calendar-label, [data-weekly-stats-label]').forEach((label) => { label.textContent = weekLabel; });
+    const weeklyGoal = dailyGoal * 7;
+    const weeklyOverGoal = totalCalories > weeklyGoal;
     document.querySelectorAll('.progress-ring').forEach((ring) => {
-      ring.style.setProperty('--ring-arc-percent', String(Math.min(100, Math.round((totalCalories / (dailyGoal * 7)) * 100))));
+      ring.style.setProperty('--ring-arc-percent', String(Math.min(100, Math.round((totalCalories / weeklyGoal) * 100))));
+      if (weeklyOverGoal) ring.style.setProperty('--ring-color', '#FF4C2C');
+      else ring.style.removeProperty('--ring-color');
+      ring.classList.toggle('is-over-goal', weeklyOverGoal);
     });
     document.querySelectorAll('.progress-ring-value').forEach((ringValue) => { ringValue.textContent = number(totalCalories); });
 
