@@ -571,14 +571,22 @@
     if (window.location.pathname === '/home-fasting-paused') {
       document.querySelectorAll('a[href="/home-fasting-in-progress"]').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); start(); }, true));
     }
+    const setupSheet = document.querySelector('#fasting-setup-complete-sheet');
+    if (setupSheet && !setupSheet.querySelector('[data-start-fasting-now]')) {
+      const startNow = document.createElement('a');
+      startNow.href = '/home-fasting-in-progress'; startNow.dataset.startFastingNow = 'true';
+      startNow.className = 'pet-notification-btn border-0 bg-dark d-inline-flex align-items-center justify-content-center fw-bold rounded-pill text-white text-decoration-none mt-4';
+      startNow.textContent = 'Start fasting now';
+      setupSheet.querySelector('.pet-notification-inner')?.append(startNow);
+      startNow.addEventListener('click', (event) => { event.preventDefault(); start(); }, true);
+    }
     document.querySelectorAll('#fasting-ended-sheet a[href="/home-fasting-completed"]').forEach((button) => button.addEventListener('click', (event) => {
       event.preventDefault(); fasting = { ...fasting, status: 'off', elapsedMs: 0, startedAt: null }; persistFasting(); window.location.assign('/home-fasting-completed');
     }, true));
-    // The designed Start links all lead here. Entering this state begins the
-    // clock as well, so the demo remains reliable even if a page navigation is
-    // handled by the prototype's existing scripts.
-    if (window.location.pathname === '/home-fasting-in-progress' && fasting.status === 'ready') {
-      fasting = { ...fasting, status: 'active', startedAt: Date.now() }; persistFasting();
+    // The designed Start links all lead here. Starting directly from this
+    // screen should also create a working fast instead of a static mock state.
+    if (window.location.pathname === '/home-fasting-in-progress' && !['active', 'completed'].includes(fasting.status)) {
+      fasting = { ...fasting, status: 'active', elapsedMs: fasting.status === 'paused' ? fasting.elapsedMs : 0, startedAt: Date.now() }; persistFasting();
     }
     if (window.location.pathname === '/home-fasting-paused' && fasting.status === 'active') { fasting.status = 'paused'; fasting.elapsedMs = elapsedMs(); fasting.startedAt = null; persistFasting(); }
     if (window.location.pathname === '/home-fasting-goal-achieved') { fasting = { ...fasting, status: 'completed', elapsedMs: totalMs(), startedAt: null }; persistFasting(); }
