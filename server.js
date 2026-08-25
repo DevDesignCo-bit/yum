@@ -57,6 +57,7 @@ const localStyles = `
     .view-recipe-save.is-saved [data-view-recipe-save-icon] { color: #17181b !important; }
     .home-card-calories.is-goal-complete .calories-intake-remaining { color: #49b96c !important; }
     .home-card-calories.is-goal-over .calories-intake-bar-fill { background: #ff5142 !important; }
+    .home-card-calories.is-goal-over .calories-intake-remaining { color: #ff5142 !important; }
   </style>`;
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;

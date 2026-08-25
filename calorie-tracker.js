@@ -124,15 +124,18 @@
     if (value) value.innerHTML = `${number(state.calories)}<span class="calories-intake-unit text-neutral-300">kcal</span>`;
     if (fill) fill.style.width = `${percentage(state.calories, GOALS.calories)}%`;
     const reachedGoal = Number(GOALS.calories) > 0 && state.calories >= Number(GOALS.calories);
+    const overGoal = Number(GOALS.calories) > 0 && state.calories > Number(GOALS.calories);
     if (card) {
       // Keep the original clean card and red intake bar at every level.
       card.classList.remove('is-goal-reached');
-      card.classList.toggle('is-goal-complete', reachedGoal);
-      card.classList.toggle('is-goal-over', reachedGoal && state.calories > Number(GOALS.calories));
+      card.classList.toggle('is-goal-complete', reachedGoal && !overGoal);
+      card.classList.toggle('is-goal-over', overGoal);
     }
     if (remaining) {
       const difference = GOALS.calories - state.calories;
-      remaining.textContent = reachedGoal
+      remaining.textContent = overGoal
+        ? `+${number(Math.abs(difference))} kcal above your goal`
+        : reachedGoal
         ? 'Completed!'
         : difference >= 0
         ? `${number(difference)} kcal under your goal`
