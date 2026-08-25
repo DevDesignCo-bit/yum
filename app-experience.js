@@ -646,7 +646,7 @@
   };
 
   const initWeeklyStats = () => {
-    if (!document.title.includes('Stats')) return;
+    if (!document.title.includes('Stats') && !document.querySelector('#weekly-stats-modal')) return;
     let tracker = { meals: [] };
     try { tracker = JSON.parse(localStorage.getItem('yumetics-calorie-tracker-v1') || '{"meals":[]}'); } catch (_) { /* Empty stats are valid for a new demo. */ }
     const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -695,7 +695,7 @@
   };
 
   const renderWeeklyStats = (selectedWeekStart = null) => {
-    if (!document.title.includes('Stats')) return;
+    if (!document.title.includes('Stats') && !document.querySelector('#weekly-stats-modal')) return;
     const tracker = read('yumetics-calorie-tracker-v1');
     const plan = onboarding.plan || {};
     const dailyGoal = Number(plan.calories) || 1400;
