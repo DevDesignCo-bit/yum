@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yumetics — Demo code</title>
+  <title>Yumetics — PIN verification</title>
   <link rel="stylesheet" href="https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/app.2e098a9d.css">
 </head>
 <body class="landing-page">
@@ -14,17 +14,22 @@
     <main class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-6 col-lg-4 text-center mt-4 pt-1">
-          <h1 class="fw-black fs-35px fs-xl-1 lh-1 mb-4">Enter your demo code</h1>
-          <p class="mb-4" data-demo-method>Continue to your Yumetics onboarding.</p>
+          <h1 class="fw-black fs-35px fs-xl-1 lh-1 mb-3">Enter PIN</h1>
+          <p class="mb-4" data-pin-context>Enter the 4-digit PIN to continue.</p>
           <form class="needs-validation form-pill" data-demo-pin-form novalidate>
             <div class="form-field form-gap">
-              <label class="form-label text-center w-100" for="demo-code">Use any 4 digits (optional in demo)</label>
-              <input id="demo-code" class="form-control text-center" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="1234" autocomplete="one-time-code">
+              <label class="form-label text-center w-100" for="pin-digit-1">PIN code</label>
+              <div class="demo-pin-row" aria-label="Four digit PIN">
+                <input id="pin-digit-1" class="demo-pin-digit" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="First PIN digit">
+                <input class="demo-pin-digit" inputmode="numeric" maxlength="1" aria-label="Second PIN digit">
+                <input class="demo-pin-digit" inputmode="numeric" maxlength="1" aria-label="Third PIN digit">
+                <input class="demo-pin-digit" inputmode="numeric" maxlength="1" aria-label="Fourth PIN digit">
+              </div>
             </div>
-            <a href="/onboarding" class="demo-entry-continue mt-4">Continue to onboarding</a>
           </form>
-          <a href="/onboarding" class="d-inline-block mt-4 text-primary fw-semibold text-decoration-none">Start onboarding without a code</a>
-          <p class="small text-body-muted mt-4 mb-0">Demo only — no SMS, payment or personal data is sent.</p>
+          <a href="/onboarding" class="demo-entry-continue mt-4">Verify PIN &amp; continue</a>
+          <a href="/onboarding" class="d-inline-block mt-4 text-primary fw-semibold text-decoration-none">Skip PIN and start onboarding</a>
+          <p class="small text-body-muted mt-4 mb-0">Demo only — use any four digits. No SMS or personal data is sent.</p>
         </div>
       </div>
     </main>

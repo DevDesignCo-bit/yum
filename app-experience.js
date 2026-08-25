@@ -491,7 +491,7 @@
 
   const initDemoEntry = () => {
     const entryRoutes = {
-      '/lp': '3G demo', '/login': 'Login demo', '/otp': 'OTP demo', '/wifi': 'WiFi demo',
+      '/lp': 'LP', '/wifi': 'Wi-Fi',
       '/wifi-operator-country-selector': 'WiFi demo', '/wifi-no-number': 'WiFi demo'
     };
     const route = window.location.pathname;
@@ -508,7 +508,7 @@
       document.querySelectorAll('form').forEach((form) => {
         // The source prototype intercepts controls inside forms. Put the demo
         // continuation just after the form so it always works as an ordinary link.
-        const continuation = form.querySelector('a[href^="/demo-code"]');
+        const continuation = form.querySelector('a[href^="/pin"]');
         if (continuation) { form.insertAdjacentElement('afterend', continuation); }
         form.addEventListener('submit', (event) => {
           if (!form.checkValidity()) return form.reportValidity();
@@ -517,19 +517,27 @@
       });
       return;
     }
-    if (route !== '/demo-code' && route !== '/lp-confirm' && route !== '/otp-pin' && route !== '/wifi-pin') return;
-    const entry = read('yumetics-demo-entry-v1');
-    const methodFromUrl = new URLSearchParams(window.location.search).get('method');
-    const label = document.querySelector('[data-demo-method]');
+    if (route !== '/pin') return;
+    const flow = new URLSearchParams(window.location.search).get('flow');
+    const label = document.querySelector('[data-pin-context]');
     if (label) {
-      const methodName = methodFromUrl ? `${methodFromUrl} demo` : entry.method;
-      label.textContent = methodName ? `${methodName} complete. Continue to your Yumetics onboarding.` : 'Continue to your Yumetics onboarding.';
+      label.textContent = flow === 'wifi' ? 'Wi-Fi flow — enter the 4-digit PIN to continue.' : 'LP flow — enter the 4-digit PIN to continue.';
     }
     const form = document.querySelector('[data-demo-pin-form]');
     form?.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!form.checkValidity()) return form.reportValidity();
       window.location.assign('/onboarding');
+    });
+    const digits = [...document.querySelectorAll('.demo-pin-digit')];
+    digits.forEach((digit, index) => {
+      digit.addEventListener('input', () => {
+        digit.value = digit.value.replace(/\D/g, '').slice(0, 1);
+        if (digit.value && digits[index + 1]) digits[index + 1].focus();
+      });
+      digit.addEventListener('keydown', (event) => {
+        if (event.key === 'Backspace' && !digit.value && digits[index - 1]) digits[index - 1].focus();
+      });
     });
   };
 

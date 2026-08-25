@@ -47,15 +47,21 @@ const localStyles = `
       text-align: center;
       text-decoration: none;
     }
+    .demo-pin-row { display: flex; justify-content: center; gap: .65rem; }
+    .demo-pin-digit {
+      width: 3.25rem; height: 3.75rem; border: 2px solid #d8dde5; border-radius: .8rem;
+      background: #fff; color: #17181b; font-size: 1.65rem; font-weight: 700; text-align: center;
+    }
+    .demo-pin-digit:focus { border-color: #17181b; outline: 3px solid rgba(23, 24, 27, .12); }
   </style>`;
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;
 const routes = {
-  '/': 'onboarding.html', '/home': 'home.html', '/qa': 'qa.html', '/lp': 'lp.html', '/otp': 'otp.html', '/demo-code': 'entry-pin.html', '/lp-confirm': 'entry-pin.html', '/otp-pin': 'entry-pin.html', '/wifi-pin': 'entry-pin.html',
+  '/': 'onboarding.html', '/home': 'home.html', '/qa': 'qa.html', '/lp': 'lp.html', '/pin': 'entry-pin.html',
   '/wifi': 'wifi.html', '/wifi-operator-country-selector': 'wifi-operator-country-selector.html', '/wifi-no-number': 'wifi-no-number.html', '/onboarding': 'onboarding.html',
   '/sad-pot': 'sad-pot.html', '/happy-carrot': 'happy-carrot.html', '/sad-carrot': 'sad-carrot.html', '/happy-banana': 'happy-banana.html', '/sad-banana': 'sad-banana.html',
   '/home-activate-fasting': 'home-activate-fasting.html', '/home-fasting-active': 'home-fasting-active.html', '/home-fasting-in-progress': 'home-fasting-in-progress.html', '/home-fasting-paused': 'home-fasting-paused.html', '/home-fasting-goal-achieved': 'home-fasting-goal-achieved.html', '/home-fasting-completed': 'home-fasting-completed.html', '/home-recommendation': 'home-recommendation.html',
-  '/login': 'login.html', '/terms': 'terms.html', '/faq': 'faq.html', '/contact': 'contact.html',
+  '/terms': 'terms.html', '/faq': 'faq.html', '/contact': 'contact.html',
   '/profile': 'profile.html', '/profile-few': 'profile-few.html', '/profile-empty': 'profile-empty.html', '/profile-long': 'profile-long.html', '/stats': 'stats.html', '/cooking-planner': 'cooking-planner.html',
   '/snap-and-cook': 'snap-and-cook.html', '/snap-and-cook-result': 'snap-and-cook-result.html', '/party-planner': 'party-planner.html', '/party-planing-result': 'party-planing-result.html',
   '/edit-diet': 'edit-diet.html', '/edit-fasting': 'edit-fasting.html', '/edit-restrictions': 'edit-restrictions.html', '/edit-weight': 'edit-weight.html',
@@ -172,6 +178,15 @@ const analyzeFood = async ({ image, mode }) => {
 
 http.createServer(async (req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+  // Keep old prototype URLs working, but expose only the two intended entry
+  // journeys: LP → PIN and the Wi-Fi flow → PIN.
+  if (['/login', '/otp'].includes(pathname)) {
+    res.writeHead(302, { Location: '/lp' }); return res.end();
+  }
+  if (['/demo-code', '/lp-confirm', '/otp-pin', '/wifi-pin'].includes(pathname)) {
+    const query = new URL(req.url, 'http://localhost').search;
+    res.writeHead(302, { Location: `/pin${query}` }); return res.end();
+  }
   if (pathname === '/api/food-analysis' && req.method === 'POST') {
     try { return sendJson(res, 200, await analyzeFood(await readJson(req))); }
     catch (error) { return sendJson(res, error.status || 500, { error: error.message || 'Unable to analyze this image.' }); }
