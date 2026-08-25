@@ -29,7 +29,9 @@
     '/assets/recipes/roasted-vegetable-gratin.png',
     '/assets/recipes/salmon-rice-bowl.png',
     '/assets/recipes/creamy-mushroom-pasta.png',
-    '/assets/recipes/sweet-potato-tacos.png'
+    '/assets/recipes/sweet-potato-tacos.png',
+    '/assets/recipes/mediterranean-chicken-quinoa-bowl.png',
+    '/assets/recipes/aubergine-chickpea-couscous-bowl.png'
   ];
   const petColors = { pot: '#ff4c2c', carrot: '#ffb15f', banana: '#97d7ff' };
   const homeColors = { blue: '#97D5FF', red: '#FF8B8E', green: '#CEE8BB', orange: '#FFC891', purple: '#B176FF' };
@@ -299,7 +301,9 @@
     if (!listModal) return;
     const host = listModal.querySelector('h2')?.parentElement;
     if (!host) return;
-    host.querySelectorAll('[data-saved-recipes-render]').forEach((element) => element.remove());
+    // Replace the exported prototype cards completely. The list is now always
+    // driven by what this person has actually saved on this device.
+    [...host.children].forEach((element) => { if (element.tagName !== 'H2') element.remove(); });
     const recipes = savedRecipes();
     const content = document.createElement('div'); content.dataset.savedRecipesRender = 'true';
     if (!recipes.length) {
@@ -466,6 +470,7 @@
     let sourceRecipes = [];
     try { sourceRecipes = JSON.parse(source?.textContent || '[]'); } catch (_) { sourceRecipes = []; }
     renderSavedRecipes();
+    window.addEventListener('storage', (event) => { if (event.key === SAVED_RECIPES_KEY) renderSavedRecipes(); });
     document.addEventListener('click', (event) => {
       const saveButton = event.target.closest('[data-view-recipe-save]');
       if (saveButton && activeRecipe) {

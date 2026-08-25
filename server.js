@@ -53,12 +53,10 @@ const localStyles = `
       background: #fff; color: #17181b; font-size: 1.65rem; font-weight: 700; text-align: center;
     }
     .pin-digit:focus { border-color: #17181b; outline: 3px solid rgba(23, 24, 27, .12); }
-    .view-recipe-save.is-saved { background: #17181b !important; color: #fff !important; }
-    .home-card-calories.is-goal-reached { background: linear-gradient(145deg, #ecfff2 0%, #c9f4d6 100%); box-shadow: 0 10px 25px rgba(59, 155, 91, .18); }
-    .home-card-calories.is-goal-reached .calories-intake-bar-fill { background: #36a65e !important; }
-    .home-card-calories.is-goal-reached .calories-intake-remaining { color: #17723a !important; }
-    .home-card-calories.is-goal-over { background: linear-gradient(145deg, #fff6e9 0%, #ffe1af 100%); }
-    .home-card-calories.is-goal-over .calories-intake-bar-fill { background: #ee8d25 !important; }
+    .view-recipe-save.is-saved { background: #fff !important; color: #17181b !important; box-shadow: 0 3px 10px rgba(20, 25, 35, .16); }
+    .view-recipe-save.is-saved [data-view-recipe-save-icon] { color: #17181b !important; }
+    .home-card-calories.is-goal-over .calories-intake-bar-fill { background: #ff5142 !important; }
+    .home-card-calories.is-goal-over .calories-intake-remaining { color: #ff5142 !important; }
   </style>`;
 const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;
@@ -211,6 +209,9 @@ http.createServer(async (req, res) => {
     if (error) { res.writeHead(500); return res.end('Unable to load page'); }
     res.writeHead(200, { 'Content-Type': contentType });
     if (req.method === 'HEAD') return res.end();
-    res.end(file.endsWith('.html') ? data.toString().replace('</head>', `${localStyles}\n</head>`).replace('</body>', '    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n</body>') : data);
+    if (!file.endsWith('.html')) return res.end(data);
+    const page = data.toString();
+    const tracker = page.includes('src="/calorie-tracker.js"') ? '' : '    <script src="/calorie-tracker.js" defer></script>\n';
+    res.end(page.replace('</head>', `${localStyles}\n</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n</body>`));
   });
 }).listen(port, () => console.log(`Yumetics is ready at http://localhost:${port}`));

@@ -5,10 +5,10 @@
   const onboarding = (() => { try { return JSON.parse(localStorage.getItem('yumetics-onboarding-v1')) || {}; } catch (_) { return {}; } })();
   const GOALS = onboarding.plan || { calories: 1400, carbs: 185, fats: 71, proteins: 128 };
   const DEFAULT_STATE = {
-    calories: 450,
-    carbs: 120,
-    fats: 43,
-    proteins: 100,
+    calories: 0,
+    carbs: 0,
+    fats: 0,
+    proteins: 0,
     meals: []
   };
 
@@ -31,7 +31,14 @@
   const safeState = () => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved && Object.keys(DEFAULT_STATE).every((key) => key in saved)) return saved;
+      if (saved && Object.keys(DEFAULT_STATE).every((key) => key in saved)) {
+        // Previous builds started every new profile with prototype nutrition data.
+        // Discard only that untouched mock record; genuine logged meals stay intact.
+        const isPrototypeState = !saved.meals?.length
+          && Number(saved.calories) === 450 && Number(saved.carbs) === 120
+          && Number(saved.fats) === 43 && Number(saved.proteins) === 100;
+        return isPrototypeState ? { ...DEFAULT_STATE, meals: [] } : saved;
+      }
     } catch (_) { /* A fresh session is enough if storage is unavailable. */ }
     return { ...DEFAULT_STATE, meals: [] };
   };
@@ -118,13 +125,14 @@
     if (fill) fill.style.width = `${percentage(state.calories, GOALS.calories)}%`;
     const reachedGoal = Number(GOALS.calories) > 0 && state.calories >= Number(GOALS.calories);
     if (card) {
-      card.classList.toggle('is-goal-reached', reachedGoal);
+      // Keep the original clean card and red intake bar at every level.
+      card.classList.remove('is-goal-reached');
       card.classList.toggle('is-goal-over', reachedGoal && state.calories > Number(GOALS.calories));
     }
     if (remaining) {
       const difference = GOALS.calories - state.calories;
       remaining.textContent = reachedGoal
-        ? (difference === 0 ? 'Daily goal reached — great job!' : `Daily goal reached · ${number(Math.abs(difference))} kcal over`)
+        ? (difference === 0 ? 'Daily goal reached' : `+${number(Math.abs(difference))} kcal above your goal`)
         : difference >= 0
         ? `${number(difference)} kcal under your goal`
         : `${number(Math.abs(difference))} kcal over your goal`;
