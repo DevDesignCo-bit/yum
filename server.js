@@ -47,8 +47,6 @@ const localStyles = `
       text-align: center;
       text-decoration: none;
     }
-    .view-recipe-save.is-saved { background: #fff !important; color: #17181b !important; box-shadow: 0 3px 10px rgba(20, 25, 35, .16); }
-    .view-recipe-save.is-saved [data-view-recipe-save-icon] { color: #17181b !important; }
     .home-card-calories.is-goal-complete .calories-intake-remaining { color: #49b96c !important; }
     .home-card-calories.is-goal-over .calories-intake-bar-fill { background: #ff5142 !important; }
     .home-card-calories.is-goal-over .calories-intake-remaining { color: #ff5142 !important; }
@@ -119,6 +117,18 @@ const hfMealFromLabel = (label, score) => {
     [/salad/, { name: 'Salad', calories: 220, carbs: 17, fats: 14, proteins: 7, ingredients: [{ name: 'Salad vegetables', grams: 180 }, { name: 'Dressing', grams: 20 }] }],
     [/pasta|spaghetti|lasagna|macaroni/, { name: titleFromLabel(label), calories: 520, carbs: 76, fats: 14, proteins: 20, ingredients: [{ name: 'Cooked pasta', grams: 180 }, { name: 'Sauce', grams: 120 }, { name: 'Cheese', grams: 18 }] }],
     [/burger/, { name: 'Burger', calories: 520, carbs: 42, fats: 27, proteins: 28, ingredients: [{ name: 'Burger bun', grams: 85 }, { name: 'Burger patty', grams: 120 }] }],
+    [/cheesecake|carrot cake|chocolate cake|red velvet|cupcake|apple pie|strawberry shortcake/, { name: titleFromLabel(label), calories: 430, carbs: 48, fats: 24, proteins: 6, ingredients: [{ name: 'Cake or pastry portion', grams: 135 }] }],
+    [/ice cream|frozen yogurt|panna cotta|chocolate mousse/, { name: titleFromLabel(label), calories: 290, carbs: 31, fats: 17, proteins: 5, ingredients: [{ name: 'Dessert portion', grams: 145 }] }],
+    [/donut|churro|macaron|beignet/, { name: titleFromLabel(label), calories: 260, carbs: 32, fats: 13, proteins: 4, ingredients: [{ name: titleFromLabel(label), grams: 85 }] }],
+    [/french fries|onion rings|poutine/, { name: titleFromLabel(label), calories: 390, carbs: 51, fats: 18, proteins: 5, ingredients: [{ name: 'Fried potato portion', grams: 155 }] }],
+    [/sushi|sashimi|ceviche|tuna tartare/, { name: titleFromLabel(label), calories: 360, carbs: 48, fats: 9, proteins: 20, ingredients: [{ name: 'Rice or fish portion', grams: 210 }] }],
+    [/ramen|pho|noodles|pad thai/, { name: titleFromLabel(label), calories: 510, carbs: 65, fats: 18, proteins: 22, ingredients: [{ name: 'Noodles', grams: 190 }, { name: 'Broth or sauce', grams: 180 }] }],
+    [/sandwich|croque|hot dog|pulled pork/, { name: titleFromLabel(label), calories: 470, carbs: 45, fats: 21, proteins: 25, ingredients: [{ name: 'Bread', grams: 100 }, { name: 'Main filling', grams: 115 }] }],
+    [/tacos|quesadilla|burrito|nachos/, { name: titleFromLabel(label), calories: 460, carbs: 46, fats: 22, proteins: 20, ingredients: [{ name: 'Tortilla or corn base', grams: 100 }, { name: 'Main filling', grams: 130 }] }],
+    [/curry|fried rice|risotto|paella|bibimbap/, { name: titleFromLabel(label), calories: 480, carbs: 60, fats: 16, proteins: 21, ingredients: [{ name: 'Rice or grain base', grams: 190 }, { name: 'Main cooked portion', grams: 150 }] }],
+    [/soup|chowder|bisque/, { name: titleFromLabel(label), calories: 260, carbs: 28, fats: 11, proteins: 12, ingredients: [{ name: 'Soup portion', grams: 340 }] }],
+    [/pancakes|waffles|french toast/, { name: titleFromLabel(label), calories: 410, carbs: 58, fats: 15, proteins: 10, ingredients: [{ name: 'Breakfast portion', grams: 190 }] }],
+    [/omelette|eggs benedict|huevos rancheros/, { name: titleFromLabel(label), calories: 390, carbs: 25, fats: 25, proteins: 22, ingredients: [{ name: 'Egg-based portion', grams: 220 }] }],
     [/chicken|steak|salmon|ribs/, { name: titleFromLabel(label), calories: 470, carbs: 8, fats: 22, proteins: 38, ingredients: [{ name: titleFromLabel(label), grams: 170 }] }]
   ];
   const match = profiles.find(([pattern]) => pattern.test(normalised))?.[1];

@@ -376,6 +376,7 @@
     const saved = isSavedRecipe(item);
     document.querySelectorAll('[data-view-recipe-save]').forEach((button) => {
       button.classList.toggle('is-saved', saved);
+      button.querySelector('[data-view-recipe-save-icon]')?.classList.toggle('is-saved', saved);
       button.setAttribute('aria-pressed', String(saved));
       button.setAttribute('aria-label', saved ? 'Remove saved recipe' : 'Save recipe');
       button.title = saved ? 'Remove from saved recipes' : 'Save recipe';
@@ -469,8 +470,12 @@
   };
 
   const buildPartyRecipes = ({ diet = 'none', guests = '5', event = 'family_gathering', difficulty = 'easy', allergies = [] }) => {
-    const vegan = diet === 'vegan' || allergies.includes('animal_products');
-    const vegetarian = vegan || diet === 'vegetarian' || allergies.includes('meat');
+    const restrictions = new Set(allergies);
+    const noMeat = restrictions.has('meat') || restrictions.has('animal_products');
+    const noDairy = restrictions.has('dairy') || restrictions.has('animal_products');
+    const noSeafood = restrictions.has('seafood');
+    const vegan = diet === 'vegan' || restrictions.has('animal_products');
+    const vegetarian = vegan || diet === 'vegetarian' || noMeat;
     const lowCarb = diet === 'low_carb' || diet === 'ketogenic';
     const highProtein = diet === 'high_protein' || diet === 'paleo';
     const tag = vegan ? 'Vegan' : vegetarian ? 'Vegetarian' : lowCarb ? 'Low Carb' : highProtein ? 'High Protein' : 'Balanced';
@@ -481,16 +486,24 @@
       movie_night: 'movie-night', summer_party: 'summer party', halloween: 'Halloween'
     }[event] || 'shared';
     const time = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 8 : 0;
-    const menu = vegan
+    let menu = vegan
       ? [['Crispy vegetable crostini', 210, 12, 8, ['wholegrain bread', 'tomatoes', 'herbs']], ['Sweet potato black bean tacos', 440, 15, 20, ['sweet potato', 'black beans', 'avocado']], ['Berry coconut pots', 260, 10, 0, ['berries', 'coconut yogurt', 'oats']]]
       : vegetarian
         ? [['Herb tomato bruschetta', 220, 12, 8, ['bread', 'tomatoes', 'fresh herbs']], ['Roasted vegetable gratin', 510, 18, 35, ['seasonal vegetables', 'cheese', 'potatoes']], ['Warm fruit crumble', 320, 15, 25, ['seasonal fruit', 'oats', 'cinnamon']]]
         : lowCarb
           ? [['Avocado cucumber bites', 190, 12, 0, ['avocado', 'cucumber', 'lemon']], ['Lemon chicken tray bake', 520, 15, 32, ['chicken', 'vegetables', 'lemon']], ['Greek yogurt berry cups', 240, 8, 0, ['greek yogurt', 'berries', 'seeds']]]
           : highProtein
-          ? [['Protein hummus board', 260, 12, 0, ['hummus', 'vegetables', 'seeds']], ['Glazed salmon rice bowl', 560, 18, 25, ['salmon', 'rice', 'edamame']], ['Cocoa protein mousse', 280, 10, 0, ['yogurt', 'cocoa', 'berries']]]
+          ? [['Protein hummus board', 260, 12, 0, ['hummus', 'vegetables', 'seeds']], [noSeafood ? 'Herb chicken grain bowl' : 'Glazed salmon rice bowl', 560, 18, 25, [noSeafood ? 'chicken' : 'salmon', 'rice', 'edamame']], ['Cocoa protein mousse', 280, 10, 0, ['yogurt', 'cocoa', 'berries']]]
           : [['Seasonal sharing platter', 260, 15, 0, ['vegetables', 'bread', 'dip']], ['Creamy mushroom pasta', 520, 15, 22, ['mushrooms', 'pasta', 'spinach']], ['Fruit yogurt parfaits', 300, 10, 0, ['fruit', 'yogurt', 'granola']]];
-    return menu.map(([name, calories, prep, cook, ingredients]) => recipe(name, tag, calories, prep + time, cook + time, ingredients, `A ${occasion} recipe scaled for ${guests} guests.`));
+    // Dairy restrictions need a separate menu, not just a visual label. This
+    // keeps every proposed dish compatible with the party's actual choices.
+    if (noDairy && !vegan) menu = [
+      ['Tomato herb crostini', 210, 12, 8, ['wholegrain bread', 'tomatoes', 'fresh herbs']],
+      [vegetarian ? 'Lentil vegetable tray bake' : 'Lemon chicken tray bake', 480, 15, 30, [vegetarian ? 'lentils' : 'chicken', 'seasonal vegetables', 'lemon']],
+      ['Fresh berry sorbet cups', 190, 10, 0, ['berries', 'orange juice', 'mint']]
+    ];
+    const restrictionsNote = [...restrictions].length ? ` It respects: ${[...restrictions].map(titleCase).join(', ')}.` : '';
+    return menu.map(([name, calories, prep, cook, ingredients]) => recipe(name, tag, calories, prep + time, cook + time, ingredients, `A ${occasion} recipe scaled for ${guests} guests.${restrictionsNote}`));
   };
 
   const initSnapAndCook = () => {
@@ -620,6 +633,18 @@
   const initPartyPlanner = () => {
     const form = document.querySelector('.party-planner-inner form');
     if (!form) return;
+    const previous = read(PARTY_KEY).settings;
+    if (previous) {
+      ['difficulty', 'guests', 'event'].forEach((name) => {
+        const field = form.elements.namedItem(name);
+        if (!field || !previous[name]) return;
+        field.value = previous[name];
+        field.tomselect?.setValue(previous[name], true);
+      });
+      const diet = form.querySelector(`input[name="diet"][value="${previous.diet}"]`);
+      if (diet) diet.checked = true;
+      form.querySelectorAll('input[name="allergies[]"]').forEach((input) => { input.checked = previous.allergies?.includes(input.value); });
+    }
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
@@ -651,11 +676,29 @@
     if (summary[1]) summary[1].textContent = `${settings.guests || 5} people`;
     if (summary[2]) summary[2].textContent = labels[settings.difficulty] || 'Easy';
     const basedOn = document.querySelector('.party-planner-result-based');
-    if (basedOn) basedOn.textContent = `Menu based on your ${titleCase(settings.diet || 'balanced')} preference`;
+    const restrictionLabels = { meat: 'Meat-free', dairy: 'Dairy-free', eggs: 'Egg-free', animal_products: 'Animal products-free', seafood: 'Seafood-free', nuts: 'Nut-free' };
+    const selectedPreferences = [
+      settings.diet && settings.diet !== 'none' ? titleCase(settings.diet) : 'No diet preference',
+      ...(settings.allergies || []).map((value) => restrictionLabels[value] || titleCase(value))
+    ];
+    if (basedOn) basedOn.textContent = `Menu based on: ${selectedPreferences.join(' · ')}`;
+    const preferencesHost = document.querySelector('.menu-based-carousel .swiper-wrapper');
+    if (preferencesHost) {
+      preferencesHost.replaceChildren(...selectedPreferences.map((label) => {
+        const slide = document.createElement('div'); slide.className = 'swiper-slide';
+        const card = document.createElement('div'); card.className = 'option-card option-card-disabled bg-secondary-100';
+        const body = document.createElement('span'); body.className = 'option-card-body';
+        const header = document.createElement('span'); header.className = 'option-card-header';
+        const title = document.createElement('span'); title.className = 'option-card-title'; title.textContent = label;
+        header.append(title); body.append(header); card.append(body); slide.append(card); return slide;
+      }));
+      preferencesHost.closest('.swiper')?.swiper?.update();
+    }
     const cards = [...document.querySelectorAll('.recipes-list-card')];
     cards.forEach((card, index) => {
       const item = recipes[index]; const wrapper = card.closest('.col-12');
-      if (!item) { if (wrapper) wrapper.hidden = true; return; }
+      if (!item) { card.hidden = true; return; }
+      card.hidden = false;
       card.querySelector('.recipes-list-card-title').textContent = item.name;
       card.querySelector('.recipe-tag').textContent = item.tag;
       const image = card.querySelector('.recipes-list-card-image'); if (image) { image.src = item.image_url; image.alt = item.name; }
