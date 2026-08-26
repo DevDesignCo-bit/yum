@@ -161,20 +161,24 @@
 
   const updateProfileFromPlan = () => {
     if (!onboarding.plan || !document.title.includes('My Profile')) return;
+    const plan = {
+      calories: 1400, carbs: 185, fats: 71, proteins: 128, water: 2000,
+      weight: Number(onboarding.weight) || 75, fasting: 16, ...onboarding.plan
+    };
     const values = document.querySelectorAll('.profile-plan-card-row .value');
-    if (values[0]) values[0].textContent = `${onboarding.plan.calories.toLocaleString('en-US')} kcal`;
-    if (values[1]) values[1].textContent = `${onboarding.plan.carbs}g / ${onboarding.plan.fats}g / ${onboarding.plan.proteins}g`;
-    if (values[2]) values[2].textContent = `${onboarding.plan.fasting}:${24 - onboarding.plan.fasting}`;
-    if (values[3]) values[3].textContent = `${onboarding.plan.water} ml`;
-    if (values[4]) values[4].textContent = `${onboarding.plan.weight} kg`;
+    if (values[0]) values[0].textContent = `${Number(plan.calories).toLocaleString('en-US')} kcal`;
+    if (values[1]) values[1].textContent = `${plan.carbs}g / ${plan.fats}g / ${plan.proteins}g`;
+    if (values[2]) values[2].textContent = `${plan.fasting}:${24 - plan.fasting}`;
+    if (values[3]) values[3].textContent = `${plan.water} ml`;
+    if (values[4]) values[4].textContent = `${plan.weight} kg`;
     if (values[5] && onboarding.diet?.length) values[5].textContent = onboarding.diet.map(titleCase).join(', ');
     if (values[6]) values[6].textContent = onboarding.allergies?.length ? onboarding.allergies.map(titleCase).join(', ') : 'None';
   };
 
   const updateHomeFromPlan = () => {
     if (!onboarding.plan || !document.title.includes('Home')) return;
-    const weight = Number(onboarding.plan.weight || onboarding.weight);
-    const targetWeight = Number(onboarding.plan.targetWeight || onboarding.target_weight || weight);
+    const weight = Number(onboarding.plan.weight || onboarding.weight) || 75;
+    const targetWeight = Number(onboarding.plan.targetWeight || onboarding.target_weight) || weight;
     const weightValue = document.querySelector('.home-card-weight .home-card-value');
     if (weightValue && Number.isFinite(weight)) {
       const unit = document.createElement('span');
@@ -320,7 +324,7 @@
 
   const detailedRecipeInstructions = (item) => {
     const existing = Array.isArray(item.instructions) ? item.instructions : [];
-    const alreadyDetailed = existing.length >= 4 && existing.every((step) => String(step.description || '').trim().length >= 80);
+    const alreadyDetailed = existing.length >= 5 && existing.every((step) => String(step.description || '').trim().length >= 80);
     if (alreadyDetailed) return existing;
     const ingredients = (item.ingredients || []).filter(Boolean);
     const ingredientList = ingredients.slice(0, 4).join(', ') || 'the listed ingredients';
@@ -331,19 +335,24 @@
     const noCook = /parfait|bites|bruschetta|crostini|salad|platter|board/.test(name);
     const prepMinutes = Math.max(5, Number(item.prep_min) || 10);
     const cookMinutes = Math.max(0, Number(item.cook_min) || 0);
-    const sourceHint = existing.map((step) => step.description).find(Boolean);
     const heatStep = noCook
-      ? `Arrange the prepared ingredients in a serving bowl or on a platter. Keep any crisp elements separate until the last moment so the texture stays fresh.`
+      ? `Layer the ingredients in a bowl or on a platter, starting with the base and keeping crunchy toppings aside. Add the dressing gradually so the dish is coated but not soggy.`
       : needsOven
-        ? `Heat the oven to 200°C / 180°C fan. Assemble everything in an oven-safe dish, leaving a little space so it cooks evenly, then bake for about ${cookMinutes || 20} minutes until hot through and lightly golden.`
+        ? `Heat the oven to 200°C / 180°C fan. Spread the ingredients in one layer in an oven-safe dish, season well, then bake for about ${cookMinutes || 20} minutes until tender, hot through, and lightly golden at the edges.`
         : isPanDish
-          ? `Warm a large pan over medium heat. Add the ingredients that need the longest cooking first, then stir in the remaining ingredients gradually so they soften without sticking.`
-          : `Cook the main ingredients using a medium heat, turning or stirring regularly until tender and hot throughout.`;
+          ? `Warm a wide pan over medium heat with a little oil. Cook the firmest ingredients first, then add the remaining ingredients in stages, stirring often so they soften evenly without catching on the pan.`
+          : `Cook the main ingredients over a medium heat, turning or stirring regularly until they are tender, hot through, and lightly coloured.`;
+    const textureCheck = noCook
+      ? `Taste a small bite and balance the flavours with a pinch of salt, pepper, lemon, herbs, or a little dressing. The result should feel fresh, bright, and easy to scoop or share.`
+      : needsOven
+        ? `Check that the centre is piping hot and the vegetables or topping are tender. If needed, return it to the oven for 3–5 minutes, then rest it briefly so the juices settle before serving.`
+        : `Taste a small spoonful and check that the firmest ingredient is cooked through. Add a splash of water, stock, or sauce if it needs loosening, then adjust salt, pepper, acidity, and herbs.`;
     return [
-      { title: 'Prepare the ingredients', description: `Measure out ${ingredientList}. Wash produce, trim any tough ends, and cut everything into even, bite-sized pieces so it cooks at the same pace. Allow about ${prepMinutes} minutes for this step.` },
-      { title: noCook ? 'Build the dish' : 'Start cooking', description: sourceHint ? `${sourceHint} Keep the heat moderate and season in small additions, tasting as you go.` : `Set out your serving dish and prepare any dressing, sauce, or seasoning before you begin. This keeps the cooking stage calm and prevents overcooking.` },
-      { title: noCook ? 'Season and balance' : 'Cook until ready', description: heatStep },
-      { title: 'Finish and serve', description: `Taste ${recipeName} and adjust salt, pepper, acidity, or herbs as needed. Rest for 2 minutes if it is hot, then portion it while warm and serve immediately.` }
+      { title: 'Set up your station', description: `Measure out ${ingredientList}. Set out a board, knife, pan or baking dish, and serving bowl before you begin. This recipe takes about ${prepMinutes} minutes to prepare, so keeping everything within reach makes the process smoother.` },
+      { title: 'Prep and season', description: `Wash the produce, trim any tough ends, and cut the ingredients into evenly sized pieces. Season the main ingredients lightly with salt, pepper, and any listed herbs or spices; you can add more at the end.` },
+      { title: noCook ? 'Assemble the dish' : 'Cook in stages', description: heatStep },
+      { title: 'Check the flavour and texture', description: textureCheck },
+      { title: 'Plate and serve', description: `Spoon ${recipeName} into warm bowls or onto a platter. Finish with fresh herbs, seeds, citrus, or a final drizzle if available, then serve straight away while the textures are at their best.` }
     ];
   };
 
@@ -683,7 +692,11 @@
     };
     const saveGoalToProfile = () => {
       const next = { ...read(ONBOARDING_KEY), fasting_goal: `${fasting.goalHours}h` };
-      next.plan = { ...(next.plan || {}), fasting: fasting.goalHours };
+      next.plan = {
+        calories: 1400, carbs: 185, fats: 71, proteins: 128, water: 2000,
+        weight: Number(next.weight) || 75, targetWeight: Number(next.target_weight || next.weight) || 75,
+        ...(next.plan || {}), fasting: fasting.goalHours
+      };
       save(ONBOARDING_KEY, next); Object.assign(onboarding, next);
     };
     const totalMs = () => fasting.goalHours * 60 * 60 * 1000;

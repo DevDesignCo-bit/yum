@@ -3,12 +3,15 @@
 
   const STORAGE_KEY = 'yumetics-calorie-tracker-v1';
   const onboarding = (() => { try { return JSON.parse(localStorage.getItem('yumetics-onboarding-v1')) || {}; } catch (_) { return {}; } })();
-  const GOALS = onboarding.plan || { calories: 1400, carbs: 185, fats: 71, proteins: 128 };
+  // Fasting can be configured before the complete onboarding plan exists.
+  // Merge partial plans with safe defaults so the Home card never renders NaN.
+  const GOALS = { calories: 1400, carbs: 185, fats: 71, proteins: 128, ...(onboarding.plan || {}) };
   const DEFAULT_STATE = {
     calories: 0,
     carbs: 0,
     fats: 0,
     proteins: 0,
+    day: '',
     meals: []
   };
 
@@ -28,19 +31,54 @@
     chicken: { name: 'Grilled chicken plate', calories: 410, carbs: 2, fats: 15, proteins: 57, ingredients: [{ name: 'Grilled chicken', grams: 170 }, { name: 'Vegetables', grams: 130 }, { name: 'Olive oil', grams: 10 }] }
   };
 
+  const localDay = (date = new Date()) => {
+    if (!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
+    const offset = date.getTimezoneOffset() * 60 * 1000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+  };
+
+  const dailyTotals = (meals, day) => meals
+    .filter((meal) => localDay(new Date(meal.loggedAt)) === day)
+    .reduce((totals, meal) => ({
+      calories: totals.calories + (Number(meal.calories) || 0),
+      carbs: totals.carbs + (Number(meal.carbs) || 0),
+      fats: totals.fats + (Number(meal.fats) || 0),
+      proteins: totals.proteins + (Number(meal.proteins) || 0)
+    }), { calories: 0, carbs: 0, fats: 0, proteins: 0 });
+
+  const stateForToday = (saved) => {
+    const day = localDay();
+    const meals = Array.isArray(saved.meals) ? saved.meals : [];
+    const totals = dailyTotals(meals, day);
+    const hasTodayMeals = meals.some((meal) => localDay(new Date(meal.loggedAt)) === day);
+    const legacySameDay = saved.day === day && !hasTodayMeals;
+    return {
+      ...DEFAULT_STATE,
+      ...totals,
+      ...(legacySameDay ? {
+        calories: Math.max(0, Number(saved.calories) || 0),
+        carbs: Math.max(0, Number(saved.carbs) || 0),
+        fats: Math.max(0, Number(saved.fats) || 0),
+        proteins: Math.max(0, Number(saved.proteins) || 0)
+      } : {}),
+      day,
+      meals
+    };
+  };
+
   const safeState = () => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved && Object.keys(DEFAULT_STATE).every((key) => key in saved)) {
+      if (saved && ['calories', 'carbs', 'fats', 'proteins', 'meals'].every((key) => key in saved)) {
         // Previous builds started every new profile with prototype nutrition data.
         // Discard only that untouched mock record; genuine logged meals stay intact.
         const isPrototypeState = !saved.meals?.length
           && Number(saved.calories) === 450 && Number(saved.carbs) === 120
           && Number(saved.fats) === 43 && Number(saved.proteins) === 100;
-        return isPrototypeState ? { ...DEFAULT_STATE, meals: [] } : saved;
+        return isPrototypeState ? { ...DEFAULT_STATE, meals: [] } : stateForToday(saved);
       }
     } catch (_) { /* A fresh session is enough if storage is unavailable. */ }
-    return { ...DEFAULT_STATE, meals: [] };
+    return { ...DEFAULT_STATE, day: localDay(), meals: [] };
   };
 
   let state = safeState();
@@ -75,8 +113,9 @@
   const renderMeals = () => {
     const list = document.querySelector('.home-meals');
     if (!list) return;
-    if (!state.meals.length) { list.replaceChildren(); return; }
-    list.innerHTML = state.meals.slice(-6).map((meal) => `
+    const todaysMeals = state.meals.filter((meal) => localDay(new Date(meal.loggedAt)) === state.day);
+    if (!todaysMeals.length) { list.replaceChildren(); return; }
+    list.innerHTML = todaysMeals.slice(-6).map((meal) => `
       <li class="home-meal" title="${meal.name}: ${number(meal.calories)} kcal">
         <img src="${meal.image || 'https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/food/burger.jpg'}" alt="${meal.name}" width="75" height="75">
       </li>`).join('');
@@ -125,16 +164,16 @@
       image.src = `${baseUrl}/${selectedPet}/animations/${mood}.webp`;
       image.alt = onboarding.pet_name || onboarding.plan?.petName || 'Your pet';
     });
-    // Mirror the ready-made sad screens: one remaining heart once the daily
-    // calorie goal has been exceeded, and all three when the user is on track.
+    // Going above the daily goal makes the character sad and costs one heart.
     document.querySelectorAll('.home-hero-lives .icon-heart').forEach((heart, index) => {
-      heart.classList.toggle('icon-heart-filled', index < (overGoal ? 1 : 3));
+      heart.classList.toggle('icon-heart-filled', index < (overGoal ? 2 : 3));
     });
   };
 
   const render = () => {
     const intake = document.querySelector('.calories-intake');
     if (!intake) return;
+    if (state.day !== localDay()) { state = stateForToday(state); persist(); }
     const value = intake.querySelector('.calories-intake-value > span:last-child');
     const fill = intake.querySelector('.calories-intake-bar-fill');
     const remaining = intake.querySelector('.calories-intake-remaining');
