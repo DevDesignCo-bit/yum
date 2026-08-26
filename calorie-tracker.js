@@ -116,6 +116,22 @@
     });
   };
 
+  const updatePetMood = (overGoal) => {
+    const pet = onboarding.pet || onboarding.plan?.pet || 'pot';
+    const selectedPet = ['pot', 'carrot', 'banana'].includes(pet) ? pet : 'pot';
+    const mood = overGoal ? 'sad' : 'happy';
+    const baseUrl = 'https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/images/pets';
+    document.querySelectorAll('.home-hero-pet img').forEach((image) => {
+      image.src = `${baseUrl}/${selectedPet}/animations/${mood}.webp`;
+      image.alt = onboarding.pet_name || onboarding.plan?.petName || 'Your pet';
+    });
+    // Mirror the ready-made sad screens: one remaining heart once the daily
+    // calorie goal has been exceeded, and all three when the user is on track.
+    document.querySelectorAll('.home-hero-lives .icon-heart').forEach((heart, index) => {
+      heart.classList.toggle('icon-heart-filled', index < (overGoal ? 1 : 3));
+    });
+  };
+
   const render = () => {
     const intake = document.querySelector('.calories-intake');
     if (!intake) return;
@@ -148,6 +164,7 @@
     updateMacro('calories-intake-macro-fill-carbs', state.carbs, GOALS.carbs);
     updateMacro('calories-intake-macro-fill-fats', state.fats, GOALS.fats);
     updateMacro('calories-intake-macro-fill-proteins', state.proteins, GOALS.proteins);
+    updatePetMood(overGoal);
     renderMeals();
     renderRecentMeals();
     const petName = document.querySelector('.home-hero-name');
