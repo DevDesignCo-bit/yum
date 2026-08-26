@@ -5,8 +5,7 @@ const path = require('path');
 const root = __dirname;
 const localStyles = `
   <style>
-    .store-slide { transition: transform .2s ease, filter .2s ease; }
-    .store-slide.is-selected { transform: translateY(-8px); }
+    .store-slide { transition: filter .2s ease; }
     .store-slide.is-selected .store-card {
       border: 4px solid var(--selected-pet-color, #ff4c2c) !important;
       background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, var(--selected-pet-color, #ff4c2c) 100%) !important;
@@ -29,12 +28,6 @@ const localStyles = `
       pointer-events: none;
     }
     .store-slide.is-selected .store-pet-img { filter: drop-shadow(0 8px 8px rgba(26, 35, 55, .2)); }
-    .store-swatch { transition: transform .18s ease, box-shadow .18s ease; }
-    .store-swatch.is-selected {
-      transform: translateY(-4px);
-      outline: 3px solid #1b2538;
-      outline-offset: 3px;
-    }
     .entry-continue {
       display: block;
       width: 100%;
