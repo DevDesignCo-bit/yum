@@ -171,6 +171,54 @@
     if (values[6]) values[6].textContent = onboarding.allergies?.length ? onboarding.allergies.map(titleCase).join(', ') : 'None';
   };
 
+  const updateHomeFromPlan = () => {
+    if (!onboarding.plan || !document.title.includes('Home')) return;
+    const weight = Number(onboarding.plan.weight || onboarding.weight);
+    const targetWeight = Number(onboarding.plan.targetWeight || onboarding.target_weight || weight);
+    const weightValue = document.querySelector('.home-card-weight .home-card-value');
+    if (weightValue && Number.isFinite(weight)) {
+      const unit = document.createElement('span');
+      unit.className = 'home-card-value-unit'; unit.textContent = 'kg';
+      weightValue.replaceChildren(document.createTextNode(`${weight} `), unit);
+    }
+    const weightGoal = document.querySelector('.home-weight-goal');
+    if (weightGoal && Number.isFinite(weight) && Number.isFinite(targetWeight)) {
+      const difference = Math.abs(weight - targetWeight);
+      weightGoal.textContent = difference === 0
+        ? `Maintaining your weight: ${targetWeight} kg`
+        : `${difference} kg ${weight > targetWeight ? 'above' : 'below'} goal: ${targetWeight} kg`;
+    }
+  };
+
+  const initProfilePlanEdits = () => {
+    if (!document.title.includes('My Profile')) return;
+    const calorieForm = document.querySelector('#edit-calories-modal form');
+    const calorieInput = calorieForm?.querySelector('input[name="calories"]');
+    if (calorieForm && calorieInput) calorieForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const calories = Number.parseInt(calorieInput.value, 10);
+      if (!Number.isFinite(calories) || calories < 800 || calories > 5000) return calorieInput.focus();
+      const next = read(ONBOARDING_KEY);
+      next.plan = { ...(next.plan || {}), calories };
+      save(ONBOARDING_KEY, next); Object.assign(onboarding, next);
+      updateProfileFromPlan();
+      const modal = calorieForm.closest('.modal');
+      if (window.bootstrap?.Modal && modal) window.bootstrap.Modal.getOrCreateInstance(modal).hide();
+      else if (modal) { modal.classList.remove('show'); modal.style.display = 'none'; }
+    }, true);
+
+    const weightForm = document.querySelector('form#onboarding-form[action="/profile"]');
+    if (weightForm?.querySelector('input[name="weight"]')) weightForm.addEventListener('submit', () => {
+      const selected = weightForm.querySelector('input[name="weight"]:checked');
+      const weight = Number(selected?.value);
+      if (!Number.isFinite(weight)) return;
+      const next = read(ONBOARDING_KEY);
+      next.weight = String(weight);
+      next.plan = { ...(next.plan || {}), weight };
+      save(ONBOARDING_KEY, next); Object.assign(onboarding, next);
+    }, true);
+  };
+
   const localDay = (date = new Date()) => {
     const offset = date.getTimezoneOffset() * 60 * 1000;
     return new Date(date.getTime() - offset).toISOString().slice(0, 10);
@@ -269,6 +317,35 @@
     ],
     image_url: recipeImages[(imageIndex == null ? recipeImageIndex(name) : imageIndex) % recipeImages.length]
   });
+
+  const detailedRecipeInstructions = (item) => {
+    const existing = Array.isArray(item.instructions) ? item.instructions : [];
+    const alreadyDetailed = existing.length >= 4 && existing.every((step) => String(step.description || '').trim().length >= 80);
+    if (alreadyDetailed) return existing;
+    const ingredients = (item.ingredients || []).filter(Boolean);
+    const ingredientList = ingredients.slice(0, 4).join(', ') || 'the listed ingredients';
+    const recipeName = String(item.name || 'recipe');
+    const name = recipeName.toLowerCase();
+    const needsOven = /bake|gratin|lasagna|pie|roast|ham|crumble|pudding/.test(name);
+    const isPanDish = /curry|skillet|pasta|stir-fry|chicken|quinoa|rice|tacos/.test(name);
+    const noCook = /parfait|bites|bruschetta|crostini|salad|platter|board/.test(name);
+    const prepMinutes = Math.max(5, Number(item.prep_min) || 10);
+    const cookMinutes = Math.max(0, Number(item.cook_min) || 0);
+    const sourceHint = existing.map((step) => step.description).find(Boolean);
+    const heatStep = noCook
+      ? `Arrange the prepared ingredients in a serving bowl or on a platter. Keep any crisp elements separate until the last moment so the texture stays fresh.`
+      : needsOven
+        ? `Heat the oven to 200°C / 180°C fan. Assemble everything in an oven-safe dish, leaving a little space so it cooks evenly, then bake for about ${cookMinutes || 20} minutes until hot through and lightly golden.`
+        : isPanDish
+          ? `Warm a large pan over medium heat. Add the ingredients that need the longest cooking first, then stir in the remaining ingredients gradually so they soften without sticking.`
+          : `Cook the main ingredients using a medium heat, turning or stirring regularly until tender and hot throughout.`;
+    return [
+      { title: 'Prepare the ingredients', description: `Measure out ${ingredientList}. Wash produce, trim any tough ends, and cut everything into even, bite-sized pieces so it cooks at the same pace. Allow about ${prepMinutes} minutes for this step.` },
+      { title: noCook ? 'Build the dish' : 'Start cooking', description: sourceHint ? `${sourceHint} Keep the heat moderate and season in small additions, tasting as you go.` : `Set out your serving dish and prepare any dressing, sauce, or seasoning before you begin. This keeps the cooking stage calm and prevents overcooking.` },
+      { title: noCook ? 'Season and balance' : 'Cook until ready', description: heatStep },
+      { title: 'Finish and serve', description: `Taste ${recipeName} and adjust salt, pepper, acidity, or herbs as needed. Rest for 2 minutes if it is hot, then portion it while warm and serve immediately.` }
+    ];
+  };
 
   const recipeId = (item) => `${String(item?.name || '').trim().toLowerCase()}|${String(item?.tag || '').trim().toLowerCase()}`;
   const savedRecipes = () => {
@@ -450,17 +527,18 @@
   };
 
   const fillRecipeModal = (item) => {
-    activeRecipe = item;
+    const recipeWithInstructions = { ...item, instructions: detailedRecipeInstructions(item) };
+    activeRecipe = recipeWithInstructions;
     const set = (selector, value) => { const element = document.querySelector(selector); if (element) element.textContent = value; };
-    set('[data-view-recipe-tag]', item.tag); set('[data-view-recipe-title]', item.name); set('[data-view-recipe-description]', item.description);
-    set('[data-view-recipe-prep]', item.prep_min); set('[data-view-recipe-cook]', item.cook_min); set('[data-view-recipe-calories]', item.calories);
-    const image = document.querySelector('[data-view-recipe-image]'); if (image) { image.src = item.image_url; image.alt = item.name; }
+    set('[data-view-recipe-tag]', recipeWithInstructions.tag); set('[data-view-recipe-title]', recipeWithInstructions.name); set('[data-view-recipe-description]', recipeWithInstructions.description);
+    set('[data-view-recipe-prep]', recipeWithInstructions.prep_min); set('[data-view-recipe-cook]', recipeWithInstructions.cook_min); set('[data-view-recipe-calories]', recipeWithInstructions.calories);
+    const image = document.querySelector('[data-view-recipe-image]'); if (image) { image.src = recipeWithInstructions.image_url; image.alt = recipeWithInstructions.name; }
     const ingredients = document.querySelector('[data-view-recipe-ingredients]');
-    if (ingredients) ingredients.replaceChildren(...item.ingredients.map((value) => { const li = document.createElement('li'); li.textContent = value; return li; }));
+    if (ingredients) ingredients.replaceChildren(...recipeWithInstructions.ingredients.map((value) => { const li = document.createElement('li'); li.textContent = value; return li; }));
     const steps = document.querySelector('[data-view-recipe-instructions]');
-    if (steps) steps.replaceChildren(...item.instructions.map((step, index) => { const article = document.createElement('article'); article.className = 'view-recipe-step position-relative rounded-3 pe-3 py-3'; const heading = document.createElement('h3'); heading.className = 'view-recipe-step-title fw-bold mb-2'; heading.textContent = `${String(index + 1).padStart(2, '0')} ${step.title}`; const text = document.createElement('p'); text.className = 'mb-0 fs-8'; text.textContent = step.description; article.append(heading, text); return article; }));
+    if (steps) steps.replaceChildren(...recipeWithInstructions.instructions.map((step, index) => { const article = document.createElement('article'); article.className = 'view-recipe-step position-relative rounded-3 pe-3 py-3'; const heading = document.createElement('h3'); heading.className = 'view-recipe-step-title fw-bold mb-2'; heading.textContent = `${String(index + 1).padStart(2, '0')} ${step.title}`; const text = document.createElement('p'); text.className = 'mb-0 fs-8'; text.textContent = step.description; article.append(heading, text); return article; }));
     const modal = document.querySelector('#view-recipe-modal');
-    syncRecipeSaveControl(item);
+    syncRecipeSaveControl(recipeWithInstructions);
     if (window.bootstrap?.Modal && modal) window.bootstrap.Modal.getOrCreateInstance(modal).show();
     else if (modal) { modal.classList.add('show'); modal.style.display = 'block'; }
   };
@@ -651,6 +729,17 @@
         if (heading) heading.textContent = fasting.status === 'active' ? 'Your fasting is in progress' : 'Your fasting is ready';
         const link = offCard.querySelector('a[href="/home-activate-fasting"]');
         if (link) { link.href = fasting.status === 'active' ? '/home-fasting-in-progress' : '/home-fasting-active'; link.textContent = fasting.status === 'active' ? 'Continue' : 'Start Fasting'; }
+      }
+      // Only the Home hero is a shortcut into the fasting flow. The other
+      // fasting screens have their own controls (start, restart and stop),
+      // so leave those intact.
+      if (window.location.pathname === '/home') {
+        document.querySelectorAll('.home-hero-fasting-btn').forEach((button) => {
+          button.disabled = false;
+          button.classList.remove('opacity-35', 'pe-none');
+          button.textContent = fasting.status === 'active' ? 'Continue fasting' : 'Start Fasting';
+          button.onclick = () => { window.location.assign(fasting.status === 'active' ? '/home-fasting-in-progress' : fasting.status === 'ready' ? '/home-fasting-active' : '/home-activate-fasting'); };
+        });
       }
       if (fasting.status === 'active' && Date.now() - lastCheckpointAt >= 60 * 1000) {
         fasting.elapsedMs = elapsed; fasting.startedAt = Date.now(); lastCheckpointAt = Date.now(); persistFasting();
@@ -925,6 +1014,8 @@
   initWaterTracker();
   document.querySelectorAll('#ai-meal-analyzing-modal .text-blue-800').forEach((element) => { element.textContent = 'Analyzing your photo'; });
   updateProfileFromPlan();
+  updateHomeFromPlan();
+  initProfilePlanEdits();
   initSnapAndCook();
   initPartyPlanner();
   renderPlannerResults();

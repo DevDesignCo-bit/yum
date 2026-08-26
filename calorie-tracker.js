@@ -65,8 +65,10 @@
     if (!macro) return;
     const item = macro.closest('.calories-intake-macro');
     const num = item?.querySelector('.calories-intake-macro-num');
+    const goalValue = item?.querySelector('.calories-intake-macro-goal');
     const fill = item?.querySelector('.calories-intake-macro-fill');
     if (num) num.textContent = number(value);
+    if (goalValue) goalValue.textContent = `/${number(goal)} g`;
     if (fill) fill.style.width = `${percentage(value, goal)}%`;
   };
 
@@ -120,8 +122,10 @@
     const value = intake.querySelector('.calories-intake-value > span:last-child');
     const fill = intake.querySelector('.calories-intake-bar-fill');
     const remaining = intake.querySelector('.calories-intake-remaining');
+    const goalLabel = intake.querySelector('.calories-intake-goal');
     const card = intake.closest('.home-card-calories');
     if (value) value.innerHTML = `${number(state.calories)}<span class="calories-intake-unit text-neutral-300">kcal</span>`;
+    if (goalLabel) goalLabel.textContent = `${number(GOALS.calories)} GOAL`;
     if (fill) fill.style.width = `${percentage(state.calories, GOALS.calories)}%`;
     const reachedGoal = Number(GOALS.calories) > 0 && state.calories >= Number(GOALS.calories);
     const overGoal = Number(GOALS.calories) > 0 && state.calories > Number(GOALS.calories);
