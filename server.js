@@ -123,6 +123,30 @@ const hfMealFromLabel = (label, score) => {
   const match = profiles.find(([pattern]) => pattern.test(normalised))?.[1];
   return { ...(match || { name: titleFromLabel(label), calories: 450, carbs: 48, fats: 19, proteins: 20, ingredients: [{ name: titleFromLabel(label), grams: 180 }] }), confidence: Math.min(1, Math.max(0, Number(score) || 0)), needsClarification: Number(score) < 0.55 };
 };
+const analyzeWithHuggingFaceVision = async ({ image, mode }) => {
+  const response = await fetch('https://router.huggingface.co/v1/responses', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.HF_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: process.env.HF_VISION_MODEL || 'Qwen/Qwen2.5-VL-7B-Instruct',
+      max_output_tokens: 900,
+      input: [{
+        role: 'user',
+        content: [
+          { type: 'input_text', text: promptFor(mode) },
+          { type: 'input_image', image_url: image }
+        ]
+      }]
+    })
+  });
+  if (!response.ok) {
+    const detail = await response.text();
+    console.error('Hugging Face vision analysis error:', response.status, detail.slice(0, 500));
+    throw Object.assign(new Error('The Hugging Face vision model is temporarily unavailable.'), { status: 502 });
+  }
+  const result = parseModelJson(outputText(await response.json()));
+  return mode === 'meal' ? cleanMeal(result) : cleanPantry(result);
+};
 const analyzeWithHuggingFace = async ({ image, mode }) => {
   const [, meta = '', encoded = ''] = image.match(/^data:([^;]+);base64,(.+)$/i) || [];
   const response = await fetch(`https://router.huggingface.co/hf-inference/models/${process.env.HF_FOOD_MODEL || 'nateraw/food'}`, {
@@ -146,16 +170,23 @@ const analyzeWithHuggingFace = async ({ image, mode }) => {
     : { detectedItems: [meal.name], preparedDish: false, dishName: '', confidence: meal.confidence, recipes: [] };
 };
 const promptFor = (mode) => mode === 'pantry'
-  ? `Analyze this food, pantry, or fridge photo. Return JSON only, with this exact shape: {"detectedItems":["..."],"preparedDish":false,"dishName":"","confidence":0.0,"recipes":[{"name":"","tag":"","calories":0,"prep_min":0,"cook_min":0,"ingredients":[""],"description":"","instructions":[{"title":"","description":""}]}]}. Identify food by visual evidence, not colours. If it is already a prepared dish (for example tiramisu), set preparedDish true and state its precise name; do not invent vegetables. Give three practical recipes only when visible ingredients support them. Use English names and conservative nutrition estimates.`
-  : `Analyze this meal photo. Return JSON only, with this exact shape: {"name":"","calories":0,"carbs":0,"fats":0,"proteins":0,"confidence":0.0,"needsClarification":false,"ingredients":[{"name":"","grams":0}]}. Identify the dish by visual evidence, not colours. Be specific: if it is tiramisu, call it tiramisu, never a vegetable bowl. Estimate one visible serving conservatively. If the dish or portion cannot be identified confidently, set needsClarification true and do not guess ingredients.`;
+  ? `Analyze this food, pantry, or fridge image. Return JSON only, with this exact shape: {"detectedItems":["..."],"preparedDish":false,"dishName":"","confidence":0.0,"recipes":[{"name":"","tag":"","calories":0,"prep_min":0,"cook_min":0,"ingredients":[""],"description":"","instructions":[{"title":"","description":""}]}]}. Use the actual visible ingredients, shapes, textures, packaging and context; never infer ingredients from the dominant colour. If this is already a prepared dish, set preparedDish true and give its specific name. Otherwise create three practical recipes supported only by the visible ingredients. Use English names, realistic portions and conservative nutrition estimates.`
+  : `You are an expert food-vision and nutrition estimator. Analyze this one meal photo and return JSON only, with this exact shape: {"name":"","calories":0,"carbs":0,"fats":0,"proteins":0,"confidence":0.0,"needsClarification":false,"ingredients":[{"name":"","grams":0}]}. Identify the exact prepared dish from visual evidence such as layers, toppings, sauce, texture and serving vessel. Estimate the single visible portion automatically: use the plate or container size and food volume; do not ask the person any questions and do not provide alternative guesses. Return a realistic central estimate for this visible serving, not restaurant averages. For example, name tiramisu as tiramisu, never as a vegetable bowl. List only ingredients that are visually plausible. Use English names and make calories approximately equal to carbs*4 + proteins*4 + fats*9.`;
 
 const analyzeFood = async ({ image, mode }) => {
   if (!['meal', 'pantry'].includes(mode) || typeof image !== 'string' || !/^data:image\/(jpeg|jpg|png|webp);base64,/i.test(image)) throw Object.assign(new Error('Send a JPG, PNG, or WebP image.'), { status: 400 });
   if (process.env.HF_TOKEN) {
-    try { return await analyzeWithHuggingFace({ image, mode }); }
-    catch (error) {
-      if (mode === 'pantry') return pantryFallback();
-      throw error;
+    // A vision-language model can identify a composed dish and estimate its
+    // visible serving. Keep the food classifier as a silent resilience fallback
+    // for tokens or providers that do not have VLM access yet.
+    try { return await analyzeWithHuggingFaceVision({ image, mode }); }
+    catch (visionError) {
+      console.warn('Falling back to Hugging Face food classifier:', visionError.message);
+      try { return await analyzeWithHuggingFace({ image, mode }); }
+      catch (classifierError) {
+        if (mode === 'pantry') return pantryFallback();
+        throw classifierError;
+      }
     }
   }
   if (!process.env.OPENAI_API_KEY) {

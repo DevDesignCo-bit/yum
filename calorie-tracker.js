@@ -23,13 +23,6 @@
     'pasta-bowl': { name: 'Pasta bowl', calories: 520, carbs: 81, fats: 15, proteins: 19 },
     'tomato-soup': { name: 'Tomato soup', calories: 180, carbs: 28, fats: 6, proteins: 5 }
   };
-  const correctionCatalog = {
-    tiramisu: { name: 'Tiramisu', calories: 480, carbs: 43, fats: 30, proteins: 7, ingredients: [{ name: 'Mascarpone cream', grams: 85 }, { name: 'Ladyfingers', grams: 45 }, { name: 'Cocoa powder', grams: 5 }] },
-    pizza: { name: 'Pizza slice', calories: 540, carbs: 66, fats: 20, proteins: 24, ingredients: [{ name: 'Pizza base', grams: 110 }, { name: 'Cheese', grams: 55 }, { name: 'Tomato sauce', grams: 35 }] },
-    pasta: { name: 'Pasta plate', calories: 520, carbs: 81, fats: 15, proteins: 19, ingredients: [{ name: 'Cooked pasta', grams: 180 }, { name: 'Tomato sauce', grams: 110 }, { name: 'Cheese', grams: 20 }] },
-    salad: { name: 'Salad bowl', calories: 220, carbs: 17, fats: 14, proteins: 7, ingredients: [{ name: 'Salad vegetables', grams: 180 }, { name: 'Dressing', grams: 20 }, { name: 'Toppings', grams: 35 }] },
-    chicken: { name: 'Grilled chicken plate', calories: 410, carbs: 2, fats: 15, proteins: 57, ingredients: [{ name: 'Grilled chicken', grams: 170 }, { name: 'Vegetables', grams: 130 }, { name: 'Olive oil', grams: 10 }] }
-  };
 
   const localDay = (date = new Date()) => {
     if (!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
@@ -244,25 +237,6 @@
     [meal.carbs, meal.fats, meal.proteins].forEach((value, index) => { if (bars[index]) bars[index].style.flex = Math.max(1, value); });
     const grid = document.querySelector('.ai-meal-result .row.g-3');
     if (grid && meal.ingredients.length) grid.innerHTML = meal.ingredients.map((ingredient) => `<div class="col-12 col-md-6"><div class="d-flex align-items-center justify-content-between bg-white rounded-3 ps-4 pe-2 py-3"><span class="fw-medium text-body-muted">${ingredient.name}</span><span class="d-inline-flex align-items-center bg-white shadow-sm rounded-3 px-3 py-2 fw-semibold">${number(ingredient.grams)}g</span></div></div>`).join('');
-    let correction = document.querySelector('#meal-correction');
-    if (!correction) {
-      correction = document.createElement('div');
-      correction.id = 'meal-correction'; correction.className = 'mt-2 fs-8 text-body-muted';
-      const label = document.createElement('label'); label.htmlFor = 'meal-correction-select'; label.textContent = 'Is this not right? ';
-      const select = document.createElement('select'); select.id = 'meal-correction-select'; select.className = 'form-select form-select-sm d-inline-block w-auto ms-1';
-      select.append(new Option('Choose the food', ''), ...Object.entries(correctionCatalog).map(([key, item]) => new Option(item.name, key)));
-      select.addEventListener('change', () => {
-        const replacement = correctionCatalog[select.value];
-        if (!replacement) return;
-        analyzedMeal = { ...replacement, image: analyzedMeal?.image || '' };
-        setResult(analyzedMeal);
-      });
-      correction.append(label, select);
-      document.querySelector('.ai-meal-result-title')?.closest('.col-12')?.append(correction);
-    }
-    const correctionSelect = document.querySelector('#meal-correction-select');
-    const matched = Object.entries(correctionCatalog).find(([, item]) => item.name === meal.name)?.[0] || '';
-    if (correctionSelect) correctionSelect.value = matched;
   };
 
   const makeThumbnail = (dataUrl) => new Promise((resolve) => {
@@ -286,9 +260,6 @@
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'We could not analyze this photo.');
-    if (result.needsClarification) {
-      result.name = `${result.name} (please verify)`;
-    }
     return result;
   };
 
