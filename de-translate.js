@@ -6,7 +6,8 @@
     ['Activate', 'Aktivieren'], ['Weight', 'Gewicht'], ['FAQ', 'FAQ'], ['Contact Us', 'Hilfe & Kontakt'], ['TC', 'Nutzungsbedingungen'],
     ['Select character', 'Begleiter auswählen'], ['Homemade meals', 'Hausgemachte Mahlzeiten'], ['Veggie Daily', 'Gemüse täglich'], ['Tropical Boost', 'Tropischer Boost'],
     ['Select', 'Auswählen'], ['Backgrounds Colors', 'Hintergrundfarben'], ['Previous character', 'Vorheriger Begleiter'], ['Next character', 'Nächster Begleiter'],
-    ['Close', 'Schließen'], ['Food added', 'Mahlzeit hinzugefügt'], ['Fasting Ended', 'Fasten beendet']
+    ['Close', 'Schließen'], ['Food added', 'Mahlzeit hinzugefügt'], ['Fasting Ended', 'Fasten beendet'],
+    ['Yumetics all the rights reserved', 'Yumetics. Alle Rechte vorbehalten.'], ['Store', 'Shop']
   ]);
   const translate = () => {
     document.title = 'Startseite — Yumetics';

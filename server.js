@@ -234,7 +234,7 @@ http.createServer(async (req, res) => {
   if (req.method !== 'GET' && req.method !== 'HEAD' && !staticFormSubmit) return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const germanOnboardingFile = pathname === '/de/onboarding' ? 'onboarding.html' : pathname.startsWith('/de/onboarding/') ? `onboarding--${pathname.slice('/de/onboarding/'.length).replaceAll('/', '--')}.html` : null;
-  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-onboarding.js']);
+  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-home.css', 'de-onboarding.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
   const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|yumetics-logo\.png)$/.test(pathname) ? pathname.slice(1) : null;
   const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : germanOnboardingFile || onboardingFile || routes[pathname]);

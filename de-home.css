@@ -1,0 +1,54 @@
+/* Localised home details: keep the existing app UI, but match the German landing's footer. */
+.de-home-locale .home-hero {
+  --home-hill-color: #b6e8c7 !important;
+}
+
+.de-home-locale .footer {
+  margin-top: 1.5rem !important;
+  padding: 30px 24px 34px !important;
+  background: #fff4e4 !important;
+  color: #191919;
+  text-align: center;
+}
+
+.de-home-locale .footer-links {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.de-home-locale .footer-links li {
+  margin: 0 !important;
+  padding: 0;
+  list-style: none;
+}
+
+.de-home-locale .footer-links a {
+  display: inline-block;
+  margin: 7px 0;
+  padding: 0 10px;
+  border-right: 1px solid #56504a;
+  color: #191919 !important;
+  font-size: 12px;
+  line-height: 1.1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.de-home-locale .footer-links li:nth-child(3n) a {
+  border-right: 0;
+}
+
+.de-home-locale .footer-copyright {
+  margin: 24px 0 0 !important;
+  color: #5d5a61;
+  font-size: 11px;
+}
+
+@media (max-width: 370px) {
+  .de-home-locale .footer { padding-inline: 15px !important; }
+  .de-home-locale .footer-links a { padding-inline: 7px; font-size: 11px; }
+}

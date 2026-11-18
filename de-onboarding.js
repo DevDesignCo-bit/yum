@@ -7,7 +7,14 @@
     ['Water boost fat burn, energy, and focus', 'Wasser unterstützt Energie, Fokus und Stoffwechsel'], ['Personalizing plan', 'Dein Plan wird erstellt'], ['Select Your Virtual Pet!', 'Wähle deinen virtuellen Begleiter!'], ['Say hi to your virtual PET!', 'Sag Hallo zu deinem virtuellen Begleiter!'],
     ['Track calories', 'Kalorien erfassen'], ['Just take a photo and let the AI do the rest', 'Mach einfach ein Foto und die KI erledigt den Rest'], ['Stay hydrated', 'Ausreichend trinken'], ['Easily track your water and hit your goals', 'Erfasse dein Wasser und erreiche dein Ziel'], ['Enjoy Fasting', 'Fasten nutzen'], ['Snap & Cook', 'Snap & Cook'], ['Party Planner', 'Party Planer'],
     ['Female', 'Weiblich'], ['Male', 'Männlich'], ['Non-binary', 'Nicht-binär'], ['Balanced', 'Ausgewogen'], ['Ketogenic', 'Ketogen'], ['Vegetarian', 'Vegetarisch'], ['High protein', 'Proteinreich'], ['Vegan', 'Vegan'], ['Low carb', 'Kohlenhydratarm'], ['Paleo', 'Paleo'],
-    ['Meat', 'Fleisch'], ['Eggs', 'Eier'], ['Animal products', 'Tierische Produkte'], ['Nuts', 'Nüsse'], ['Dairy', 'Milchprodukte'], ['Seafood', 'Meeresfrüchte'], ['FAQ', 'FAQ'], ['Contact Us', 'Hilfe & Kontakt'], ['TC', 'Nutzungsbedingungen']
+    ['Meat', 'Fleisch'], ['Eggs', 'Eier'], ['Animal products', 'Tierische Produkte'], ['Nuts', 'Nüsse'], ['Dairy', 'Milchprodukte'], ['Seafood', 'Meeresfrüchte'], ['FAQ', 'FAQ'], ['Contact Us', 'Hilfe & Kontakt'], ['TC', 'Nutzungsbedingungen'],
+    ['Highly active', 'Sehr aktiv'], ['Moderately active', 'Mäßig aktiv'], ['Lightly active', 'Leicht aktiv'], ['Not active', 'Nicht aktiv'], ['Yes', 'Ja'], ['No', 'Nein'], ['Skip', 'Überspringen'],
+    ['Today', 'Heute'], ['Fasting hours', 'Fastenstunden'], ['Fasting', 'Fasten'], ['Eating Window', 'Essensfenster'], ['Nutritional Recommendations', 'Ernährungsempfehlungen'], ['Carbs', 'Kohlenhydrate'], ['Fat', 'Fette'], ['Protein', 'Protein'], ['Daily Hydration', 'Tägliche Flüssigkeitszufuhr'],
+    ['A plan that adapts to your needs', 'Ein Plan, der zu dir passt'], ['Eat less processed foods', 'Weniger verarbeitete Lebensmittel'], ['Lose weight', 'Abnehmen'], ['Maintain', 'Gewicht halten'], ['Adapted to a moderately active lifestyle', 'Für einen moderat aktiven Alltag'], ['Low in carbs', 'Kohlenhydratarm'], ["I’m in, let’s go", 'Ich bin dabei, los geht’s'],
+    ['Your fasting schedule is based on your eating window. You can change the goal at any time in your profile.', 'Dein Fastenplan basiert auf deinem Essensfenster. Du kannst dein Ziel jederzeit in deinem Profil ändern.'],
+    ['Based on your needs, we calculate the right amount of carbohydrates, fats and protein for you.', 'Auf Basis deiner Bedürfnisse berechnen wir die passende Menge an Kohlenhydraten, Fetten und Proteinen für dich.'],
+    ['Your daily water goal is calculated based on your needs.', 'Dein tägliches Wasserziel wird anhand deiner Bedürfnisse berechnet.'],
+    ['Yumetics all the rights reserved', 'Yumetics. Alle Rechte vorbehalten.']
   ]);
   const translate = () => {
     document.documentElement.lang = 'de';
@@ -18,6 +25,10 @@
     document.querySelectorAll('a[href^="/onboarding"], form[action^="/onboarding/"]').forEach((element) => { const attribute = element.tagName === 'FORM' ? 'action' : 'href'; element.setAttribute(attribute, element.getAttribute(attribute).replace('/onboarding', '/de/onboarding')); });
     document.querySelectorAll('[data-next-url^="/onboarding"]').forEach((element) => { element.dataset.nextUrl = element.dataset.nextUrl.replace('/onboarding', '/de/onboarding'); });
     document.querySelectorAll('a[href="/"]').forEach((link) => { link.href = '/de/home'; });
+    document.querySelectorAll('a[href="/qa"], a[href="/home"]').forEach((link) => { link.href = '/de/home'; });
+    document.querySelectorAll('.onboarding-step-title').forEach((title) => {
+      if (title.textContent.trim().startsWith('Reach ')) title.textContent = title.textContent.replace(/^Reach /, 'Erreiche ').replace(' by ', ' bis ');
+    });
     const footer = document.querySelector('.footer-links');
     if (footer) footer.innerHTML = '<li><a href="/de/abo-verwaltung">Abo Verwaltung</a></li><li><a href="/de/nutzungsbedingungen">Nutzungsbedingungen</a></li><li><a href="/de/widerrufsbelehrung">Widerrufsbelehrung</a></li><li><a href="/de/widerrufsformular">Widerrufsformular</a></li><li><a href="/de/kontakt">Hilfe &amp; Kontakt</a></li><li><a href="/de/impressum">Impressum</a></li>';
   };
