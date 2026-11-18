@@ -233,10 +233,11 @@ http.createServer(async (req, res) => {
   const staticFormSubmit = req.method === 'POST' && Boolean(routes[pathname]);
   if (req.method !== 'GET' && req.method !== 'HEAD' && !staticFormSubmit) return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
-  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css']);
+  const germanOnboardingFile = pathname === '/de/onboarding' ? 'onboarding.html' : pathname.startsWith('/de/onboarding/') ? `onboarding--${pathname.slice('/de/onboarding/'.length).replaceAll('/', '--')}.html` : null;
+  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-onboarding.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
   const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|yumetics-logo\.png)$/.test(pathname) ? pathname.slice(1) : null;
-  const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : onboardingFile || routes[pathname]);
+  const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : germanOnboardingFile || onboardingFile || routes[pathname]);
   if (!file) { res.writeHead(404); return res.end('Not found'); }
   const contentType = file.endsWith('.js') ? 'text/javascript; charset=utf-8' : file.endsWith('.css') ? 'text/css; charset=utf-8' : file.endsWith('.png') ? 'image/png' : file.endsWith('.gif') ? 'image/gif' : 'text/html; charset=utf-8';
   fs.readFile(path.join(root, file), (error, data) => {
@@ -246,6 +247,7 @@ http.createServer(async (req, res) => {
     if (!file.endsWith('.html')) return res.end(data);
     const page = data.toString();
     const tracker = page.includes('src="/calorie-tracker.js"') ? '' : '    <script src="/calorie-tracker.js" defer></script>\n';
-    res.end(page.replace('</head>', `${localStyles}\n</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n</body>`));
+    const germanOnboardingScript = germanOnboardingFile ? '    <script src="/de-onboarding.js" defer></script>\n' : '';
+    res.end(page.replace('</head>', `${localStyles}\n</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n${germanOnboardingScript}</body>`));
   });
 }).listen(port, () => console.log(`Yumetics is ready at http://localhost:${port}`));
