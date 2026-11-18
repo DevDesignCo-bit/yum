@@ -48,9 +48,9 @@ const port = Number(process.env.PORT) || 4174;
 const maxRequestBytes = 12 * 1024 * 1024;
 const routes = {
   '/': 'lp.html', '/home': 'home.html', '/qa': 'qa.html', '/lp': 'lp.html', '/pin': 'entry-pin.html',
-  '/de': 'de-landing.html', '/de/': 'de-landing.html', '/de/store': 'de-store.html',
+  '/de': 'de-landing.html', '/de/': 'de-landing.html', '/de/home': 'de-home.html', '/de/store': 'de-store.html',
   '/de/agb': 'de-legal.html', '/de/impressum': 'de-legal.html', '/de/abo-verwaltung': 'de-legal.html', '/de/datenschutz': 'de-legal.html',
-  '/de/nutzungsbedingungen': 'de-legal.html', '/de/widerrufsbelehrung': 'de-legal.html', '/de/widerrufsformular': 'de-legal.html', '/de/kontakt': 'de-legal.html', '/de/kuendigung': 'de-legal.html',
+  '/de/nutzungsbedingungen': 'de-legal.html', '/de/widerrufsbelehrung': 'de-legal.html', '/de/widerrufsformular': 'de-legal.html', '/de/kontakt': 'de-contact.html', '/de/kuendigung': 'de-legal.html',
   '/wifi': 'wifi.html', '/wifi-operator-country-selector': 'wifi-operator-country-selector.html', '/wifi-no-number': 'wifi-no-number.html', '/onboarding': 'onboarding.html',
   '/sad-pot': 'sad-pot.html', '/happy-carrot': 'happy-carrot.html', '/sad-carrot': 'sad-carrot.html', '/happy-banana': 'happy-banana.html', '/sad-banana': 'sad-banana.html',
   '/home-activate-fasting': 'home-activate-fasting.html', '/home-fasting-active': 'home-fasting-active.html', '/home-fasting-in-progress': 'home-fasting-in-progress.html', '/home-fasting-paused': 'home-fasting-paused.html', '/home-fasting-goal-achieved': 'home-fasting-goal-achieved.html', '/home-fasting-completed': 'home-fasting-completed.html', '/home-recommendation': 'home-recommendation.html',
@@ -233,7 +233,7 @@ http.createServer(async (req, res) => {
   const staticFormSubmit = req.method === 'POST' && Boolean(routes[pathname]);
   if (req.method !== 'GET' && req.method !== 'HEAD' && !staticFormSubmit) return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
-  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js']);
+  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
   const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|yumetics-logo\.png)$/.test(pathname) ? pathname.slice(1) : null;
   const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : onboardingFile || routes[pathname]);
