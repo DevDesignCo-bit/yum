@@ -235,7 +235,7 @@ http.createServer(async (req, res) => {
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
-  const germanAsset = pathname === '/assets/de/yumetics-pot.gif' ? 'assets/de/yumetics-pot.gif' : null;
+  const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png)$/.test(pathname) ? pathname.slice(1) : null;
   const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : onboardingFile || routes[pathname]);
   if (!file) { res.writeHead(404); return res.end('Not found'); }
   const contentType = file.endsWith('.js') ? 'text/javascript; charset=utf-8' : file.endsWith('.css') ? 'text/css; charset=utf-8' : file.endsWith('.png') ? 'image/png' : file.endsWith('.gif') ? 'image/gif' : 'text/html; charset=utf-8';
