@@ -10,7 +10,7 @@
   ]);
   const translate = () => {
     document.title = 'Startseite — Yumetics';
-    document.querySelectorAll('.app-navbar-mascot').forEach((image) => { image.src = '/assets/de/yumetics-pot.gif'; image.alt = ''; });
+    document.querySelectorAll('.app-navbar-mascot').forEach((image) => { if (!image.src.includes('/assets/de/yumetics-pot.gif')) image.src = '/assets/de/yumetics-pot.gif?animated=1'; image.alt = ''; image.dataset.deAnimatedPet = 'true'; });
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -28,4 +28,5 @@
     modal?.querySelector('form')?.setAttribute('action', '/de/home');
   };
   setTimeout(translate, 0);
+  new MutationObserver(() => document.querySelectorAll('[data-de-animated-pet]').forEach((image) => { if (!image.src.includes('/assets/de/yumetics-pot.gif')) image.src = '/assets/de/yumetics-pot.gif?animated=1'; })).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['src'] });
 })();
