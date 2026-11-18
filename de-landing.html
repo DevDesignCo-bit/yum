@@ -17,8 +17,8 @@
 
 /* Desktop: artwork and message become a two-column hero while keeping the same Yumetics language. */
 @media (min-width:980px){
-  body{display:grid;place-items:center;min-height:100vh;padding:32px;background:radial-gradient(circle at 12% 14%,#ffe2d5 0 12%,transparent 12.2%),radial-gradient(circle at 88% 82%,#d5f0ff 0 13%,transparent 13.2%),var(--cream)}
-  .de-shell{width:min(1180px,calc(100% - 64px));min-height:720px;display:grid;grid-template-columns:minmax(500px,1.06fr) minmax(420px,.94fr);grid-template-rows:1fr auto;border-radius:30px;overflow:hidden;box-shadow:0 22px 60px rgba(70,45,25,.15)}
+  body{min-height:100vh;padding:0;background:var(--cream)}
+  .de-shell{width:100%;min-height:720px;display:grid;grid-template-columns:minmax(500px,1.06fr) minmax(420px,.94fr);grid-template-rows:1fr auto;border-radius:0;overflow:hidden;box-shadow:none}
   .de-landing__hero{grid-column:1;grid-row:1;aspect-ratio:auto;min-height:720px;background-size:cover;background-position:center top}
   .de-landing__logo{top:40px;width:170px}
   .de-landing__pot{width:clamp(650px,68vw,800px);bottom:-146px}
