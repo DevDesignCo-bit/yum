@@ -208,6 +208,7 @@ const analyzeFood = async ({ image, mode }, { usePublishedDemo = false } = {}) =
   }
   if (!process.env.OPENAI_API_KEY) {
     if (mode === 'pantry') return pantryFallback();
+    if (usePublishedDemo) return analyzeWithPublishedDemo({ image, mode });
     throw Object.assign(new Error('Food analysis is not configured. Add HF_TOKEN or OPENAI_API_KEY on the server.'), { status: 503 });
   }
   const response = await fetch('https://api.openai.com/v1/responses', {
@@ -235,7 +236,8 @@ http.createServer(async (req, res) => {
     res.writeHead(302, { Location: `/pin${query}` }); return res.end();
   }
   if (pathname === '/api/food-analysis' && req.method === 'POST') {
-    try { return sendJson(res, 200, await analyzeFood(await readJson(req))); }
+    const localPreview = /^(localhost|127\.0\.0\.1)(:|$)/i.test(req.headers.host || '');
+    try { return sendJson(res, 200, await analyzeFood(await readJson(req), { usePublishedDemo: localPreview })); }
     catch (error) { return sendJson(res, error.status || 500, { error: error.message || 'Unable to analyze this image.' }); }
   }
   // The prototype pages contain a few regular forms. Serve their result pages on submit
