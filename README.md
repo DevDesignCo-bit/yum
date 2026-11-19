@@ -14,7 +14,7 @@ Yumetics is a local Node.js app for meal logging and pantry-based recipe suggest
 
 3. Open `http://localhost:4174`.
 
-The default model is `Qwen/Qwen2.5-VL-3B-Instruct`, a vision-language model served through Hugging Face Inference Providers. It can identify a prepared dish and estimate a visible portion; nutrition remains an estimate. You can change it through `HF_VISION_MODEL`.
+The default model is `Qwen/Qwen2.5-VL-3B-Instruct:featherless-ai`, a vision-language model served through Hugging Face Inference Providers. It can identify a prepared dish and estimate a visible portion; nutrition remains an estimate. You can change it through `HF_VISION_MODEL`.
 
 If `HF_TOKEN` is not set, the app can optionally fall back to the OpenAI Responses API via `OPENAI_API_KEY`. The server keeps all tokens out of the browser.
 

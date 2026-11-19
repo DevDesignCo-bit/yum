@@ -137,7 +137,9 @@ const analyzeWithHuggingFaceVision = async ({ image, mode }) => {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.HF_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: process.env.HF_VISION_MODEL || 'Qwen/Qwen2.5-VL-3B-Instruct',
+      // This model is currently served by Featherless AI. Pinning the provider
+      // avoids the router occasionally trying an unavailable automatic route.
+      model: process.env.HF_VISION_MODEL || 'Qwen/Qwen2.5-VL-3B-Instruct:featherless-ai',
       max_tokens: 900,
       messages: [{
         role: 'user',
@@ -151,7 +153,12 @@ const analyzeWithHuggingFaceVision = async ({ image, mode }) => {
   if (!response.ok) {
     const detail = await response.text();
     console.error('Hugging Face vision analysis error:', response.status, detail.slice(0, 500));
-    throw Object.assign(new Error('The Hugging Face vision model is temporarily unavailable.'), { status: 502 });
+    const message = response.status === 401 || response.status === 403
+      ? 'Food analysis needs a Hugging Face token with Inference Providers permission.'
+      : response.status === 402
+        ? 'Food analysis needs Hugging Face inference credits to continue.'
+        : 'The Hugging Face vision model is temporarily unavailable.';
+    throw Object.assign(new Error(message), { status: 502 });
   }
   const payload = await response.json();
   const content = payload.choices?.[0]?.message?.content;
