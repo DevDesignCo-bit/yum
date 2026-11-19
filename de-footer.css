@@ -34,17 +34,23 @@
 .de-footer .de-footer__copy,
 .de-footer .footer-copyright { margin: 24px 0 0 !important; color: #3d393b; font-size: 11px; }
 
-/* The landing reference has four links on its first row and three on the second. */
-.de-footer--landing .de-footer__links a:nth-child(3n),
-.de-footer--landing .footer-links a:nth-child(3n) { border-right: 1px solid #454043; }
-.de-footer--landing .de-footer__links a:nth-child(4),
-.de-footer--landing .de-footer__links a:last-child,
-.de-footer--landing .footer-links li:nth-child(4) a,
-.de-footer--landing .footer-links li:last-child a { border-right: 0; }
+/* The landing reference has four links on its first row and three on the second, without dividers. */
+.de-footer--landing .de-footer__links,
+.de-footer--landing .footer-links { max-width: 350px; margin-inline: auto !important; }
+.de-footer--landing .de-footer__links a,
+.de-footer--landing .footer-links a { border-right: 0 !important; }
 
 /* The legal/contact references use exactly three links per row. */
 .de-footer--legal .de-footer__links a:nth-child(3n),
 .de-footer--legal .footer-links li:nth-child(3n) a { border-right: 0; }
+
+/* The supplied legal-page artwork has a clean cream surround, not the decorative desktop circles. */
+@media (min-width: 720px) {
+  body.de-legal-page,
+  body.de-contact-page { padding: 0; background: #fff4e4; }
+  .de-legal-page .de-shell,
+  .de-contact-page .de-shell { border-radius: 0; box-shadow: none; }
+}
 
 @media (max-width: 370px) {
   .de-footer { padding-inline: 15px !important; }
