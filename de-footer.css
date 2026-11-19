@@ -1,4 +1,10 @@
 /* Footer system reproduced from the supplied German mobile references. */
+@font-face { font-display: swap; font-family: Figtree; font-style: normal; font-weight: 400; src: url('https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/fonts/Figtree-Regular.c7d32330.ttf') format('truetype'); }
+@font-face { font-display: swap; font-family: Figtree; font-style: normal; font-weight: 800; src: url('https://yumetics-store-cdn-dev.s3.eu-west-1.amazonaws.com/cme-1306/ltr/fonts/Figtree-ExtraBold.63e6adec.ttf') format('truetype'); }
+
+body.de-legal-page,
+body.de-contact-page { font-family: Figtree, Arial, sans-serif; }
+
 .de-footer {
   padding: 30px 24px 28px !important;
   background: #fff4e4 !important;
@@ -68,9 +74,9 @@
 /* The supplied legal-page artwork has a clean cream surround, not the decorative desktop circles. */
 @media (min-width: 720px) {
   body.de-legal-page,
-  body.de-contact-page { padding: 32px !important; background: #fff4e4 !important; }
+  body.de-contact-page { padding: 0 !important; background: #fff4e4 !important; }
   .de-legal-page .de-shell,
-  .de-contact-page .de-shell { width: min(100%, 1120px); min-height: calc(100vh - 64px); border-radius: 24px; box-shadow: 0 14px 46px rgba(70,45,25,.1); }
+  .de-contact-page .de-shell { width: 100%; min-height: 100vh; margin: 0; border-radius: 0; box-shadow: none; background: #fff4e4; }
   .de-page-hero { min-height: 155px; padding: 46px clamp(44px,7vw,88px) 34px; gap: 25px; }
   .de-page-hero h1 { max-width: none; font-size: clamp(42px,5vw,58px); }
   .de-copy { padding: 46px clamp(44px,7vw,110px) 60px; }
@@ -87,12 +93,12 @@
 
 /* The desktop header reuses the static navigation artwork from the German demo. */
 @media (min-width: 992px) {
-  .de-top { position: relative; height: 86px !important; margin: 24px 32px 0; padding: 0 42px !important; border-radius: 999px; background: #ff4c2c !important; overflow: hidden; }
+  .de-top { position: relative; width: min(calc(100% - 64px), 1140px); height: 86px !important; margin: 45px auto 0; padding: 0 42px !important; border-radius: 999px; background: #ff4c2c !important; overflow: hidden; }
   .de-top__link { display: inline-flex; align-items: center; width: auto; height: 86px; }
   .de-top__brand { display: block; width: 146px; height: 17px; }
   .de-top__nav { display: flex; align-items: center; gap: clamp(18px,2.2vw,32px); margin-left: auto; margin-right: 170px; }
   .de-top__nav a { color: #171717; font-size: 13px; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap; }
-  .de-top__mascot { display: block; position: absolute; right: -11px; bottom: -61px; width: 192px; height: 199px; }
+  .de-top__mascot { display: block; position: absolute; right: -17px; top: 0; width: 191.68px; height: 199px; }
 }
 
 @media (max-width: 370px) {
