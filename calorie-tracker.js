@@ -273,7 +273,7 @@
     const response = await fetch('/api/food-analysis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: dataUrl, mode: 'meal', sourceName, visualHints })
+      body: JSON.stringify({ image: dataUrl, mode: 'meal', sourceName, visualHints, locale: document.documentElement.lang })
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'We could not analyze this photo.');
@@ -340,7 +340,7 @@
     state.calories += meal.calories; state.carbs += meal.carbs; state.fats += meal.fats; state.proteins += meal.proteins;
     logMeal(meal); persist(); render(); hideModal('ai-meal-result-modal');
     const message = document.querySelector('[data-meal-success-message]');
-    if (message) message.textContent = `${meal.name} added to today.`;
+    if (message) message.textContent = document.documentElement.lang.startsWith('de') ? `${meal.name} wurde zu heute hinzugefügt.` : `${meal.name} added to today.`;
     showModal('ai-meal-success-sheet');
   }, true);
 

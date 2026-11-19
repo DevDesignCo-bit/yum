@@ -7,6 +7,8 @@
     ['Select character', 'Begleiter auswählen'], ['Homemade meals', 'Hausgemachte Mahlzeiten'], ['Veggie Daily', 'Gemüse täglich'], ['Tropical Boost', 'Tropischer Boost'],
     ['Select', 'Auswählen'], ['Backgrounds Colors', 'Hintergrundfarben'], ['Previous character', 'Vorheriger Begleiter'], ['Next character', 'Nächster Begleiter'],
     ['Close', 'Schließen'], ['Food added', 'Mahlzeit hinzugefügt'], ['Fasting Ended', 'Fasten beendet'],
+    ['AI Powered', 'KI-gestützt'], ['Analyzing…', 'Wird analysiert…'], ['Detecting nutrients…', 'Nährwerte werden erkannt…'],
+    ['Servings', 'Portionen'], ['More plates? Add more servings', 'Mehr Teller? Weitere Portionen hinzufügen'], ['Detected Ingredients', 'Erkannte Zutaten'], ['Confirm', 'Bestätigen'],
     ['Yumetics all the rights reserved', 'Yumetics. Alle Rechte vorbehalten.'], ['Store', 'Shop']
   ]);
   const translate = () => {
