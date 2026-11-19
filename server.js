@@ -246,7 +246,7 @@ http.createServer(async (req, res) => {
   if (req.method !== 'GET' && req.method !== 'HEAD' && !staticFormSubmit) return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const germanOnboardingFile = pathname === '/de/onboarding' ? 'onboarding.html' : pathname.startsWith('/de/onboarding/') ? `onboarding--${pathname.slice('/de/onboarding/'.length).replaceAll('/', '--')}.html` : null;
-  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-home.css', 'de-onboarding.js']);
+  const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-home.css', 'de-onboarding.js', 'de-footer.css', 'de-footer.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
   const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|yumetics-logo\.png|pot-happy-character\.webp)$/.test(pathname) ? pathname.slice(1) : null;
   const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : germanOnboardingFile || onboardingFile || routes[pathname]);
@@ -260,6 +260,8 @@ http.createServer(async (req, res) => {
     const page = data.toString();
     const tracker = page.includes('src="/calorie-tracker.js"') ? '' : '    <script src="/calorie-tracker.js" defer></script>\n';
     const germanOnboardingScript = germanOnboardingFile ? '    <script src="/de-onboarding.js" defer></script>\n' : '';
-    res.end(page.replace('</head>', `${localStyles}\n</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n${germanOnboardingScript}</body>`));
+    const germanFooterAssets = pathname === '/de' || pathname.startsWith('/de/') ? '    <link rel="stylesheet" href="/de-footer.css">\n' : '';
+    const germanFooterScript = pathname === '/de' || pathname.startsWith('/de/') ? '    <script src="/de-footer.js" defer></script>\n' : '';
+    res.end(page.replace('</head>', `${localStyles}\n${germanFooterAssets}</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n${germanOnboardingScript}${germanFooterScript}</body>`));
   });
 }).listen(port, () => console.log(`Yumetics is ready at http://localhost:${port}`));

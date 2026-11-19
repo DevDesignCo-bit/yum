@@ -1,0 +1,53 @@
+/* Footer system reproduced from the supplied German mobile references. */
+.de-footer {
+  padding: 30px 24px 28px !important;
+  background: #fff4e4 !important;
+  color: #3d393b;
+  text-align: center;
+}
+
+.de-footer .de-footer__links,
+.de-footer .footer-links {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none;
+}
+
+.de-footer .de-footer__links a,
+.de-footer .footer-links a {
+  display: inline-block;
+  margin: 7px 0;
+  padding: 0 10px;
+  border-right: 1px solid #454043;
+  color: #3d393b !important;
+  font-size: 12px;
+  line-height: 1.1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.de-footer .footer-links li { margin: 0 !important; padding: 0; list-style: none; }
+.de-footer .de-footer__copy,
+.de-footer .footer-copyright { margin: 24px 0 0 !important; color: #3d393b; font-size: 11px; }
+
+/* The landing reference has four links on its first row and three on the second. */
+.de-footer--landing .de-footer__links a:nth-child(3n),
+.de-footer--landing .footer-links a:nth-child(3n) { border-right: 1px solid #454043; }
+.de-footer--landing .de-footer__links a:nth-child(4),
+.de-footer--landing .de-footer__links a:last-child,
+.de-footer--landing .footer-links li:nth-child(4) a,
+.de-footer--landing .footer-links li:last-child a { border-right: 0; }
+
+/* The legal/contact references use exactly three links per row. */
+.de-footer--legal .de-footer__links a:nth-child(3n),
+.de-footer--legal .footer-links li:nth-child(3n) a { border-right: 0; }
+
+@media (max-width: 370px) {
+  .de-footer { padding-inline: 15px !important; }
+  .de-footer .de-footer__links a,
+  .de-footer .footer-links a { padding-inline: 7px; font-size: 11px; }
+}
