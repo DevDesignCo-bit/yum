@@ -43,15 +43,20 @@ body.de-contact-page { font-family: Figtree, Arial, sans-serif; }
 
 /* Exact reusable top bar and back control supplied for the footer destinations. */
 .de-top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   height: 65px !important;
-  padding: 0 !important;
-  background: #ff4c2c url('/assets/de/header.png') center / 100% 65px no-repeat !important;
+  padding: 0 24px !important;
+  background: #ff4c2c !important;
+  overflow: hidden;
 }
 
-.de-top__link { display: block; width: 100%; height: 100%; }
-.de-top__brand,
-.de-top__nav,
-.de-top__mascot { display: none; }
+.de-top__link { display: inline-flex; align-items: center; width: auto; height: 65px; z-index: 1; }
+.de-top__brand { display: block; width: 146px; height: 17px; }
+.de-top__nav { display: none; }
+.de-top__mascot { display: block; position: absolute; right: -39px; top: 12px; width: 117px; height: 121.33px; pointer-events: none; }
 
 .de-back {
   flex: 0 0 39px !important;
@@ -62,7 +67,8 @@ body.de-contact-page { font-family: Figtree, Arial, sans-serif; }
   background: transparent !important;
 }
 
-.de-back img { display: block; width: 39px; height: 35px; }
+.de-back img { display: block; width: auto; height: 35px; max-width: 39px; object-fit: contain; }
+.de-page-hero h1 { min-width: 0; overflow-wrap: anywhere; }
 
 /* The landing reference has four links on its first row and three on the second, without dividers. */
 .de-footer--landing .de-footer__links a,
@@ -99,6 +105,7 @@ body.de-contact-page { font-family: Figtree, Arial, sans-serif; }
   .de-top__nav { display: flex; align-items: center; gap: clamp(18px,2.2vw,32px); margin-left: auto; margin-right: 170px; }
   .de-top__nav a { color: #171717; font-size: 13px; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap; }
   .de-top__mascot { display: block; position: absolute; right: -17px; top: 0; width: 191.68px; height: 199px; }
+  .de-legal-page .de-page-hero { background: transparent; }
 }
 
 @media (max-width: 370px) {
