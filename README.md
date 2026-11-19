@@ -1,6 +1,6 @@
 # Yumetics
 
-Yumetics is a local Node.js app for meal logging and pantry-based recipe suggestions. Food photos are analyzed on the server with Hugging Face Food-101 by default, so a dessert such as tiramisu is identified from the picture rather than guessed from its dominant colours.
+Yumetics is a local Node.js app for meal logging and pantry-based recipe suggestions. Food photos are analyzed on the server with a Hugging Face vision-language model, so a dessert such as tiramisu is identified from the picture rather than guessed from its dominant colours.
 
 ## Run locally
 
@@ -14,7 +14,7 @@ Yumetics is a local Node.js app for meal logging and pantry-based recipe suggest
 
 3. Open `http://localhost:4174`.
 
-The default model is `nateraw/food`, a Food-101 image classifier. It is ideal for the demo's dish identifier (including tiramisu), but it only knows the Food-101 categories and nutrition remains an estimate. You can change it through `HF_FOOD_MODEL`.
+The default model is `Qwen/Qwen2.5-VL-3B-Instruct`, a vision-language model served through Hugging Face Inference Providers. It can identify a prepared dish and estimate a visible portion; nutrition remains an estimate. You can change it through `HF_VISION_MODEL`.
 
 If `HF_TOKEN` is not set, the app can optionally fall back to the OpenAI Responses API via `OPENAI_API_KEY`. The server keeps all tokens out of the browser.
 

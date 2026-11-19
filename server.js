@@ -131,17 +131,19 @@ const hfMealFromLabel = (label, score) => {
   return { ...(match || { name: titleFromLabel(label), calories: 450, carbs: 48, fats: 19, proteins: 20, ingredients: [{ name: titleFromLabel(label), grams: 180 }] }), confidence: Math.min(1, Math.max(0, Number(score) || 0)), needsClarification: Number(score) < 0.55 };
 };
 const analyzeWithHuggingFaceVision = async ({ image, mode }) => {
-  const response = await fetch('https://router.huggingface.co/v1/responses', {
+  // Hugging Face vision providers expose the OpenAI-compatible chat-completions
+  // format. The former Responses endpoint was not a reliable VLM route.
+  const response = await fetch('https://router.huggingface.co/v1/chat/completions', {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.HF_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: process.env.HF_VISION_MODEL || 'Qwen/Qwen2.5-VL-7B-Instruct',
-      max_output_tokens: 900,
-      input: [{
+      model: process.env.HF_VISION_MODEL || 'Qwen/Qwen2.5-VL-3B-Instruct',
+      max_tokens: 900,
+      messages: [{
         role: 'user',
         content: [
-          { type: 'input_text', text: promptFor(mode) },
-          { type: 'input_image', image_url: image }
+          { type: 'text', text: promptFor(mode) },
+          { type: 'image_url', image_url: { url: image } }
         ]
       }]
     })
@@ -151,30 +153,11 @@ const analyzeWithHuggingFaceVision = async ({ image, mode }) => {
     console.error('Hugging Face vision analysis error:', response.status, detail.slice(0, 500));
     throw Object.assign(new Error('The Hugging Face vision model is temporarily unavailable.'), { status: 502 });
   }
-  const result = parseModelJson(outputText(await response.json()));
+  const payload = await response.json();
+  const content = payload.choices?.[0]?.message?.content;
+  const modelText = Array.isArray(content) ? content.map((item) => item?.text || '').join('') : content;
+  const result = parseModelJson(modelText);
   return mode === 'meal' ? cleanMeal(result) : cleanPantry(result);
-};
-const analyzeWithHuggingFace = async ({ image, mode }) => {
-  const [, meta = '', encoded = ''] = image.match(/^data:([^;]+);base64,(.+)$/i) || [];
-  const response = await fetch(`https://router.huggingface.co/hf-inference/models/${process.env.HF_FOOD_MODEL || 'nateraw/food'}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.HF_TOKEN}`, 'Content-Type': meta || 'image/jpeg' },
-    body: Buffer.from(encoded, 'base64')
-  });
-  if (!response.ok) {
-    const detail = await response.text();
-    console.error('Hugging Face food analysis error:', response.status, detail.slice(0, 500));
-    throw Object.assign(new Error('The Hugging Face food model is temporarily unavailable.'), { status: 502 });
-  }
-  const predictions = await response.json();
-  const best = Array.isArray(predictions) ? predictions[0] : null;
-  if (!best?.label) throw new Error('The food model did not return a dish.');
-  const meal = hfMealFromLabel(best.label, best.score);
-  if (mode === 'meal') return meal;
-  const isPreparedDessert = /tiramisu|cake|cheesecake|mousse|donut|ice cream|creme brulee/.test(String(best.label).toLowerCase());
-  return isPreparedDessert
-    ? { detectedItems: [meal.name], preparedDish: true, dishName: meal.name, confidence: meal.confidence, recipes: [] }
-    : { detectedItems: [meal.name], preparedDish: false, dishName: '', confidence: meal.confidence, recipes: [] };
 };
 // The German pages are previewed locally, where secrets are deliberately not
 // stored. Reuse the already configured demo analysis only for a loopback
@@ -193,17 +176,12 @@ const promptFor = (mode) => mode === 'pantry'
 const analyzeFood = async ({ image, mode }, { usePublishedDemo = false } = {}) => {
   if (!['meal', 'pantry'].includes(mode) || typeof image !== 'string' || !/^data:image\/(jpeg|jpg|png|webp);base64,/i.test(image)) throw Object.assign(new Error('Send a JPG, PNG, or WebP image.'), { status: 400 });
   if (process.env.HF_TOKEN) {
-    // A vision-language model can identify a composed dish and estimate its
-    // visible serving. Keep the food classifier as a silent resilience fallback
-    // for tokens or providers that do not have VLM access yet.
+    // A vision-language model identifies composed dishes and their visible serving.
     try { return await analyzeWithHuggingFaceVision({ image, mode }); }
     catch (visionError) {
-      console.warn('Falling back to Hugging Face food classifier:', visionError.message);
-      try { return await analyzeWithHuggingFace({ image, mode }); }
-      catch (classifierError) {
-        if (mode === 'pantry') return pantryFallback();
-        throw classifierError;
-      }
+      console.error('Hugging Face vision analysis failed:', visionError.message);
+      if (mode === 'pantry') return pantryFallback();
+      throw visionError;
     }
   }
   if (!process.env.OPENAI_API_KEY) {
