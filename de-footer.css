@@ -43,6 +43,8 @@
 }
 
 .de-top__link { display: block; width: 100%; height: 100%; }
+.de-top__desktop-logo,
+.de-top__desktop-pot { display: none; }
 
 .de-back {
   flex: 0 0 39px !important;
@@ -65,9 +67,26 @@
 /* The supplied legal-page artwork has a clean cream surround, not the decorative desktop circles. */
 @media (min-width: 720px) {
   body.de-legal-page,
-  body.de-contact-page { padding: 0 !important; background: #fff4e4 !important; }
+  body.de-contact-page { padding: 32px !important; background: #fff4e4 !important; }
   .de-legal-page .de-shell,
-  .de-contact-page .de-shell { border-radius: 0; box-shadow: none; }
+  .de-contact-page .de-shell { width: min(100%, 1120px); min-height: calc(100vh - 64px); border-radius: 24px; box-shadow: 0 14px 46px rgba(70,45,25,.1); }
+  .de-top { padding: 0 44px !important; background: #ff4c2c !important; }
+  .de-top__link { display: inline-flex; align-items: center; width: auto; height: 65px; }
+  .de-top__desktop-logo { display: block; width: 148px; height: auto; filter: brightness(0) invert(1); }
+  .de-top__desktop-pot { display: block; align-self: flex-end; width: 90px; height: 94px; object-fit: contain; object-position: bottom; transform: translate(16px,9px); }
+  .de-page-hero { min-height: 155px; padding: 46px clamp(44px,7vw,88px) 34px; gap: 25px; }
+  .de-page-hero h1 { max-width: none; font-size: clamp(42px,5vw,58px); }
+  .de-copy { padding: 46px clamp(44px,7vw,110px) 60px; }
+  .de-copy > * { max-width: 850px; margin-left: auto; margin-right: auto; }
+  .de-copy h2 { margin-top: 36px; font-size: 18px; }
+  .de-copy p, .de-copy li { font-size: 15px; line-height: 1.52; }
+  .de-copy__card { padding: 25px 28px; }
+  .de-footer { padding: 32px 40px !important; }
+  .de-contact-hero { min-height: 170px; padding: 45px clamp(44px,7vw,88px) 25px; }
+  .de-contact-hero h1 { font-size: 52px; }
+  .de-contact-hero img { width: 145px; height: 150px; margin: -24px 0 0 auto; }
+  .de-contact-form { padding: 38px clamp(44px,10vw,180px) 60px; }
+  .de-contact-form h2 { max-width: 620px; font-size: 26px; }
 }
 
 @media (max-width: 370px) {
