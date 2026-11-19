@@ -17,6 +17,6 @@
   const slug = location.pathname.split('/').filter(Boolean).pop();
   const page = pages[slug] || pages.agb;
   document.title = `${page.title} | Yumetics`;
-  target.innerHTML = `<section class="de-page-hero"><a class="de-back" href="/de" aria-label="Zurück zur Startseite">←</a><h1>${page.title}</h1></section><section class="de-copy">${page.body}</section>`;
+  target.innerHTML = `<section class="de-page-hero"><a class="de-back" href="/de" aria-label="Zurück zur Startseite"><img src="/assets/de/back-button-container.png" alt=""></a><h1>${page.title}</h1></section><section class="de-copy">${page.body}</section>`;
   target.querySelector('[data-form]')?.addEventListener('submit', (event) => { event.preventDefault(); event.currentTarget.querySelector('.de-form-note').textContent = 'Danke. Die nächsten Schritte werden an deine Mobilfunknummer gesendet.'; });
 })();

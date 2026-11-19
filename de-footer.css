@@ -33,21 +33,39 @@
 .de-footer .footer-links li { margin: 0 !important; padding: 0; list-style: none; }
 .de-footer .de-footer__copy,
 .de-footer .footer-copyright { margin: 24px 0 0 !important; color: #3d393b; font-size: 11px; }
+.de-footer__row { display: flex; justify-content: center; width: 100%; }
+
+/* Exact reusable top bar and back control supplied for the footer destinations. */
+.de-top {
+  height: 65px !important;
+  padding: 0 !important;
+  background: #ff4c2c url('/assets/de/header.png') center / 100% 65px no-repeat !important;
+}
+
+.de-top__link { display: block; width: 100%; height: 100%; }
+
+.de-back {
+  flex: 0 0 39px !important;
+  width: 39px !important;
+  height: 35px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.de-back img { display: block; width: 39px; height: 35px; }
 
 /* The landing reference has four links on its first row and three on the second, without dividers. */
-.de-footer--landing .de-footer__links,
-.de-footer--landing .footer-links { max-width: 350px; margin-inline: auto !important; }
 .de-footer--landing .de-footer__links a,
 .de-footer--landing .footer-links a { border-right: 0 !important; }
 
 /* The legal/contact references use exactly three links per row. */
-.de-footer--legal .de-footer__links a:nth-child(3n),
-.de-footer--legal .footer-links li:nth-child(3n) a { border-right: 0; }
+.de-footer--legal .de-footer__row a:last-child { border-right: 0; }
 
 /* The supplied legal-page artwork has a clean cream surround, not the decorative desktop circles. */
 @media (min-width: 720px) {
   body.de-legal-page,
-  body.de-contact-page { padding: 0; background: #fff4e4; }
+  body.de-contact-page { padding: 0 !important; background: #fff4e4 !important; }
   .de-legal-page .de-shell,
   .de-contact-page .de-shell { border-radius: 0; box-shadow: none; }
 }

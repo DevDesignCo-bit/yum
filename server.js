@@ -248,7 +248,7 @@ http.createServer(async (req, res) => {
   const germanOnboardingFile = pathname === '/de/onboarding' ? 'onboarding.html' : pathname.startsWith('/de/onboarding/') ? `onboarding--${pathname.slice('/de/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-home.css', 'de-onboarding.js', 'de-footer.css', 'de-footer.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
-  const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|yumetics-logo\.png|pot-happy-character\.webp)$/.test(pathname) ? pathname.slice(1) : null;
+  const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|yumetics-logo\.png|pot-happy-character\.webp|header\.png|back-button-container\.png)$/.test(pathname) ? pathname.slice(1) : null;
   const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : germanOnboardingFile || onboardingFile || routes[pathname]);
   if (!file) { res.writeHead(404); return res.end('Not found'); }
   const contentType = file.endsWith('.js') ? 'text/javascript; charset=utf-8' : file.endsWith('.css') ? 'text/css; charset=utf-8' : file.endsWith('.png') ? 'image/png' : file.endsWith('.gif') ? 'image/gif' : file.endsWith('.webp') ? 'image/webp' : 'text/html; charset=utf-8';
