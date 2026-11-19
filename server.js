@@ -195,6 +195,38 @@ const analyzeWithHuggingFaceVision = async ({ image, mode }) => {
   const result = parseModelJson(modelText);
   return mode === 'meal' ? cleanMeal(result) : cleanPantry(result);
 };
+const analyzeWithGroqVision = async ({ image, mode }) => {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: process.env.GROQ_VISION_MODEL || 'qwen/qwen3.8-27b',
+      temperature: .2,
+      max_completion_tokens: 900,
+      response_format: { type: 'json_object' },
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: promptFor(mode) },
+          { type: 'image_url', image_url: { url: image } }
+        ]
+      }]
+    })
+  });
+  if (!response.ok) {
+    const detail = await response.text();
+    console.error('Groq vision analysis error:', response.status, detail.slice(0, 500));
+    const message = response.status === 401 || response.status === 403
+      ? 'Food analysis needs a valid Groq API key.'
+      : response.status === 429
+        ? 'The free Groq vision quota has been reached. Please try again later.'
+        : 'The Groq vision service is temporarily unavailable.';
+    throw Object.assign(new Error(message), { status: 502 });
+  }
+  const content = (await response.json()).choices?.[0]?.message?.content;
+  const result = parseModelJson(Array.isArray(content) ? content.map((item) => item?.text || '').join('') : content || '');
+  return mode === 'meal' ? cleanMeal(result) : cleanPantry(result);
+};
 // The German pages are previewed locally, where secrets are deliberately not
 // stored. Reuse the already configured demo analysis only for a loopback
 // preview; visitors never see or provide a token.
@@ -211,7 +243,12 @@ const promptFor = (mode) => mode === 'pantry'
 
 const analyzeFood = async ({ image, mode, sourceName, visualHints }, { usePublishedDemo = false } = {}) => {
   if (!['meal', 'pantry'].includes(mode) || typeof image !== 'string' || !/^data:image\/(jpeg|jpg|png|webp);base64,/i.test(image)) throw Object.assign(new Error('Send a JPG, PNG, or WebP image.'), { status: 400 });
-  if (process.env.FOOD_ANALYSIS_MODE !== 'live') return mode === 'meal' ? demoMeal({ image, sourceName, visualHints }) : demoPantry({ image, sourceName });
+  const analysisMode = String(process.env.FOOD_ANALYSIS_MODE || 'demo').toLowerCase();
+  if (analysisMode === 'groq') {
+    if (!process.env.GROQ_API_KEY) throw Object.assign(new Error('Food analysis needs GROQ_API_KEY on the server.'), { status: 503 });
+    return analyzeWithGroqVision({ image, mode });
+  }
+  if (analysisMode !== 'live') return mode === 'meal' ? demoMeal({ image, sourceName, visualHints }) : demoPantry({ image, sourceName });
   if (process.env.HF_TOKEN) {
     // A vision-language model identifies composed dishes and their visible serving.
     try { return await analyzeWithHuggingFaceVision({ image, mode }); }

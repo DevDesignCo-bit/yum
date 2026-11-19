@@ -16,6 +16,10 @@ Yumetics is a local Node.js app for meal logging and pantry-based recipe suggest
 
 By default, the public demo uses a no-cost, on-device visual classifier for common image classes such as burgers, pizza, sushi and pasta. It supplements this with a filename match when available, then returns a stable sample estimate if the dish is outside its small local vocabulary. No photo leaves the browser for classification. For genuine, broader visual analysis, set `FOOD_ANALYSIS_MODE=live` and configure either the Hugging Face vision model (`Qwen/Qwen2.5-VL-3B-Instruct:featherless-ai`) or OpenAI; nutrition remains an estimate.
 
+## Groq vision option
+
+For a broader image-reading demo without Hugging Face credits, create a Groq API key and add it only to your hosting provider as `GROQ_API_KEY`. Then set `FOOD_ANALYSIS_MODE=groq`. Yumetics uses Groq's `qwen/qwen3.8-27b` vision model and retains the on-device classifier only when running in the default demo mode.
+
 If `HF_TOKEN` is not set, the app can optionally fall back to the OpenAI Responses API via `OPENAI_API_KEY`. The server keeps all tokens out of the browser.
 
 ## Upload to GitHub
