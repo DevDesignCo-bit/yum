@@ -105,6 +105,34 @@ const titleFromLabel = (label) => String(label || 'Unidentified meal').replaceAl
 const pantryFallback = () => ({
   detectedItems: ['Ingredients from your photo'], preparedDish: false, dishName: '', confidence: 0, recipes: []
 });
+// The public demo stays usable without an AI-provider bill. It recognises common
+// dish names from a photo filename when available and otherwise uses a stable,
+// varied sample result for that exact image. Set FOOD_ANALYSIS_MODE=live only
+// when a paid provider has been configured on the server.
+const demoDishNames = ['Tiramisu', 'Classic Cheeseburger', 'Chicken Caesar Salad', 'Spaghetti Bolognese', 'Salmon Poké Bowl', 'Margherita Pizza', 'Chicken Curry', 'Avocado Toast'];
+const imageSeed = (value) => {
+  let total = 0;
+  const sample = String(value || 'yumetics').slice(-4096);
+  for (let index = 0; index < sample.length; index += 97) total = (total * 31 + sample.charCodeAt(index)) >>> 0;
+  return total;
+};
+const demoMeal = ({ image, sourceName }) => {
+  const namedDish = String(sourceName || '').replace(/\.[^.]+$/, '').replaceAll(/[_-]+/g, ' ').trim();
+  const label = /tiramisu|pizza|salad|pasta|spaghetti|lasagna|burger|cheesecake|cake|ice cream|donut|fries|sushi|ramen|noodles|sandwich|taco|burrito|curry|rice|soup|pancake|waffle|omelette|egg|chicken|steak|salmon/i.test(namedDish)
+    ? namedDish
+    : demoDishNames[imageSeed(image) % demoDishNames.length];
+  return hfMealFromLabel(label, .74);
+};
+const demoPantry = ({ image, sourceName }) => {
+  const sets = [
+    ['Tomatoes', 'Pasta', 'Parmesan', 'Fresh basil'],
+    ['Chicken breast', 'Broccoli', 'Rice', 'Lemon'],
+    ['Eggs', 'Avocado', 'Wholegrain bread', 'Cherry tomatoes'],
+    ['Salmon', 'Cucumber', 'Rice', 'Edamame']
+  ];
+  const namedItems = String(sourceName || '').replace(/\.[^.]+$/, '').replaceAll(/[_-]+/g, ' ').match(/tomato|pasta|chicken|broccoli|rice|egg|avocado|bread|salmon|cucumber|edamame/gi);
+  return { detectedItems: namedItems?.length ? namedItems.map(titleFromLabel) : sets[imageSeed(image) % sets.length], preparedDish: false, dishName: '', confidence: .7, recipes: [] };
+};
 const hfMealFromLabel = (label, score) => {
   const normalised = String(label || '').toLowerCase().replaceAll('_', ' ');
   const profiles = [
@@ -180,8 +208,9 @@ const promptFor = (mode) => mode === 'pantry'
   ? `Analyze this food, pantry, or fridge image. Return JSON only, with this exact shape: {"detectedItems":["..."],"preparedDish":false,"dishName":"","confidence":0.0,"recipes":[{"name":"","tag":"","calories":0,"prep_min":0,"cook_min":0,"ingredients":[""],"description":"","instructions":[{"title":"","description":""}]}]}. Use the actual visible ingredients, shapes, textures, packaging and context; never infer ingredients from the dominant colour. If this is already a prepared dish, set preparedDish true and give its specific name. Otherwise create three practical recipes supported only by the visible ingredients. Use English names, realistic portions and conservative nutrition estimates.`
   : `You are an expert food-vision and nutrition estimator. Analyze this one meal photo and return JSON only, with this exact shape: {"name":"","calories":0,"carbs":0,"fats":0,"proteins":0,"confidence":0.0,"needsClarification":false,"ingredients":[{"name":"","grams":0}]}. Identify the exact prepared dish from visual evidence such as layers, toppings, sauce, texture and serving vessel. Estimate the single visible portion automatically: use the plate or container size and food volume; do not ask the person any questions and do not provide alternative guesses. Return a realistic central estimate for this visible serving, not restaurant averages. For example, name tiramisu as tiramisu, never as a vegetable bowl. List only ingredients that are visibly plausible. Never use placeholders such as "side dish", "toppings", "vegetables", or "sauce" when the photo does not clearly show them; omit unknown components instead. For a burger, use specific visible components such as bun, patty, cheese, lettuce, tomato, or fries only when present. Use English names and make calories approximately equal to carbs*4 + proteins*4 + fats*9.`;
 
-const analyzeFood = async ({ image, mode }, { usePublishedDemo = false } = {}) => {
+const analyzeFood = async ({ image, mode, sourceName }, { usePublishedDemo = false } = {}) => {
   if (!['meal', 'pantry'].includes(mode) || typeof image !== 'string' || !/^data:image\/(jpeg|jpg|png|webp);base64,/i.test(image)) throw Object.assign(new Error('Send a JPG, PNG, or WebP image.'), { status: 400 });
+  if (process.env.FOOD_ANALYSIS_MODE !== 'live') return mode === 'meal' ? demoMeal({ image, sourceName }) : demoPantry({ image, sourceName });
   if (process.env.HF_TOKEN) {
     // A vision-language model identifies composed dishes and their visible serving.
     try { return await analyzeWithHuggingFaceVision({ image, mode }); }

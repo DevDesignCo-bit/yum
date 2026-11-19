@@ -289,7 +289,7 @@
     const response = await fetch('/api/food-analysis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image, mode: 'pantry' })
+      body: JSON.stringify({ image, mode: 'pantry', sourceName: file.name })
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'We could not analyze this photo.');

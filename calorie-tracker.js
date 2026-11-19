@@ -252,11 +252,11 @@
     image.src = dataUrl;
   });
 
-  const estimateMealFromPhoto = async (dataUrl) => {
+  const estimateMealFromPhoto = async (dataUrl, sourceName = '') => {
     const response = await fetch('/api/food-analysis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: dataUrl, mode: 'meal' })
+      body: JSON.stringify({ image: dataUrl, mode: 'meal', sourceName })
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'We could not analyze this photo.');
