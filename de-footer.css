@@ -43,8 +43,9 @@
 }
 
 .de-top__link { display: block; width: 100%; height: 100%; }
-.de-top__desktop-logo,
-.de-top__desktop-pot { display: none; }
+.de-top__brand,
+.de-top__nav,
+.de-top__mascot { display: none; }
 
 .de-back {
   flex: 0 0 39px !important;
@@ -70,10 +71,6 @@
   body.de-contact-page { padding: 32px !important; background: #fff4e4 !important; }
   .de-legal-page .de-shell,
   .de-contact-page .de-shell { width: min(100%, 1120px); min-height: calc(100vh - 64px); border-radius: 24px; box-shadow: 0 14px 46px rgba(70,45,25,.1); }
-  .de-top { padding: 0 44px !important; background: #ff4c2c !important; }
-  .de-top__link { display: inline-flex; align-items: center; width: auto; height: 65px; }
-  .de-top__desktop-logo { display: block; width: 148px; height: auto; filter: brightness(0) invert(1); }
-  .de-top__desktop-pot { display: block; align-self: flex-end; width: 90px; height: 94px; object-fit: contain; object-position: bottom; transform: translate(16px,9px); }
   .de-page-hero { min-height: 155px; padding: 46px clamp(44px,7vw,88px) 34px; gap: 25px; }
   .de-page-hero h1 { max-width: none; font-size: clamp(42px,5vw,58px); }
   .de-copy { padding: 46px clamp(44px,7vw,110px) 60px; }
@@ -84,9 +81,18 @@
   .de-footer { padding: 32px 40px !important; }
   .de-contact-hero { min-height: 170px; padding: 45px clamp(44px,7vw,88px) 25px; }
   .de-contact-hero h1 { font-size: 52px; }
-  .de-contact-hero img { width: 145px; height: 150px; margin: -24px 0 0 auto; }
   .de-contact-form { padding: 38px clamp(44px,10vw,180px) 60px; }
   .de-contact-form h2 { max-width: 620px; font-size: 26px; }
+}
+
+/* The desktop header reuses the static navigation artwork from the German demo. */
+@media (min-width: 992px) {
+  .de-top { position: relative; height: 86px !important; margin: 24px 32px 0; padding: 0 42px !important; border-radius: 999px; background: #ff4c2c !important; overflow: hidden; }
+  .de-top__link { display: inline-flex; align-items: center; width: auto; height: 86px; }
+  .de-top__brand { display: block; width: 146px; height: 17px; }
+  .de-top__nav { display: flex; align-items: center; gap: clamp(18px,2.2vw,32px); margin-left: auto; margin-right: 170px; }
+  .de-top__nav a { color: #171717; font-size: 13px; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap; }
+  .de-top__mascot { display: block; position: absolute; right: -11px; bottom: -61px; width: 192px; height: 199px; }
 }
 
 @media (max-width: 370px) {
