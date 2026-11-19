@@ -14,7 +14,7 @@ Yumetics is a local Node.js app for meal logging and pantry-based recipe suggest
 
 3. Open `http://localhost:4174`.
 
-By default, the public demo uses a no-cost automatic demo analyser, so it works without any key or provider credits. It recognises common dish names included in a photo filename and otherwise returns a stable, varied sample estimate. For genuine visual analysis, set `FOOD_ANALYSIS_MODE=live` and configure either the Hugging Face vision model (`Qwen/Qwen2.5-VL-3B-Instruct:featherless-ai`) or OpenAI; nutrition remains an estimate.
+By default, the public demo uses a no-cost, on-device visual classifier for common image classes such as burgers, pizza, sushi and pasta. It supplements this with a filename match when available, then returns a stable sample estimate if the dish is outside its small local vocabulary. No photo leaves the browser for classification. For genuine, broader visual analysis, set `FOOD_ANALYSIS_MODE=live` and configure either the Hugging Face vision model (`Qwen/Qwen2.5-VL-3B-Instruct:featherless-ai`) or OpenAI; nutrition remains an estimate.
 
 If `HF_TOKEN` is not set, the app can optionally fall back to the OpenAI Responses API via `OPENAI_API_KEY`. The server keeps all tokens out of the browser.
 

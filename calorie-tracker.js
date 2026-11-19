@@ -252,11 +252,28 @@
     image.src = dataUrl;
   });
 
-  const estimateMealFromPhoto = async (dataUrl, sourceName = '') => {
+  let foodVisionModel;
+  const foodLabels = /cheeseburger|hamburger|hotdog|pizza|spaghetti|carbonara|ramen|sushi|burrito|taco|guacamole|ice cream|icecream|chocolate sauce|strawberry|salad|caesar|omelet|omelette|egg|pancake|waffle|french toast|chicken|steak|salmon|soup/i;
+  const photoElement = (dataUrl) => new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = dataUrl;
+  });
+  const classifyFoodInBrowser = async (dataUrl) => {
+    if (!window.mobilenet) return [];
+    foodVisionModel ||= window.mobilenet.load({ version: 2, alpha: 1.0 });
+    const [model, image] = await Promise.all([foodVisionModel, photoElement(dataUrl)]);
+    return (await model.classify(image, 5))
+      .filter((prediction) => prediction.probability >= .08 && foodLabels.test(prediction.className))
+      .map((prediction) => prediction.className);
+  };
+
+  const estimateMealFromPhoto = async (dataUrl, sourceName = '', visualHints = []) => {
     const response = await fetch('/api/food-analysis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: dataUrl, mode: 'meal', sourceName })
+      body: JSON.stringify({ image: dataUrl, mode: 'meal', sourceName, visualHints })
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || 'We could not analyze this photo.');
@@ -277,7 +294,8 @@
         document.querySelector('[data-analyzing-photo]').src = selectedPhoto;
         showModal('ai-meal-analyzing-modal');
         try {
-          const [meal, thumbnail] = await Promise.all([estimateMealFromPhoto(selectedPhoto, file.name), makeThumbnail(selectedPhoto)]);
+          const [visualHints, thumbnail] = await Promise.all([classifyFoodInBrowser(selectedPhoto).catch(() => []), makeThumbnail(selectedPhoto)]);
+          const meal = await estimateMealFromPhoto(selectedPhoto, file.name, visualHints);
           analyzedMeal = { ...meal, image: thumbnail };
           setResult(analyzedMeal);
           hideModal('ai-meal-analyzing-modal');
