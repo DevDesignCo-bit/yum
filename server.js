@@ -187,7 +187,7 @@ const analyzeWithHuggingFaceVision = async ({ image, mode, locale }) => {
       : response.status === 402
         ? 'Food analysis needs Hugging Face inference credits to continue.'
         : 'The Hugging Face vision model is temporarily unavailable.';
-    throw Object.assign(new Error(message), { status: 502 });
+    throw Object.assign(new Error(message), { status: 502, upstreamStatus: response.status });
   }
   const payload = await response.json();
   const content = payload.choices?.[0]?.message?.content;
@@ -221,7 +221,7 @@ const analyzeWithGroqVision = async ({ image, mode, locale }) => {
       : response.status === 429
         ? 'The free Groq vision quota has been reached. Please try again later.'
         : 'The Groq vision service is temporarily unavailable.';
-    throw Object.assign(new Error(message), { status: 502 });
+    throw Object.assign(new Error(message), { status: 502, upstreamStatus: response.status });
   }
   const content = (await response.json()).choices?.[0]?.message?.content;
   const result = parseModelJson(Array.isArray(content) ? content.map((item) => item?.text || '').join('') : content || '');
@@ -249,7 +249,17 @@ const analyzeFood = async ({ image, mode, sourceName, visualHints, locale }, { u
   const analysisMode = String(process.env.FOOD_ANALYSIS_MODE || 'demo').toLowerCase();
   if (analysisMode === 'groq') {
     if (!process.env.GROQ_API_KEY) throw Object.assign(new Error('Food analysis needs GROQ_API_KEY on the server.'), { status: 503 });
-    return analyzeWithGroqVision({ image, mode, locale });
+    try {
+      return await analyzeWithGroqVision({ image, mode, locale });
+    } catch (groqError) {
+      // The free Groq plan is rate-limited. Keep the public demo usable while
+      // waiting for the quota window instead of making the photo flow fail.
+      if (groqError.upstreamStatus === 429) {
+        console.warn('Groq quota reached; using the local food fallback.');
+        return mode === 'meal' ? demoMeal({ image, sourceName, visualHints }) : demoPantry({ image, sourceName });
+      }
+      throw groqError;
+    }
   }
   if (analysisMode !== 'live') return mode === 'meal' ? demoMeal({ image, sourceName, visualHints }) : demoPantry({ image, sourceName });
   if (process.env.HF_TOKEN) {
@@ -297,14 +307,16 @@ http.createServer(async (req, res) => {
   }
   // The prototype pages contain a few regular forms. Serve their result pages on submit
   // instead of exposing a technical 405 message while no database is involved.
-  const staticFormSubmit = req.method === 'POST' && Boolean(routes[pathname]);
+  const germanDemoPath = pathname.startsWith('/de/') ? `/${pathname.slice('/de/'.length)}` : '';
+  const germanDemoFile = germanDemoPath && routes[germanDemoPath] ? routes[germanDemoPath] : null;
+  const staticFormSubmit = req.method === 'POST' && Boolean(routes[pathname] || germanDemoFile);
   if (req.method !== 'GET' && req.method !== 'HEAD' && !staticFormSubmit) return sendJson(res, 405, { error: 'Method not allowed.' });
   const onboardingFile = pathname === '/onboarding' ? 'onboarding.html' : pathname.startsWith('/onboarding/') ? `onboarding--${pathname.slice('/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const germanOnboardingFile = pathname === '/de/onboarding' ? 'onboarding.html' : pathname.startsWith('/de/onboarding/') ? `onboarding--${pathname.slice('/de/onboarding/'.length).replaceAll('/', '--')}.html` : null;
   const scripts = new Set(['calorie-tracker.js', 'local-navigation.js', 'onboarding.js', 'app-experience.js', 'onboarding-pet.js', 'de.css', 'de-store.js', 'de-legal.js', 'de-translate.js', 'de-contact.css', 'de-home.css', 'de-onboarding.js', 'de-footer.css', 'de-footer.js']);
   const recipeAsset = /^\/assets\/recipes\/[a-z0-9-]+\.png$/i.test(pathname) ? pathname.slice(1) : null;
   const germanAsset = /^\/assets\/de\/(yumetics-pot\.gif|landing-background\.png|landing-background-desktop\.png|yumetics-logo\.png|yumetics-landing-logo\.png|pot-happy-character\.webp|header\.png|back-button-container\.png|Widerrufsformular_Yumetics\.docx)$/.test(pathname) ? pathname.slice(1) : null;
-  const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : germanOnboardingFile || onboardingFile || routes[pathname]);
+  const file = recipeAsset || germanAsset || (scripts.has(pathname.slice(1)) ? pathname.slice(1) : germanOnboardingFile || onboardingFile || routes[pathname] || germanDemoFile);
   if (!file) { res.writeHead(404); return res.end('Not found'); }
   const contentType = file.endsWith('.js') ? 'text/javascript; charset=utf-8' : file.endsWith('.css') ? 'text/css; charset=utf-8' : file.endsWith('.png') ? 'image/png' : file.endsWith('.gif') ? 'image/gif' : file.endsWith('.webp') ? 'image/webp' : file.endsWith('.docx') ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'text/html; charset=utf-8';
   fs.readFile(path.join(root, file), (error, data) => {
@@ -312,11 +324,15 @@ http.createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': contentType });
     if (req.method === 'HEAD') return res.end();
     if (!file.endsWith('.html')) return res.end(data);
-    const page = data.toString();
+    const isGermanPage = pathname === '/de' || pathname.startsWith('/de/');
+    const page = isGermanPage
+      ? data.toString().replace(/<html\b[^>]*>/i, (tag) => tag.replace(/\s+lang=(['"]).*?\1/i, '').replace('>', ' lang="de">'))
+      : data.toString();
     const tracker = page.includes('src="/calorie-tracker.js"') ? '' : '    <script src="/calorie-tracker.js" defer></script>\n';
     const germanOnboardingScript = germanOnboardingFile ? '    <script src="/de-onboarding.js" defer></script>\n' : '';
+    const germanTranslationScript = isGermanPage && !page.includes('src="/de-translate.js"') ? '    <script src="/de-translate.js" defer></script>\n' : '';
     const germanFooterAssets = pathname === '/de' || pathname.startsWith('/de/') ? '    <link rel="stylesheet" href="/de-footer.css">\n' : '';
     const germanFooterScript = pathname === '/de' || pathname.startsWith('/de/') ? '    <script src="/de-footer.js" defer></script>\n' : '';
-    res.end(page.replace('</head>', `${localStyles}\n${germanFooterAssets}</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n${germanOnboardingScript}${germanFooterScript}</body>`));
+    res.end(page.replace('</head>', `${localStyles}\n${germanFooterAssets}</head>`).replace('</body>', `${tracker}    <script src="/local-navigation.js" defer></script>\n    <script src="/onboarding.js" defer></script>\n    <script src="/app-experience.js" defer></script>\n${germanTranslationScript}${germanOnboardingScript}${germanFooterScript}</body>`));
   });
 }).listen(port, () => console.log(`Yumetics is ready at http://localhost:${port}`));
